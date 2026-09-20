@@ -1,0 +1,1244 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <title>即時投遞箱 ＆ 生命之流</title>
+  
+  <!-- PWA 設定 -->
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#090d16" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="投遞箱" />
+  <link rel="apple-touch-icon" href="icon-192.png" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Noto+Sans+TC:wght@500;700;900&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #090d16;
+      --card-bg: rgba(22, 27, 38, 0.75);
+      --border: rgba(255, 255, 255, 0.08);
+      --primary: #38bdf8;
+      --primary-hover: #0284c7;
+      --purple: #a855f7;
+      --purple-hover: #9333ea;
+      --accent: #34d399;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --input-bg: #111827;
+      --btn-type-bg: #1e293b;
+      --btn-type-active: #0284c7;
+      --danger: #ef4444;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+    body {
+      font-family: 'Plus Jakarta Sans', 'Noto Sans TC', -apple-system, sans-serif;
+      background-color: var(--bg);
+      background-image: 
+        radial-gradient(at 0% 0%, rgba(56, 189, 248, 0.12) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(168, 85, 247, 0.08) 0px, transparent 50%);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding: env(safe-area-inset-top, 16px) 16px env(safe-area-inset-bottom, 24px);
+    }
+
+    .app-container {
+      width: 100%;
+      max-width: 480px;
+      margin-top: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    /* 頂部極簡標題 */
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 4px;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .brand-icon {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, #0284c7, #a855f7);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      box-shadow: 0 4px 12px rgba(168, 85, 247, 0.25);
+    }
+    h1 {
+      font-size: 19px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+    }
+    .config-trigger {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 20px;
+      cursor: pointer;
+      padding: 6px;
+      border-radius: 8px;
+      transition: color 0.2s;
+    }
+    .config-trigger:hover { color: var(--text); }
+
+    /* 雙 Tab 切換器 (Segmented Control) */
+    .tab-switch {
+      background: rgba(30, 41, 59, 0.7);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 4px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+      backdrop-filter: blur(12px);
+    }
+    .tab-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      padding: 10px 12px;
+      font-size: 14px;
+      font-weight: 700;
+      border-radius: 12px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .tab-btn.active {
+      background: linear-gradient(135deg, rgba(2, 132, 199, 0.9), rgba(56, 189, 248, 0.9));
+      color: #04101d;
+      box-shadow: 0 4px 12px rgba(2, 132, 199, 0.35);
+    }
+    .tab-btn.active.tab-life {
+      background: linear-gradient(135deg, rgba(147, 51, 234, 0.9), rgba(168, 85, 247, 0.9));
+      color: #ffffff;
+      box-shadow: 0 4px 12px rgba(168, 85, 247, 0.35);
+    }
+
+    /* 設定區塊（預設收折） */
+    .settings-panel {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 16px;
+      display: none;
+      flex-direction: column;
+      gap: 10px;
+      backdrop-filter: blur(16px);
+    }
+    .settings-panel.open { display: flex; }
+    .settings-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--primary);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .settings-input {
+      width: 100%;
+      background: var(--input-bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--text);
+      padding: 10px 14px;
+      font-size: 13px;
+      outline: none;
+    }
+
+    /* 頁面容器 */
+    .page-section {
+      display: none;
+      flex-direction: column;
+      gap: 16px;
+      animation: fadeIn 0.25s ease-out;
+    }
+    .page-section.active { display: flex; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* 主要卡片 */
+    .app-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      backdrop-filter: blur(20px);
+      box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.5);
+    }
+
+    .input-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .input-label {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .url-input-wrapper, .text-input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    input[type="text"], textarea {
+      width: 100%;
+      background: var(--input-bg);
+      border: 2px solid var(--border);
+      border-radius: 14px;
+      color: var(--text);
+      padding: 14px 16px;
+      font-size: 14px;
+      outline: none;
+      font-family: inherit;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    input[type="text"]:focus, textarea:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.15);
+    }
+    .page-life input[type="text"]:focus, .page-life textarea:focus {
+      border-color: var(--purple);
+      box-shadow: 0 0 0 4px rgba(168, 85, 247, 0.15);
+    }
+
+    .paste-btn, .mic-btn {
+      position: absolute;
+      right: 10px;
+      background: rgba(255, 255, 255, 0.08);
+      border: none;
+      color: var(--primary);
+      font-weight: 600;
+      font-size: 12px;
+      padding: 6px 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      transition: background 0.2s;
+    }
+    .mic-btn {
+      color: var(--purple);
+      bottom: 12px;
+      right: 12px;
+      padding: 8px 12px;
+      font-size: 13px;
+    }
+    .mic-btn.recording {
+      background: rgba(239, 68, 68, 0.2);
+      color: var(--danger);
+      animation: pulse 1s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+
+    /* 網格按鈕 (靈感類型) */
+    .type-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+    .type-btn {
+      background: var(--btn-type-bg);
+      border: 1.5px solid transparent;
+      border-radius: 12px;
+      color: var(--text-muted);
+      padding: 12px 6px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .type-btn .emoji { font-size: 18px; }
+    .type-btn:hover { background: #273549; color: var(--text); }
+    .type-btn.active {
+      background: rgba(2, 132, 199, 0.2);
+      border-color: var(--primary);
+      color: var(--primary);
+      transform: scale(1.02);
+    }
+
+    /* 時間快速選擇 Chips */
+    .time-chips-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .time-chip {
+      background: var(--btn-type-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text-muted);
+      padding: 6px 10px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .time-chip.active {
+      background: rgba(168, 85, 247, 0.25);
+      border-color: var(--purple);
+      color: #d8b4fe;
+    }
+
+    /* 生命流類別 Chips */
+    .category-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+    }
+    .cat-btn {
+      background: var(--btn-type-bg);
+      border: 1.5px solid transparent;
+      border-radius: 12px;
+      color: var(--text-muted);
+      padding: 10px 12px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+    .cat-btn:hover { background: #273549; color: var(--text); }
+    .cat-btn.active {
+      background: rgba(168, 85, 247, 0.2);
+      border-color: var(--purple);
+      color: #d8b4fe;
+    }
+
+    /* 送出大按鈕 */
+    .submit-btn {
+      width: 100%;
+      background: linear-gradient(135deg, #0284c7 0%, #38bdf8 100%);
+      color: #04101d;
+      border: none;
+      border-radius: 16px;
+      padding: 16px;
+      font-size: 15px;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: 0 10px 25px -5px rgba(2, 132, 199, 0.4);
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .submit-btn.btn-purple {
+      background: linear-gradient(135deg, #9333ea 0%, #a855f7 100%);
+      color: #ffffff;
+      box-shadow: 0 10px 25px -5px rgba(168, 85, 247, 0.4);
+    }
+    .submit-btn:active { transform: scale(0.98); }
+    .submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    /* 最近紀錄列表卡片 */
+    .history-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      backdrop-filter: blur(16px);
+    }
+    .history-header {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-muted);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .history-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .history-item {
+      background: rgba(17, 24, 39, 0.6);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 10px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      font-size: 13px;
+    }
+    .history-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+    .history-tag {
+      background: rgba(56, 189, 248, 0.15);
+      color: var(--primary);
+      padding: 2px 6px;
+      border-radius: 6px;
+      font-weight: 700;
+      font-size: 11px;
+    }
+    .history-tag.tag-purple {
+      background: rgba(168, 85, 247, 0.2);
+      color: #d8b4fe;
+    }
+    .history-content {
+      color: var(--text);
+      line-height: 1.4;
+      word-break: break-word;
+    }
+
+    /* 浮動通知 Toast */
+    #toast {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: rgba(15, 23, 42, 0.95);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: var(--text);
+      padding: 12px 20px;
+      border-radius: 14px;
+      font-size: 14px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5);
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s;
+      opacity: 0;
+      z-index: 1000;
+    }
+    #toast.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app-container">
+    <!-- Header -->
+    <header>
+      <div class="brand">
+        <div class="brand-icon">⚡</div>
+        <h1 id="appTitle">靈感 ＆ 生命之流</h1>
+      </div>
+      <button class="config-trigger" id="configBtn" aria-label="設定">⚙️</button>
+    </header>
+
+    <!-- 雙 Tab 切換 -->
+    <div class="tab-switch">
+      <button class="tab-btn active" id="tabInboxBtn">💡 靈感採集</button>
+      <button class="tab-btn" id="tabLifeBtn">⏱️ 生命之流</button>
+    </div>
+
+    <!-- 設定面板 (收折) -->
+    <div class="settings-panel" id="settingsPanel">
+      <div class="settings-label">GAS Web App API 網址</div>
+      <input type="text" class="settings-input" id="gasUrlInput" placeholder="https://script.google.com/macros/s/.../exec" />
+      <div class="settings-label" style="margin-top: 6px;">驗證 Token</div>
+      <input type="text" class="settings-input" id="gasTokenInput" value="INBOX_SECRET_TOKEN_2026" />
+      <button class="submit-btn" id="saveConfigBtn" style="padding: 10px; margin-top: 6px; font-size: 13px;">💾 儲存設定</button>
+    </div>
+
+    <!-- ==================== 分頁 1: 靈感採集 (Tab 1) ==================== -->
+    <div class="page-section active" id="pageInbox">
+      <div class="app-card">
+        <div class="input-group">
+          <label class="input-label">
+            <span>網址或靈感來源</span>
+          </label>
+          <div class="url-input-wrapper">
+            <input type="text" id="urlInput" placeholder="貼上網址 (https://...)" autofocus />
+            <button class="paste-btn" id="pasteBtn">📋 貼上</button>
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label class="input-label">自訂標題（選填）</label>
+          <input type="text" id="titleInput" placeholder="預設自動擷取網頁標題" />
+        </div>
+
+        <div class="input-group">
+          <div style="display: flex; align-items: center; justify-content: space-between;">
+            <label class="input-label" style="margin-bottom: 0;">靈感分類</label>
+            <span id="autoTypeBadge" style="font-size: 11px; color: var(--primary); font-weight: 700; background: rgba(56, 189, 248, 0.12); padding: 2px 8px; border-radius: 6px;">⚡ 貼上網址自動辨識</span>
+          </div>
+          <div class="type-grid" style="margin-top: 8px;">
+            <button class="type-btn" data-type="Threads"><span class="emoji">🧵</span>Threads</button>
+            <button class="type-btn" data-type="影片"><span class="emoji">📹</span>影片</button>
+            <button class="type-btn" data-type="社群"><span class="emoji">💬</span>社群</button>
+            <button class="type-btn" data-type="文章"><span class="emoji">📄</span>文章</button>
+            <button class="type-btn" data-type="工具"><span class="emoji">🛠️</span>工具</button>
+            <button class="type-btn" data-type="Podcast"><span class="emoji">🎙️</span>Podcast</button>
+            <button class="type-btn" data-type="筆記"><span class="emoji">📝</span>筆記</button>
+            <button class="type-btn active" data-type="其他"><span class="emoji">📦</span>其他</button>
+          </div>
+        </div>
+
+        <button class="submit-btn" id="submitInboxBtn">🚀 即時投遞至待採集庫</button>
+      </div>
+
+      <!-- 靈感最近紀錄 -->
+      <div class="history-card" id="inboxHistoryCard" style="display: none;">
+        <div class="history-header">
+          <span>今日已投遞靈感</span>
+          <span id="inboxCountBadge">0 筆</span>
+        </div>
+        <div class="history-list" id="inboxHistoryList"></div>
+      </div>
+    </div>
+
+    <!-- ==================== 分頁 2: 生命之流時程 (Tab 2) ==================== -->
+    <div class="page-section page-life" id="pageLife">
+      <div class="app-card">
+        <!-- 時間選擇 -->
+        <div class="input-group">
+          <label class="input-label">
+            <span>時間區間 / 發生時段</span>
+            <span style="font-size: 11px; color: var(--purple);" id="currentClock"></span>
+          </label>
+          <input type="text" id="lifeTimeInput" placeholder="例如：14:00 - 15:30 或 現在" />
+          <div class="time-chips-grid">
+            <button class="time-chip" data-time="現在">⏱️ 現在</button>
+            <button class="time-chip" data-time="剛剛30m">⏳ 剛才 30m</button>
+            <button class="time-chip" data-time="剛剛1h">⏳ 剛才 1h</button>
+            <button class="time-chip" data-time="進行中">⚡ 進行中</button>
+          </div>
+        </div>
+
+        <!-- 場景類別 -->
+        <div class="input-group">
+          <label class="input-label">生活場景標籤</label>
+          <div class="category-grid">
+            <button class="cat-btn active" data-cat="💭 隨手靈感">💭 隨手靈感</button>
+            <button class="cat-btn" data-cat="🚗 外出/交通">🚗 外出/交通</button>
+            <button class="cat-btn" data-cat="🛒 生活/採買">🛒 生活/採買</button>
+            <button class="cat-btn" data-cat="🏥 身體/就醫">🏥 身體/就醫</button>
+            <button class="cat-btn" data-cat="☕ 休息/用餐">☕ 休息/用餐</button>
+            <button class="cat-btn" data-cat="👥 陪伴/家人">👥 陪伴/家人</button>
+            <button class="cat-btn" data-cat="📖 閱讀/學習">📖 閱讀/學習</button>
+            <button class="cat-btn" data-cat="💻 工作/專案">💻 工作/專案</button>
+          </div>
+        </div>
+
+        <!-- 內容描述 (含語音按鈕) -->
+        <div class="input-group">
+          <label class="input-label">
+            <span>事件描述與想法（保留真實原話）</span>
+          </label>
+          <div class="text-input-wrapper">
+            <textarea id="lifeContentInput" rows="4" placeholder="例如：載媽媽去醫院拿藥，順便買了衛生紙；路上想到一個寫作點子..."></textarea>
+            <button class="mic-btn" id="micBtn">🎙️ 語音輸入</button>
+          </div>
+        </div>
+
+        <button class="submit-btn btn-purple" id="submitLifeBtn">⏱️ 記錄至生命之流</button>
+      </div>
+
+      <!-- 生命流最近紀錄 -->
+      <div class="history-card" id="lifeHistoryCard" style="display: none;">
+        <div class="history-header">
+          <span>今日已記時程（待回家同步）</span>
+          <span id="lifeCountBadge" style="color: var(--purple);">0 筆</span>
+        </div>
+        <div class="history-list" id="lifeHistoryList"></div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Toast 提示 -->
+  <div id="toast">
+    <span id="toastIcon">✨</span>
+    <span id="toastMsg">已記錄！</span>
+  </div>
+
+  <script>
+    // 正式生產環境 GAS 端點配置 (Version 13: 跨行大綱自動擷取)
+    const PRODUCTION_GAS_URL = "https://script.google.com/macros/s/AKfycbziv1JVlexE6Cl9hsLZsp5tKVar1jwpEuRlIZNMbagw6ZP9BojXuzev1oMXuR9LMg13gg/exec";
+    const DEFAULT_TOKEN = "INBOX_SECRET_TOKEN_2026";
+
+    let gasUrl = localStorage.getItem("gas_url");
+    // 若無設定、舊端點或舊版本網址，自動修復升級為最新 Version 13 生產端點
+    if (!gasUrl || gasUrl.includes("sample") || gasUrl.includes("AKfycbw1f") || gasUrl.includes("AKfycbx60eRkmqL") || gasUrl.includes("AKfycby5t4c12y9z")) {
+      gasUrl = PRODUCTION_GAS_URL;
+      localStorage.setItem("gas_url", gasUrl);
+      localStorage.setItem("inbox_gas_url", gasUrl);
+    }
+    let gasToken = localStorage.getItem("gas_token") || DEFAULT_TOKEN;
+
+    const elGasUrl = document.getElementById("gasUrlInput");
+    const elGasToken = document.getElementById("gasTokenInput");
+    elGasUrl.value = gasUrl;
+    elGasToken.value = gasToken;
+
+    // Tab 切換
+    const tabInboxBtn = document.getElementById("tabInboxBtn");
+    const tabLifeBtn = document.getElementById("tabLifeBtn");
+    const pageInbox = document.getElementById("pageInbox");
+    const pageLife = document.getElementById("pageLife");
+
+    tabInboxBtn.addEventListener("click", () => {
+      tabInboxBtn.classList.add("active");
+      tabLifeBtn.classList.remove("active", "tab-life");
+      pageInbox.classList.add("active");
+      pageLife.classList.remove("active");
+    });
+
+    tabLifeBtn.addEventListener("click", () => {
+      tabLifeBtn.classList.add("active", "tab-life");
+      tabInboxBtn.classList.remove("active");
+      pageLife.classList.add("active");
+      pageInbox.classList.remove("active");
+      initLifeTimeDefault();
+    });
+
+    // 設定面板切換
+    const configBtn = document.getElementById("configBtn");
+    const settingsPanel = document.getElementById("settingsPanel");
+    const saveConfigBtn = document.getElementById("saveConfigBtn");
+
+    configBtn.addEventListener("click", () => {
+      settingsPanel.classList.toggle("open");
+    });
+
+    saveConfigBtn.addEventListener("click", () => {
+      gasUrl = elGasUrl.value.trim();
+      gasToken = elGasToken.value.trim();
+      localStorage.setItem("gas_url", gasUrl);
+      localStorage.setItem("inbox_gas_url", gasUrl);
+      localStorage.setItem("gas_token", gasToken);
+      settingsPanel.classList.remove("open");
+      showToast("⚙️ 設定已儲存！");
+    });
+
+    // Toast 控制
+    function showToast(msg, icon = "✨") {
+      const toast = document.getElementById("toast");
+      document.getElementById("toastMsg").innerText = msg;
+      document.getElementById("toastIcon").innerText = icon;
+      toast.classList.add("show");
+      setTimeout(() => toast.classList.remove("show"), 2800);
+    }
+
+    // ==================== Tab 1: 靈感採集邏輯 (智慧自動分類引擎) ====================
+    let selectedType = "其他";
+    let isUserManuallySelected = false;
+
+    function detectTypeFromUrl(rawUrl) {
+      if (!rawUrl || !rawUrl.trim()) return "其他";
+      const u = rawUrl.trim().toLowerCase();
+
+      // 1. Threads
+      if (u.includes("threads.net") || u.includes("threads.com")) {
+        return "Threads";
+      }
+
+      // 2. 影片 / 影音
+      if (u.includes("youtube.com") || u.includes("youtu.be") || u.includes("bilibili.com") || u.includes("tiktok.com") || u.includes("vimeo.com") || u.includes("twitch.tv") || u.includes("nicovideo.jp")) {
+        return "影片";
+      }
+
+      // 3. 社群平台 (X/Twitter, Facebook, IG, Dcard, PTT, Reddit, LinkedIn)
+      if (u.includes("twitter.com") || u.includes("x.com") || u.includes("facebook.com") || u.includes("fb.com") || u.includes("fb.watch") || u.includes("instagram.com") || u.includes("dcard.tw") || u.includes("ptt.cc") || u.includes("reddit.com") || u.includes("linkedin.com") || u.includes("weibo.com") || u.includes("plurk.com")) {
+        return "社群";
+      }
+
+      // 4. 工具 / 開源專案
+      if (u.includes("github.com") || u.includes("gitlab.com") || u.includes("gitee.com") || u.includes("npmjs.com") || u.includes("producthunt.com") || u.includes("chromewebstore.google.com") || u.includes("huggingface.co")) {
+        return "工具";
+      }
+
+      // 5. Podcast / 聲音
+      if (u.includes("podcasts.apple.com") || u.includes("spotify.com") || u.includes("soundon.fm") || u.includes("firstory.me") || u.includes("kkbox.com/podcast") || u.includes("castbox.fm") || u.includes("overcast.fm")) {
+        return "Podcast";
+      }
+
+      // 6. 筆記 / 知識庫
+      if (u.includes("notion.site") || u.includes("notion.so") || u.includes("hackmd.io") || u.includes("craft.do") || u.includes("obsidian.md")) {
+        return "筆記";
+      }
+
+      // 7. 文章 / 專欄 / 部落格 / 媒體
+      if (u.includes("medium.com") || u.includes("substack.com") || u.includes("vocus.cc") || u.includes("matters.town") || u.includes("zhihu.com") || u.includes("weixin.qq.com") || u.includes("ithome.com.tw") || u.includes("technews.tw") || u.includes("bnext.com.tw") || u.includes("cw.com.tw") || u.includes("thenewslens.com") || u.includes("panx.asia") || u.includes("/blog") || u.includes("/news") || u.includes("/article") || u.includes("/post") || u.includes(".html") || u.startsWith("http://") || u.startsWith("https://")) {
+        return "文章";
+      }
+
+      return "其他";
+    }
+
+    function applyDetectedType(type, isAuto = true) {
+      selectedType = type;
+      document.querySelectorAll(".type-btn").forEach(btn => {
+        if (btn.getAttribute("data-type") === type) {
+          btn.classList.add("active");
+        } else {
+          btn.classList.remove("active");
+        }
+      });
+
+      const badge = document.getElementById("autoTypeBadge");
+      if (badge) {
+        if (isAuto) {
+          badge.innerText = `✨ 已自動辨識：${type}`;
+          badge.style.color = "var(--primary)";
+          badge.style.background = "rgba(56, 189, 248, 0.15)";
+        } else {
+          badge.innerText = `手動指定：${type}`;
+          badge.style.color = "var(--purple)";
+          badge.style.background = "rgba(168, 85, 247, 0.15)";
+        }
+      }
+    }
+
+    const urlInputEl = document.getElementById("urlInput");
+    function handleUrlChange() {
+      const val = urlInputEl.value.trim();
+      if (!val) {
+        applyDetectedType("其他", true);
+        const badge = document.getElementById("autoTypeBadge");
+        if (badge) badge.innerText = "⚡ 貼上網址自動辨識";
+        return;
+      }
+      if (!isUserManuallySelected) {
+        const detected = detectTypeFromUrl(val);
+        applyDetectedType(detected, true);
+      }
+    }
+
+    urlInputEl.addEventListener("input", handleUrlChange);
+    urlInputEl.addEventListener("change", handleUrlChange);
+    urlInputEl.addEventListener("paste", () => setTimeout(handleUrlChange, 50));
+
+    document.querySelectorAll(".type-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        isUserManuallySelected = true;
+        const type = btn.getAttribute("data-type");
+        applyDetectedType(type, false);
+      });
+    });
+
+    document.getElementById("pasteBtn").addEventListener("click", async () => {
+      try {
+        const text = await navigator.clipboard.readText();
+        if (text) {
+          urlInputEl.value = text;
+          isUserManuallySelected = false;
+          handleUrlChange();
+          showToast(`📋 已貼上並辨識為【${selectedType}】！`);
+        }
+      } catch (err) {
+        showToast("⚠️ 請手動長按貼上", "⚠️");
+      }
+    });
+
+    function getTodayKey(prefix) {
+      const now = new Date();
+      const y = now.getFullYear();
+      const m = String(now.getMonth() + 1).padStart(2, '0');
+      const d = String(now.getDate()).padStart(2, '0');
+      return `${prefix}_${y}-${m}-${d}`;
+    }
+
+    function loadInboxHistory() {
+      try {
+        const raw = localStorage.getItem(getTodayKey("inbox_history"));
+        return raw ? JSON.parse(raw) : [];
+      } catch (e) {
+        return [];
+      }
+    }
+
+    function saveInboxHistory(list) {
+      try {
+        localStorage.setItem(getTodayKey("inbox_history"), JSON.stringify(list));
+      } catch (e) {}
+    }
+
+    function renderInboxHistory() {
+      const card = document.getElementById("inboxHistoryCard");
+      const listEl = document.getElementById("inboxHistoryList");
+      const badge = document.getElementById("inboxCountBadge");
+      const items = loadInboxHistory();
+
+      if (badge) badge.innerText = `${items.length} 筆`;
+      if (!card || !listEl) return;
+
+      if (items.length === 0) {
+        card.style.display = "none";
+        listEl.innerHTML = "";
+        return;
+      }
+      card.style.display = "flex";
+      listEl.innerHTML = "";
+      items.forEach((item) => {
+        const el = document.createElement("div");
+        el.className = "history-item";
+        const statusBadge = item.status === "failed" 
+          ? `<span class="history-tag" style="background: rgba(239, 68, 68, 0.2); color: #fca5a5;">⚠️ 暫存(未送出)</span>`
+          : "";
+        el.innerHTML = `
+          <div class="history-top">
+            <span class="history-tag">${item.type}</span>
+            <div style="display: flex; align-items: center; gap: 6px;">
+              ${statusBadge}
+              <span>${item.time}</span>
+            </div>
+          </div>
+          <div class="history-content">${item.title || item.url}</div>
+          ${item.status === "failed" ? `<div style="font-size: 11px; color: #fca5a5; margin-top: 4px; word-break: break-all;">🔗 待送網址：${item.url}</div>` : ""}
+        `;
+        listEl.appendChild(el);
+      });
+    }
+
+    function addInboxRecord(url, type, title, status = "success") {
+      const items = loadInboxHistory();
+      const time = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+      items.unshift({ url, type, title, time, status });
+      saveInboxHistory(items);
+      renderInboxHistory();
+    }
+
+    const submitInboxBtn = document.getElementById("submitInboxBtn");
+    submitInboxBtn.addEventListener("click", async () => {
+      const url = urlInputEl.value.trim();
+      const title = document.getElementById("titleInput").value.trim();
+
+      if (!url) {
+        showToast("⚠️ 請輸入或貼上網址", "⚠️");
+        return;
+      }
+
+      // 若未手動點選，發送前再做一次精準網址分類補全
+      const finalType = isUserManuallySelected ? selectedType : detectTypeFromUrl(url);
+
+      submitInboxBtn.disabled = true;
+      submitInboxBtn.innerText = "⏳ 傳送中...";
+
+      try {
+        const payload = {
+          action: "submit",
+          token: gasToken,
+          url: url,
+          type: finalType,
+          title: title
+        };
+
+        const res = await fetch(gasUrl, {
+          method: "POST",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify(payload)
+        });
+
+        const data = await res.json();
+        if (data.status === "success") {
+          showToast(`🎉 【${finalType}】靈感投遞成功！`);
+          urlInputEl.value = "";
+          document.getElementById("titleInput").value = "";
+          isUserManuallySelected = false;
+          applyDetectedType("其他", true);
+          const badge = document.getElementById("autoTypeBadge");
+          if (badge) badge.innerText = "⚡ 貼上網址自動辨識";
+          addInboxRecord(url, finalType, title || "自動擷取標題", "success");
+        } else {
+          showToast("❌ " + (data.message || "上傳失敗，已暫存"), "❌");
+          addInboxRecord(url, finalType, title || url, "failed");
+        }
+      } catch (err) {
+        showToast("❌ 網路異常，已將靈感暫存於下方！", "⚠️");
+        addInboxRecord(url, finalType, title || url, "failed");
+      } finally {
+        submitInboxBtn.disabled = false;
+        submitInboxBtn.innerText = "🚀 即時投遞至待採集庫";
+      }
+    });
+
+    // ==================== Tab 2: 生命之流時程邏輯 ====================
+    let selectedCategory = "💭 隨手靈感";
+    document.querySelectorAll(".cat-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".cat-btn").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        selectedCategory = btn.getAttribute("data-cat");
+      });
+    });
+
+    function initLifeTimeDefault() {
+      const now = new Date();
+      const timeStr = now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit', hour12: false});
+      document.getElementById("currentClock").innerText = "現在 " + timeStr;
+      if (!document.getElementById("lifeTimeInput").value) {
+        document.getElementById("lifeTimeInput").value = timeStr;
+      }
+    }
+
+    function calculateDurationJs(tStr) {
+      if (!tStr || tStr === "—") return "—";
+      const s = tStr.trim();
+      if (s.includes("30m") || s.includes("30分")) return "30m";
+      if (s.includes("1h") || s.includes("1小時") || s.includes("60分")) return "1h";
+      if (s.includes("進行中")) return "進行中";
+
+      const match = s.match(/(\d{1,2})[:：](\d{2})\s*[-~至]\s*(\d{1,2})[:：](\d{2})/);
+      if (match) {
+        const h1 = parseInt(match[1]), m1 = parseInt(match[2]);
+        const h2 = parseInt(match[3]), m2 = parseInt(match[4]);
+        let diff = (h2 * 60 + m2) - (h1 * 60 + m1);
+        if (diff < 0) diff += 24 * 60;
+        const hrs = Math.floor(diff / 60);
+        const mins = diff % 60;
+        if (hrs > 0 && mins > 0) return `${hrs}h ${mins}m`;
+        if (hrs > 0) return `${hrs}h`;
+        return `${mins}m`;
+      }
+      return "—";
+    }
+
+    document.querySelectorAll(".time-chip").forEach(chip => {
+      chip.addEventListener("click", () => {
+        document.querySelectorAll(".time-chip").forEach(c => c.classList.remove("active"));
+        chip.classList.add("active");
+        const type = chip.getAttribute("data-time");
+        const now = new Date();
+        const cur = now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit', hour12: false});
+
+        if (type === "現在") {
+          document.getElementById("lifeTimeInput").value = cur;
+        } else if (type === "剛剛30m") {
+          const past = new Date(now.getTime() - 30 * 60000);
+          const pastStr = past.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit', hour12: false});
+          document.getElementById("lifeTimeInput").value = `${pastStr} - ${cur}`;
+        } else if (type === "剛剛1h") {
+          const past = new Date(now.getTime() - 60 * 60000);
+          const pastStr = past.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit', hour12: false});
+          document.getElementById("lifeTimeInput").value = `${pastStr} - ${cur}`;
+        } else if (type === "進行中") {
+          document.getElementById("lifeTimeInput").value = `${cur} - 進行中`;
+        }
+      });
+    });
+
+    // 語音輸入 (Web Speech API - 連續不中斷長錄音模式)
+    const micBtn = document.getElementById("micBtn");
+    const lifeContentInput = document.getElementById("lifeContentInput");
+    let recognition = null;
+    let isRecording = false;
+
+    if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+      const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+      recognition = new SpeechRec();
+      recognition.lang = 'zh-TW';
+      recognition.continuous = true;
+      recognition.interimResults = true;
+
+      recognition.onstart = () => {
+        isRecording = true;
+        micBtn.classList.add("recording");
+        micBtn.innerText = "🛑 停止錄音";
+        showToast("🎙️ 持續聆聽中，說完請按停止...", "🎙️");
+      };
+
+      recognition.onresult = (e) => {
+        for (let i = e.resultIndex; i < e.results.length; ++i) {
+          if (e.results[i].isFinal) {
+            const text = e.results[i][0].transcript.trim();
+            if (text) {
+              const prev = lifeContentInput.value.trim();
+              lifeContentInput.value = prev ? prev + "，" + text : text;
+              showToast("✨ 語音辨識中...");
+            }
+          }
+        }
+      };
+
+      recognition.onerror = (e) => {
+        if (e.error !== 'no-speech') {
+          console.warn("Speech error:", e.error);
+        }
+      };
+
+      recognition.onend = () => {
+        if (isRecording) {
+          try {
+            recognition.start();
+          } catch (err) {
+            isRecording = false;
+            micBtn.classList.remove("recording");
+            micBtn.innerText = "🎙️ 語音輸入";
+          }
+        } else {
+          micBtn.classList.remove("recording");
+          micBtn.innerText = "🎙️ 語音輸入";
+          showToast("✨ 語音記錄完成！");
+        }
+      };
+
+      micBtn.addEventListener("click", () => {
+        if (isRecording) {
+          isRecording = false;
+          try { recognition.stop(); } catch(e){}
+          micBtn.classList.remove("recording");
+          micBtn.innerText = "🎙️ 語音輸入";
+        } else {
+          isRecording = true;
+          try { recognition.start(); } catch(e){}
+        }
+      });
+    } else {
+      micBtn.style.display = "none";
+    }
+
+    function loadLifeHistory() {
+      try {
+        const raw = localStorage.getItem(getTodayKey("life_history"));
+        return raw ? JSON.parse(raw) : [];
+      } catch (e) {
+        return [];
+      }
+    }
+
+    function saveLifeHistory(list) {
+      try {
+        localStorage.setItem(getTodayKey("life_history"), JSON.stringify(list));
+      } catch (e) {}
+    }
+
+    function renderLifeHistory() {
+      const card = document.getElementById("lifeHistoryCard");
+      const listEl = document.getElementById("lifeHistoryList");
+      const badge = document.getElementById("lifeCountBadge");
+      const items = loadLifeHistory();
+
+      if (badge) badge.innerText = `${items.length} 筆`;
+      if (!card || !listEl) return;
+
+      if (items.length === 0) {
+        card.style.display = "none";
+        listEl.innerHTML = "";
+        return;
+      }
+      card.style.display = "flex";
+      listEl.innerHTML = "";
+      items.forEach((item) => {
+        const el = document.createElement("div");
+        el.className = "history-item";
+        const durTag = (item.duration && item.duration !== "—") 
+          ? `<span class="history-tag" style="background: rgba(168, 85, 247, 0.25); color: #e9d5ff; font-weight: 700;">⏱️ ${item.duration}</span>` 
+          : "";
+        const statusBadge = item.status === "failed" 
+          ? `<span class="history-tag" style="background: rgba(239, 68, 68, 0.2); color: #fca5a5;">⚠️ 暫存(未送出)</span>`
+          : "";
+        el.innerHTML = `
+          <div class="history-top">
+            <span class="history-tag tag-purple">${item.category}</span>
+            <div style="display: flex; align-items: center; gap: 6px;">
+              ${statusBadge}
+              ${durTag}
+              <span>${item.time}</span>
+            </div>
+          </div>
+          <div class="history-content">${item.content}</div>
+        `;
+        listEl.appendChild(el);
+      });
+    }
+
+    function addLifeRecord(timeStr, cat, content, duration = "—", status = "success") {
+      const items = loadLifeHistory();
+      items.unshift({ time: timeStr, category: cat, content: content, duration: duration, status: status });
+      saveLifeHistory(items);
+      renderLifeHistory();
+    }
+
+    const submitLifeBtn = document.getElementById("submitLifeBtn");
+    submitLifeBtn.addEventListener("click", async () => {
+      const timeRange = document.getElementById("lifeTimeInput").value.trim();
+      const content = lifeContentInput.value.trim();
+      const now = new Date();
+      const y = now.getFullYear();
+      const m = String(now.getMonth() + 1).padStart(2, '0');
+      const d = String(now.getDate()).padStart(2, '0');
+      const eventDate = `${y}-${m}-${d}`;
+      const defaultTime = now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit', hour12: false});
+      const finalTimeRange = timeRange || defaultTime;
+      const duration = calculateDurationJs(finalTimeRange);
+
+      if (!content) {
+        showToast("⚠️ 請填寫事件或想法描述", "⚠️");
+        return;
+      }
+
+      submitLifeBtn.disabled = true;
+      submitLifeBtn.innerText = "⏳ 記錄中...";
+
+      try {
+        const payload = {
+          action: "submit_lifestream",
+          token: gasToken,
+          event_date: eventDate,
+          time_range: finalTimeRange,
+          duration: duration,
+          category: selectedCategory,
+          content: content
+        };
+
+        const res = await fetch(gasUrl, {
+          method: "POST",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify(payload)
+        });
+
+        const data = await res.json();
+        if (data.status === "success") {
+          const durBadge = duration !== "—" ? ` (${duration})` : "";
+          showToast(`⏱️ 已記錄至生命之流${durBadge}！`, "💜");
+          lifeContentInput.value = "";
+          addLifeRecord(finalTimeRange, selectedCategory, content, duration, "success");
+        } else {
+          showToast("❌ " + (data.message || "上傳失敗，已暫存"), "❌");
+          addLifeRecord(finalTimeRange, selectedCategory, content, duration, "failed");
+        }
+      } catch (err) {
+        showToast("❌ 網路異常，已將時程暫存於下方！", "⚠️");
+        addLifeRecord(finalTimeRange, selectedCategory, content, duration, "failed");
+      } finally {
+        submitLifeBtn.disabled = false;
+        submitLifeBtn.innerText = "⏱️ 記錄至生命之流";
+      }
+    });
+
+    // Service Worker 註冊
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('sw.js').catch(err => {
+          console.log('SW register error:', err);
+        });
+      });
+    }
+
+    async function syncRemoteInbox() {
+      try {
+        const res = await fetch(`${gasUrl}?action=fetch_pending&token=${encodeURIComponent(gasToken)}`);
+        const data = await res.json();
+        if (data && data.status === "success" && Array.isArray(data.items)) {
+          const localItems = loadInboxHistory();
+          const failedItems = localItems.filter(i => i.status === "failed");
+          const remoteList = data.items.map(rem => {
+            const timeStr = rem.timestamp ? rem.timestamp.slice(11, 16) : "—";
+            return {
+              url: rem.url,
+              type: rem.type || "其他",
+              title: rem.title || rem.url,
+              time: timeStr,
+              timestamp: rem.timestamp,
+              status: "success"
+            };
+          }).reverse();
+
+          const combined = [...failedItems];
+          remoteList.forEach(r => {
+            if (!combined.some(c => c.url === r.url)) {
+              combined.push(r);
+            }
+          });
+          saveInboxHistory(combined);
+          renderInboxHistory();
+        }
+      } catch (err) {
+        console.warn("syncRemoteInbox err:", err);
+      }
+    }
+
+    async function syncRemoteLife() {
+      try {
+        const res = await fetch(`${gasUrl}?action=fetch_lifestream&token=${encodeURIComponent(gasToken)}`);
+        const data = await res.json();
+        if (data && data.status === "success" && Array.isArray(data.items)) {
+          const localItems = loadLifeHistory();
+          const failedItems = localItems.filter(i => i.status === "failed");
+          const remoteList = data.items.map(rem => {
+            return {
+              time: rem.time_range || "—",
+              category: rem.category || "💭 隨手靈感",
+              content: rem.content || "",
+              duration: rem.duration || "—",
+              timestamp: rem.timestamp,
+              status: "success"
+            };
+          }).reverse();
+
+          const combined = [...failedItems];
+          remoteList.forEach(r => {
+            if (!combined.some(c => c.timestamp === r.timestamp || (c.time === r.time && c.content === r.content))) {
+              combined.push(r);
+            }
+          });
+          saveLifeHistory(combined);
+          renderLifeHistory();
+        }
+      } catch (err) {
+        console.warn("syncRemoteLife err:", err);
+      }
+    }
+
+    // 初始化時間與歷史暫存清單（本地秒開 + 雲端秒級同步）
+    setInterval(initLifeTimeDefault, 60000);
+    initLifeTimeDefault();
+    renderInboxHistory();
+    renderLifeHistory();
+    syncRemoteInbox();
+    syncRemoteLife();
+  </script>
+</body>
+</html>
