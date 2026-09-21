@@ -1,18 +1,63 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
   <defs>
-    <linearGradient id="badge" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#00d2ff" />
-      <stop offset="100%" stop-color="#0066ff" />
+    <!-- 金色漸層 (Radiant Imperial Gold) -->
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fff2b2" />
+      <stop offset="25%" stop-color="#ffd700" />
+      <stop offset="50%" stop-color="#cca033" />
+      <stop offset="75%" stop-color="#fdf1a9" />
+      <stop offset="100%" stop-color="#b8860b" />
     </linearGradient>
+
+    <!-- 背景深邃黑曜金漸層 -->
+    <radialGradient id="bgGrad" cx="50%" cy="50%" r="65%">
+      <stop offset="0%" stop-color="#1c1917" />
+      <stop offset="60%" stop-color="#0c0a09" />
+      <stop offset="100%" stop-color="#050505" />
+    </radialGradient>
+
+    <!-- 金色微光外發光 -->
+    <filter id="goldGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="0" stdDeviation="8" flood-color="#ffd700" flood-opacity="0.45" />
+    </filter>
+    <clipPath id="outerClip">
+      <circle cx="256.0" cy="256.0" r="217.0" />
+    </clipPath>
   </defs>
-  <!-- 圓形亮藍徽章 -->
-  <circle cx="256" cy="256" r="248" fill="url(#badge)" />
-  
-  <!-- 加粗純白訊號波紋 -->
-  <path d="M 115 345 A 165 165 0 1 1 397 345" stroke="#ffffff" stroke-width="34" stroke-linecap="round" fill="none" />
-  <path d="M 165 315 A 105 105 0 1 1 347 315" stroke="#ffffff" stroke-width="34" stroke-linecap="round" fill="none" />
-  <circle cx="256" cy="260" r="32" fill="#ffffff" />
-  
-  <!-- 底部發射箭頭 -->
-  <path d="M 256 410 L 256 340 M 224 364 L 256 330 L 288 364" stroke="#ffffff" stroke-width="30" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+
+  <!-- 背景：奢華黑金畫布 (iOS 全版裁切安全) -->
+  <rect width="512" height="512" fill="url(#bgGrad)" />
+
+  <!-- 柔和金色環境光暈 -->
+  <circle cx="256.0" cy="256.0" r="236.0" fill="#d4af37" opacity="0.1" />
+
+  <!-- 生命之花主體 (受外圓裁剪的內部花瓣幾何) -->
+  <g filter="url(#goldGlow)" clip-path="url(#outerClip)">
+  <circle cx="256.00" cy="256.00" r="72.00" stroke="url(#goldGrad)" stroke-width="6.5" fill="none" />
+  <circle cx="328.00" cy="256.00" r="72.00" stroke="url(#goldGrad)" stroke-width="6.5" fill="none" />
+  <circle cx="292.00" cy="318.35" r="72.00" stroke="url(#goldGrad)" stroke-width="6.5" fill="none" />
+  <circle cx="220.00" cy="318.35" r="72.00" stroke="url(#goldGrad)" stroke-width="6.5" fill="none" />
+  <circle cx="184.00" cy="256.00" r="72.00" stroke="url(#goldGrad)" stroke-width="6.5" fill="none" />
+  <circle cx="220.00" cy="193.65" r="72.00" stroke="url(#goldGrad)" stroke-width="6.5" fill="none" />
+  <circle cx="292.00" cy="193.65" r="72.00" stroke="url(#goldGrad)" stroke-width="6.5" fill="none" />
+  <circle cx="400.00" cy="256.00" r="72.00" stroke="url(#goldGrad)" stroke-width="6.5" fill="none" />
+  <circle cx="328.00" cy="380.71" r="72.00" stroke="url(#goldGrad)" stroke-width="6.5" fill="none" />
+  <circle cx="184.00" cy="380.71" r="72.00" stroke="url(#goldGrad)" stroke-width="6.5" fill="none" />
+  <circle cx="112.00" cy="256.00" r="72.00" stroke="url(#goldGrad)" stroke-width="6.5" fill="none" />
+  <circle cx="184.00" cy="131.29" r="72.00" stroke="url(#goldGrad)" stroke-width="6.5" fill="none" />
+  <circle cx="328.00" cy="131.29" r="72.00" stroke="url(#goldGrad)" stroke-width="6.5" fill="none" />
+  <circle cx="364.00" cy="318.35" r="72.00" stroke="url(#goldGrad)" stroke-width="6.5" fill="none" />
+  <circle cx="256.00" cy="380.71" r="72.00" stroke="url(#goldGrad)" stroke-width="6.5" fill="none" />
+  <circle cx="148.00" cy="318.35" r="72.00" stroke="url(#goldGrad)" stroke-width="6.5" fill="none" />
+  <circle cx="148.00" cy="193.65" r="72.00" stroke="url(#goldGrad)" stroke-width="6.5" fill="none" />
+  <circle cx="256.00" cy="131.29" r="72.00" stroke="url(#goldGrad)" stroke-width="6.5" fill="none" />
+  <circle cx="364.00" cy="193.65" r="72.00" stroke="url(#goldGrad)" stroke-width="6.5" fill="none" />
+  </g>
+
+  <!-- 生命之花雙重外同心同質圓邊框 -->
+  <circle cx="256.0" cy="256.0" r="216.0" stroke="url(#goldGrad)" stroke-width="8" fill="none" filter="url(#goldGlow)" />
+  <circle cx="256.0" cy="256.0" r="230.0" stroke="url(#goldGrad)" stroke-width="5" fill="none" filter="url(#goldGlow)" />
+
+  <!-- 幾何正中心微型金核點 -->
+  <circle cx="256.0" cy="256.0" r="6" fill="url(#goldGrad)" filter="url(#goldGlow)" />
 </svg>
