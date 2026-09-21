@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="robots" content="noindex, nofollow, noarchive" />
   <title>即時投遞箱 ＆ 生命之流</title>
   
   <!-- PWA 設定 -->
@@ -434,6 +435,35 @@
       line-height: 1.4;
       word-break: break-word;
     }
+    .history-item.clickable {
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .history-item.clickable:hover, .history-item.clickable:active {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(56, 189, 248, 0.35);
+      transform: translateY(-1px);
+    }
+    .history-link {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 6px;
+      text-decoration: none;
+      color: inherit;
+    }
+    .history-link-icon {
+      color: var(--primary);
+      font-size: 13px;
+      flex-shrink: 0;
+      margin-top: 2px;
+      opacity: 0.75;
+      transition: transform 0.2s;
+    }
+    .history-item:hover .history-link-icon {
+      transform: translate(2px, -2px);
+      opacity: 1;
+    }
 
     /* 浮動通知 Toast */
     #toast {
@@ -790,6 +820,47 @@
       return `${prefix}_${y}-${m}-${d}`;
     }
 
+    function cleanTimeArtifact(timeStr) {
+      if (!timeStr || timeStr === "—") return "";
+      let s = String(timeStr);
+      // 替換 1899-12-30T13:00:00.000Z 或 ISO 時間戳為純時分 HH:mm
+      s = s.replace(/1899-12-30T?(\d{2}:\d{2})(:\d{2})?(\.\d+)?Z?/ig, "$1");
+      s = s.replace(/\d{4}-\d{2}-\d{2}T?(\d{2}:\d{2})(:\d{2})?(\.\d+)?(Z|[+-]\d{2}:\d{2})?/ig, "$1");
+      return s.trim();
+    }
+
+    function formatDisplayTimestamp(rawTime, rawTimestamp, rawEventDate) {
+      const now = new Date();
+      const currentMmDd = `${String(now.getMonth() + 1).padStart(2, '0')}/${String(now.getDate()).padStart(2, '0')}`;
+      
+      let datePart = "";
+      if (rawTimestamp) {
+        const m = String(rawTimestamp).match(/(\d{4})-(\d{2})-(\d{2})/);
+        if (m) datePart = `${m[2]}/${m[3]}`;
+      } else if (rawEventDate) {
+        const m = String(rawEventDate).match(/(\d{4})-(\d{2})-(\d{2})/);
+        if (m) datePart = `${m[2]}/${m[3]}`;
+      }
+      if (!datePart) datePart = currentMmDd;
+
+      const cleanedTime = cleanTimeArtifact(rawTime);
+      
+      // 若原字串已含有 MM/DD 日期格式，直接返回清洗後結果
+      if (/^\d{2}\/\d{2}/.test(cleanedTime)) {
+        return cleanedTime;
+      }
+
+      if (!cleanedTime || cleanedTime === "—") {
+        if (rawTimestamp && String(rawTimestamp).includes("T")) {
+          const mTime = String(rawTimestamp).match(/T(\d{2}:\d{2})/);
+          if (mTime) return `${datePart} ${mTime[1]}`;
+        }
+        return datePart;
+      }
+
+      return `${datePart} ${cleanedTime}`;
+    }
+
     function loadInboxHistory() {
       try {
         const raw = localStorage.getItem(getTodayKey("inbox_history"));
@@ -803,6 +874,16 @@
       try {
         localStorage.setItem(getTodayKey("inbox_history"), JSON.stringify(list));
       } catch (e) {}
+    }
+
+    function escapeHtml(str) {
+      if (!str) return "";
+      return String(str)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
     }
 
     function renderInboxHistory() {
@@ -823,29 +904,53 @@
       listEl.innerHTML = "";
       items.forEach((item) => {
         const el = document.createElement("div");
-        el.className = "history-item";
+        const hasUrl = item.url && (item.url.startsWith("http://") || item.url.startsWith("https://"));
+        el.className = "history-item" + (hasUrl ? " clickable" : "");
         const statusBadge = item.status === "failed" 
           ? `<span class="history-tag" style="background: rgba(239, 68, 68, 0.2); color: #fca5a5;">⚠️ 暫存(未送出)</span>`
           : "";
+        const displayTime = formatDisplayTimestamp(item.time, item.timestamp);
+        const displayTitle = item.title || item.url || "無標題";
+        
+        let contentHtml = "";
+        if (hasUrl) {
+          contentHtml = `
+            <a href="${escapeHtml(item.url)}" target="_blank" rel="noopener noreferrer" class="history-content history-link" onclick="event.stopPropagation()">
+              <span>${escapeHtml(displayTitle)}</span>
+              <span class="history-link-icon">↗</span>
+            </a>
+          `;
+        } else {
+          contentHtml = `<div class="history-content">${escapeHtml(displayTitle)}</div>`;
+        }
+
         el.innerHTML = `
           <div class="history-top">
-            <span class="history-tag">${item.type}</span>
+            <span class="history-tag">${escapeHtml(item.type || "靈感")}</span>
             <div style="display: flex; align-items: center; gap: 6px;">
               ${statusBadge}
-              <span>${item.time}</span>
+              <span>${displayTime}</span>
             </div>
           </div>
-          <div class="history-content">${item.title || item.url}</div>
-          ${item.status === "failed" ? `<div style="font-size: 11px; color: #fca5a5; margin-top: 4px; word-break: break-all;">🔗 待送網址：${item.url}</div>` : ""}
+          ${contentHtml}
+          ${item.status === "failed" ? `<div style="font-size: 11px; color: #fca5a5; margin-top: 4px; word-break: break-all;">🔗 待送網址：${escapeHtml(item.url)}</div>` : ""}
         `;
+
+        if (hasUrl) {
+          el.addEventListener("click", () => {
+            window.open(item.url, "_blank", "noopener,noreferrer");
+          });
+        }
+
         listEl.appendChild(el);
       });
     }
 
     function addInboxRecord(url, type, title, status = "success") {
       const items = loadInboxHistory();
-      const time = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-      items.unshift({ url, type, title, time, status });
+      const now = new Date();
+      const displayTime = formatDisplayTimestamp("", now.toISOString());
+      items.unshift({ url, type, title, time: displayTime, timestamp: now.toISOString(), status });
       saveInboxHistory(items);
       renderInboxHistory();
     }
@@ -1079,13 +1184,14 @@
         const statusBadge = item.status === "failed" 
           ? `<span class="history-tag" style="background: rgba(239, 68, 68, 0.2); color: #fca5a5;">⚠️ 暫存(未送出)</span>`
           : "";
+        const displayTime = formatDisplayTimestamp(item.time, item.timestamp, item.event_date);
         el.innerHTML = `
           <div class="history-top">
             <span class="history-tag tag-purple">${item.category}</span>
             <div style="display: flex; align-items: center; gap: 6px;">
               ${statusBadge}
               ${durTag}
-              <span>${item.time}</span>
+              <span>${displayTime}</span>
             </div>
           </div>
           <div class="history-content">${item.content}</div>
@@ -1096,7 +1202,9 @@
 
     function addLifeRecord(timeStr, cat, content, duration = "—", status = "success") {
       const items = loadLifeHistory();
-      items.unshift({ time: timeStr, category: cat, content: content, duration: duration, status: status });
+      const now = new Date();
+      const displayTime = formatDisplayTimestamp(timeStr, now.toISOString());
+      items.unshift({ time: displayTime, category: cat, content: content, duration: duration, timestamp: now.toISOString(), status: status });
       saveLifeHistory(items);
       renderLifeHistory();
     }
@@ -1175,7 +1283,7 @@
           const localItems = loadInboxHistory();
           const failedItems = localItems.filter(i => i.status === "failed");
           const remoteList = data.items.map(rem => {
-            const timeStr = rem.timestamp ? rem.timestamp.slice(11, 16) : "—";
+            const timeStr = formatDisplayTimestamp("", rem.timestamp);
             return {
               url: rem.url,
               type: rem.type || "其他",
@@ -1208,12 +1316,14 @@
           const localItems = loadLifeHistory();
           const failedItems = localItems.filter(i => i.status === "failed");
           const remoteList = data.items.map(rem => {
+            const timeStr = formatDisplayTimestamp(rem.time_range, rem.timestamp, rem.event_date);
             return {
-              time: rem.time_range || "—",
+              time: timeStr,
               category: rem.category || "💭 隨手靈感",
               content: rem.content || "",
               duration: rem.duration || "—",
               timestamp: rem.timestamp,
+              event_date: rem.event_date,
               status: "success"
             };
           }).reverse();
@@ -1232,6 +1342,34 @@
       }
     }
 
+    // 檢查是否有 URL 傳入參數（支援 Web Share Target API 或捷徑跳轉）
+    function handleSharedUrlParams() {
+      const params = new URLSearchParams(window.location.search);
+      const rawText = params.get("text") || "";
+      const rawUrl = params.get("url") || "";
+      const rawTitle = params.get("title") || "";
+
+      let targetUrl = rawUrl;
+      if (!targetUrl && rawText) {
+        const match = rawText.match(/https?:\/\/[^\s]+/);
+        if (match) targetUrl = match[0];
+      }
+
+      if (targetUrl) {
+        urlInputEl.value = targetUrl;
+        if (rawTitle) document.getElementById("titleInput").value = rawTitle;
+        const detectedType = detectTypeFromUrl(targetUrl);
+        applyDetectedType(detectedType, false);
+        showToast(`🔗 已自動帶入分享連結：${detectedType}`, "✨");
+
+        if (params.get("auto") === "1") {
+          setTimeout(() => {
+            submitInboxBtn.click();
+          }, 300);
+        }
+      }
+    }
+
     // 初始化時間與歷史暫存清單（本地秒開 + 雲端秒級同步）
     setInterval(initLifeTimeDefault, 60000);
     initLifeTimeDefault();
@@ -1239,6 +1377,7 @@
     renderLifeHistory();
     syncRemoteInbox();
     syncRemoteLife();
+    handleSharedUrlParams();
   </script>
 </body>
 </html>

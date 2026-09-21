@@ -1,4 +1,4 @@
-const CACHE_NAME = 'inbox-collector-v12';
+const CACHE_NAME = 'inbox-collector-v15';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
