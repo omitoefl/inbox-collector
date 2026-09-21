@@ -1,4 +1,4 @@
-const CACHE_NAME = 'inbox-collector-v16';
+const CACHE_NAME = 'inbox-collector-v17';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
@@ -6,8 +6,10 @@ const ASSETS_TO_CACHE = [
   './icon-192.png',
   './icon-512.png',
   './apple-touch-icon.png',
+  './apple-touch-icon-180x180.png',
   './favicon.png',
-  './favicon.ico'
+  './favicon.ico',
+  './favicon.svg'
 ];
 
 self.addEventListener('install', event => {

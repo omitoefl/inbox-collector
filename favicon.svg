@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1d4ed8" />
+      <stop offset="50%" stop-color="#0284c7" />
+      <stop offset="100%" stop-color="#38bdf8" />
+    </linearGradient>
+    <filter id="subtleGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#0f172a" flood-opacity="0.3" />
+    </filter>
+  </defs>
+
+  <!-- 全版背景，避免 iOS 裁切產生黑角 -->
+  <rect width="512" height="512" fill="url(#bgGrad)" />
+
+  <!-- 內部裝飾光圈 -->
+  <circle cx="256" cy="256" r="185" fill="#ffffff" opacity="0.08" />
+
+  <!-- 主體加粗純白雷達投遞波紋（高清晰、高辨識） -->
+  <g filter="url(#subtleGlow)" stroke="#ffffff" stroke-linecap="round" fill="none">
+    <path d="M 125 335 A 155 155 0 1 1 387 335" stroke-width="28" />
+    <path d="M 168 310 A 108 108 0 1 1 344 310" stroke-width="28" />
+    <path d="M 210 285 A 60 60 0 1 1 302 285" stroke-width="28" />
+  </g>
+
+  <!-- 中心核心信號原點 -->
+  <circle cx="256" cy="235" r="25" fill="#ffffff" filter="url(#subtleGlow)" />
+
+  <!-- 底部發射箭頭信標 -->
+  <path d="M 256 365 L 256 312 M 240 328 L 256 310 L 272 328" 
+        stroke="#ffffff" stroke-width="24" stroke-linecap="round" stroke-linejoin="round" 
+        fill="none" filter="url(#subtleGlow)" />
+</svg>
