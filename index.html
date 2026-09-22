@@ -575,7 +575,10 @@
       <div class="history-card" id="inboxHistoryCard" style="display: none;">
         <div class="history-header">
           <span>今日已投遞靈感</span>
-          <span id="inboxCountBadge">0 筆</span>
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <button id="clearFailedInboxBtn" onclick="clearFailedInboxItems()" style="background: rgba(239, 68, 68, 0.15); color: #fca5a5; border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 6px; padding: 2px 6px; font-size: 11px; cursor: pointer; display: none;">🧹 清除舊暫存</button>
+            <span id="inboxCountBadge">0 筆</span>
+          </div>
         </div>
         <div class="history-list" id="inboxHistoryList"></div>
       </div>
@@ -898,58 +901,21 @@
         .replace(/'/g, "&#039;");
     }
 
-    function deleteInboxHistoryItem(itemIndex) {
+    function clearFailedInboxItems() {
       const items = loadInboxHistory();
-      if (items[itemIndex]) {
-        items.splice(itemIndex, 1);
-        saveInboxHistory(items);
-        renderInboxHistory();
-        showToast("🗑️ 已從本地清單移除！");
-      }
+      const cleaned = items.filter(i => i.status !== "failed");
+      saveInboxHistory(cleaned);
+      renderInboxHistory();
+      showToast("🧹 已清理所有未送出的暫存草稿！");
     }
-    window.deleteInboxHistoryItem = deleteInboxHistoryItem;
-
-    async function retrySubmitInboxItem(itemIndex) {
-      const items = loadInboxHistory();
-      if (!items[itemIndex]) return;
-      const target = items[itemIndex];
-
-      showToast("⏳ 正在嘗試重新補傳...", "⏳");
-      try {
-        const payload = {
-          action: "submit",
-          token: gasToken,
-          url: target.url,
-          type: target.type || "Threads",
-          title: target.title || ""
-        };
-
-        const res = await fetch(gasUrl, {
-          method: "POST",
-          headers: { "Content-Type": "text/plain;charset=utf-8" },
-          body: JSON.stringify(payload)
-        });
-
-        const data = await res.json();
-        if (data.status === "success") {
-          showToast(`🎉 補傳成功！已寫入待採集庫`);
-          items[itemIndex].status = "success";
-          saveInboxHistory(items);
-          renderInboxHistory();
-        } else {
-          showToast("❌ 補傳失敗：" + (data.message || "請檢查連線"), "❌");
-        }
-      } catch (err) {
-        showToast("❌ 補傳失敗，網路仍未連通", "⚠️");
-      }
-    }
-    window.retrySubmitInboxItem = retrySubmitInboxItem;
+    window.clearFailedInboxItems = clearFailedInboxItems;
 
     function renderInboxHistory() {
       try {
         const card = document.getElementById("inboxHistoryCard");
         const listEl = document.getElementById("inboxHistoryList");
         const badge = document.getElementById("inboxCountBadge");
+        const clearBtn = document.getElementById("clearFailedInboxBtn");
         const items = loadInboxHistory();
 
         if (badge) badge.innerText = `${items.length} 筆`;
@@ -961,6 +927,12 @@
           return;
         }
         card.style.display = "flex";
+
+        const hasFailed = items.some(i => i && i.status === "failed");
+        if (clearBtn) {
+          clearBtn.style.display = hasFailed ? "inline-block" : "none";
+        }
+
         listEl.innerHTML = "";
         items.forEach((item, index) => {
           if (!item) return;
@@ -1358,6 +1330,11 @@
       });
     }
 
+    function normalizeUrl(url) {
+      if (!url) return "";
+      return String(url).trim().replace(/\/+$/, "").toLowerCase();
+    }
+
     async function syncRemoteInbox() {
       try {
         const res = await fetch(`${gasUrl}?action=fetch_pending&token=${encodeURIComponent(gasToken)}`);
@@ -1376,22 +1353,39 @@
             };
           }).reverse();
 
+          // 1. 如果本地有 failed 項目，但遠端 pending 中有相符的 URL (規範化比對)，狀態一律轉為 success
           const reconciledLocal = localItems.map(item => {
-            if (item.status === "failed" && remoteList.some(r => r.url === item.url)) {
-              return { ...item, status: "success" };
+            const normItemUrl = normalizeUrl(item.url);
+            const matchedRemote = remoteList.find(r => normalizeUrl(r.url) === normItemUrl);
+            if (matchedRemote) {
+              return {
+                ...item,
+                status: "success",
+                timestamp: matchedRemote.timestamp || item.timestamp,
+                title: (matchedRemote.title && matchedRemote.title !== matchedRemote.url) ? matchedRemote.title : item.title
+              };
             }
             return item;
           });
 
-          const failedItems = reconciledLocal.filter(i => i.status === "failed");
-          const combined = [...failedItems];
+          // 2. 組合最新清單 (遠端最新優先 + 本地未對齊草稿)
+          const combined = [];
+          
+          // 遠端最新 pending 項目優先
           remoteList.forEach(r => {
-            if (!combined.some(c => c.url === r.url)) {
-              combined.push(r);
+            combined.push(r);
+          });
+
+          // 本地真正待補傳且與 remoteList 不重複的 failed 項目
+          reconciledLocal.filter(i => i.status === "failed").forEach(f => {
+            if (!combined.some(c => normalizeUrl(c.url) === normalizeUrl(f.url))) {
+              combined.push(f);
             }
           });
+
+          // 本地 success 項目補充 (去重)
           reconciledLocal.filter(i => i.status === "success").forEach(s => {
-            if (!combined.some(c => c.url === s.url)) {
+            if (!combined.some(c => normalizeUrl(c.url) === normalizeUrl(s.url))) {
               combined.push(s);
             }
           });
