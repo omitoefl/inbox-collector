@@ -843,25 +843,33 @@
     }
 
     function formatDisplayTimestamp(rawTime, rawTimestamp, rawEventDate) {
-      let dt = new Date();
       if (rawTimestamp) {
         const parsed = new Date(rawTimestamp);
-        if (!isNaN(parsed.getTime())) dt = parsed;
+        if (!isNaN(parsed.getTime())) {
+          const mm = String(parsed.getMonth() + 1).padStart(2, '0');
+          const dd = String(parsed.getDate()).padStart(2, '0');
+          const hh = String(parsed.getHours()).padStart(2, '0');
+          const min = String(parsed.getMinutes()).padStart(2, '0');
+          return `${mm}/${dd} ${hh}:${min}`;
+        }
       }
-      
-      const mm = String(dt.getMonth() + 1).padStart(2, '0');
-      const dd = String(dt.getDate()).padStart(2, '0');
-      const hh = String(dt.getHours()).padStart(2, '0');
-      const min = String(dt.getMinutes()).padStart(2, '0');
       
       const cleanedTime = cleanTimeArtifact(rawTime);
       if (cleanedTime && /^\d{2}\/\d{2}/.test(cleanedTime)) {
         return cleanedTime;
       }
       if (cleanedTime && /^\d{2}:\d{2}$/.test(cleanedTime)) {
+        const dt = new Date();
+        const mm = String(dt.getMonth() + 1).padStart(2, '0');
+        const dd = String(dt.getDate()).padStart(2, '0');
         return `${mm}/${dd} ${cleanedTime}`;
       }
       
+      const dt = new Date();
+      const mm = String(dt.getMonth() + 1).padStart(2, '0');
+      const dd = String(dt.getDate()).padStart(2, '0');
+      const hh = String(dt.getHours()).padStart(2, '0');
+      const min = String(dt.getMinutes()).padStart(2, '0');
       return `${mm}/${dd} ${hh}:${min}`;
     }
 
@@ -889,6 +897,17 @@
         .replace(/"/g, "&quot;")
         .replace(/'/g, "&#039;");
     }
+
+    function deleteInboxHistoryItem(itemIndex) {
+      const items = loadInboxHistory();
+      if (items[itemIndex]) {
+        items.splice(itemIndex, 1);
+        saveInboxHistory(items);
+        renderInboxHistory();
+        showToast("🗑️ 已從本地清單移除！");
+      }
+    }
+    window.deleteInboxHistoryItem = deleteInboxHistoryItem;
 
     async function retrySubmitInboxItem(itemIndex) {
       const items = loadInboxHistory();
@@ -949,7 +968,10 @@
           const hasUrl = item.url && (item.url.startsWith("http://") || item.url.startsWith("https://"));
           el.className = "history-item" + (hasUrl ? " clickable" : "");
           const statusBadge = item.status === "failed" 
-            ? `<button class="history-tag btn-retry-inbox" data-index="${index}" style="background: rgba(239, 68, 68, 0.25); color: #fca5a5; border: 1px solid rgba(239, 68, 68, 0.5); cursor: pointer; padding: 2px 8px; border-radius: 6px;">⚠️ 暫存(未送出) 🔄 點此補傳</button>`
+            ? `<div style="display: flex; align-items: center; gap: 4px;">
+                 <button class="history-tag btn-retry-inbox" data-index="${index}" style="background: rgba(239, 68, 68, 0.25); color: #fca5a5; border: 1px solid rgba(239, 68, 68, 0.5); cursor: pointer; padding: 2px 8px; border-radius: 6px;">⚠️ 暫存 🔄 補傳</button>
+                 <button class="history-tag btn-delete-inbox" data-index="${index}" style="background: rgba(107, 114, 128, 0.3); color: #d1d5db; border: 1px solid rgba(156, 163, 175, 0.5); cursor: pointer; padding: 2px 6px; border-radius: 6px;">🗑️</button>
+               </div>`
             : "";
           const displayTime = formatDisplayTimestamp(item.time, item.timestamp);
           const displayTitle = item.title || item.url || "無標題";
@@ -983,6 +1005,14 @@
             retryBtn.addEventListener("click", (e) => {
               e.stopPropagation();
               retrySubmitInboxItem(index);
+            });
+          }
+
+          const delBtn = el.querySelector(".btn-delete-inbox");
+          if (delBtn) {
+            delBtn.addEventListener("click", (e) => {
+              e.stopPropagation();
+              deleteInboxHistoryItem(index);
             });
           }
 
