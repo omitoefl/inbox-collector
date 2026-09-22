@@ -1353,40 +1353,18 @@
             };
           }).reverse();
 
-          // 1. 如果本地有 failed 項目，但遠端 pending 中有相符的 URL (規範化比對)，狀態一律轉為 success
-          const reconciledLocal = localItems.map(item => {
-            const normItemUrl = normalizeUrl(item.url);
-            const matchedRemote = remoteList.find(r => normalizeUrl(r.url) === normItemUrl);
-            if (matchedRemote) {
-              return {
-                ...item,
-                status: "success",
-                timestamp: matchedRemote.timestamp || item.timestamp,
-                title: (matchedRemote.title && matchedRemote.title !== matchedRemote.url) ? matchedRemote.title : item.title
-              };
-            }
-            return item;
-          });
-
-          // 2. 組合最新清單 (遠端最新優先 + 本地未對齊草稿)
+          // 當遠端 pending 已經由 Worker 處理完成變為 0 筆時，本地歷史即時開同步重置為 0 筆
+          // 僅保留：1. 遠端最新 pending 項目 + 2. 本地尚未成功送出 (failed) 的草稿
+          const failedItems = localItems.filter(i => i.status === "failed");
           const combined = [];
           
-          // 遠端最新 pending 項目優先
           remoteList.forEach(r => {
             combined.push(r);
           });
 
-          // 本地真正待補傳且與 remoteList 不重複的 failed 項目
-          reconciledLocal.filter(i => i.status === "failed").forEach(f => {
+          failedItems.forEach(f => {
             if (!combined.some(c => normalizeUrl(c.url) === normalizeUrl(f.url))) {
               combined.push(f);
-            }
-          });
-
-          // 本地 success 項目補充 (去重)
-          reconciledLocal.filter(i => i.status === "success").forEach(s => {
-            if (!combined.some(c => normalizeUrl(c.url) === normalizeUrl(s.url))) {
-              combined.push(s);
             }
           });
 
