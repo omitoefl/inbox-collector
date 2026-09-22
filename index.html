@@ -843,35 +843,26 @@
     }
 
     function formatDisplayTimestamp(rawTime, rawTimestamp, rawEventDate) {
-      const now = new Date();
-      const currentMmDd = `${String(now.getMonth() + 1).padStart(2, '0')}/${String(now.getDate()).padStart(2, '0')}`;
-      
-      let datePart = "";
+      let dt = new Date();
       if (rawTimestamp) {
-        const m = String(rawTimestamp).match(/(\d{4})-(\d{2})-(\d{2})/);
-        if (m) datePart = `${m[2]}/${m[3]}`;
-      } else if (rawEventDate) {
-        const m = String(rawEventDate).match(/(\d{4})-(\d{2})-(\d{2})/);
-        if (m) datePart = `${m[2]}/${m[3]}`;
+        const parsed = new Date(rawTimestamp);
+        if (!isNaN(parsed.getTime())) dt = parsed;
       }
-      if (!datePart) datePart = currentMmDd;
-
-      const cleanedTime = cleanTimeArtifact(rawTime);
       
-      // 若原字串已含有 MM/DD 日期格式，直接返回清洗後結果
-      if (/^\d{2}\/\d{2}/.test(cleanedTime)) {
+      const mm = String(dt.getMonth() + 1).padStart(2, '0');
+      const dd = String(dt.getDate()).padStart(2, '0');
+      const hh = String(dt.getHours()).padStart(2, '0');
+      const min = String(dt.getMinutes()).padStart(2, '0');
+      
+      const cleanedTime = cleanTimeArtifact(rawTime);
+      if (cleanedTime && /^\d{2}\/\d{2}/.test(cleanedTime)) {
         return cleanedTime;
       }
-
-      if (!cleanedTime || cleanedTime === "—") {
-        if (rawTimestamp && String(rawTimestamp).includes("T")) {
-          const mTime = String(rawTimestamp).match(/T(\d{2}:\d{2})/);
-          if (mTime) return `${datePart} ${mTime[1]}`;
-        }
-        return datePart;
+      if (cleanedTime && /^\d{2}:\d{2}$/.test(cleanedTime)) {
+        return `${mm}/${dd} ${cleanedTime}`;
       }
-
-      return `${datePart} ${cleanedTime}`;
+      
+      return `${mm}/${dd} ${hh}:${min}`;
     }
 
     function loadInboxHistory() {
@@ -899,64 +890,113 @@
         .replace(/'/g, "&#039;");
     }
 
-    function renderInboxHistory() {
-      const card = document.getElementById("inboxHistoryCard");
-      const listEl = document.getElementById("inboxHistoryList");
-      const badge = document.getElementById("inboxCountBadge");
+    async function retrySubmitInboxItem(itemIndex) {
       const items = loadInboxHistory();
+      if (!items[itemIndex]) return;
+      const target = items[itemIndex];
 
-      if (badge) badge.innerText = `${items.length} 筆`;
-      if (!card || !listEl) return;
+      showToast("⏳ 正在嘗試重新補傳...", "⏳");
+      try {
+        const payload = {
+          action: "submit",
+          token: gasToken,
+          url: target.url,
+          type: target.type || "Threads",
+          title: target.title || ""
+        };
 
-      if (items.length === 0) {
-        card.style.display = "none";
-        listEl.innerHTML = "";
-        return;
-      }
-      card.style.display = "flex";
-      listEl.innerHTML = "";
-      items.forEach((item) => {
-        const el = document.createElement("div");
-        const hasUrl = item.url && (item.url.startsWith("http://") || item.url.startsWith("https://"));
-        el.className = "history-item" + (hasUrl ? " clickable" : "");
-        const statusBadge = item.status === "failed" 
-          ? `<span class="history-tag" style="background: rgba(239, 68, 68, 0.2); color: #fca5a5;">⚠️ 暫存(未送出)</span>`
-          : "";
-        const displayTime = formatDisplayTimestamp(item.time, item.timestamp);
-        const displayTitle = item.title || item.url || "無標題";
-        
-        let contentHtml = "";
-        if (hasUrl) {
-          contentHtml = `
-            <a href="${escapeHtml(item.url)}" target="_blank" rel="noopener noreferrer" class="history-content history-link" onclick="event.stopPropagation()">
-              <span>${escapeHtml(displayTitle)}</span>
-              <span class="history-link-icon">↗</span>
-            </a>
-          `;
+        const res = await fetch(gasUrl, {
+          method: "POST",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify(payload)
+        });
+
+        const data = await res.json();
+        if (data.status === "success") {
+          showToast(`🎉 補傳成功！已寫入待採集庫`);
+          items[itemIndex].status = "success";
+          saveInboxHistory(items);
+          renderInboxHistory();
         } else {
-          contentHtml = `<div class="history-content">${escapeHtml(displayTitle)}</div>`;
+          showToast("❌ 補傳失敗：" + (data.message || "請檢查連線"), "❌");
         }
+      } catch (err) {
+        showToast("❌ 補傳失敗，網路仍未連通", "⚠️");
+      }
+    }
+    window.retrySubmitInboxItem = retrySubmitInboxItem;
 
-        el.innerHTML = `
-          <div class="history-top">
-            <span class="history-tag">${escapeHtml(item.type || "靈感")}</span>
-            <div style="display: flex; align-items: center; gap: 6px;">
-              ${statusBadge}
-              <span>${displayTime}</span>
+    function renderInboxHistory() {
+      try {
+        const card = document.getElementById("inboxHistoryCard");
+        const listEl = document.getElementById("inboxHistoryList");
+        const badge = document.getElementById("inboxCountBadge");
+        const items = loadInboxHistory();
+
+        if (badge) badge.innerText = `${items.length} 筆`;
+        if (!card || !listEl) return;
+
+        if (!items || items.length === 0) {
+          card.style.display = "none";
+          listEl.innerHTML = "";
+          return;
+        }
+        card.style.display = "flex";
+        listEl.innerHTML = "";
+        items.forEach((item, index) => {
+          if (!item) return;
+          const el = document.createElement("div");
+          const hasUrl = item.url && (item.url.startsWith("http://") || item.url.startsWith("https://"));
+          el.className = "history-item" + (hasUrl ? " clickable" : "");
+          const statusBadge = item.status === "failed" 
+            ? `<button class="history-tag btn-retry-inbox" data-index="${index}" style="background: rgba(239, 68, 68, 0.25); color: #fca5a5; border: 1px solid rgba(239, 68, 68, 0.5); cursor: pointer; padding: 2px 8px; border-radius: 6px;">⚠️ 暫存(未送出) 🔄 點此補傳</button>`
+            : "";
+          const displayTime = formatDisplayTimestamp(item.time, item.timestamp);
+          const displayTitle = item.title || item.url || "無標題";
+          
+          let contentHtml = "";
+          if (hasUrl) {
+            contentHtml = `
+              <a href="${escapeHtml(item.url)}" target="_blank" rel="noopener noreferrer" class="history-content history-link" onclick="event.stopPropagation()">
+                <span>${escapeHtml(displayTitle)}</span>
+                <span class="history-link-icon">↗</span>
+              </a>
+            `;
+          } else {
+            contentHtml = `<div class="history-content">${escapeHtml(displayTitle)}</div>`;
+          }
+
+          el.innerHTML = `
+            <div class="history-top">
+              <span class="history-tag">${escapeHtml(item.type || "靈感")}</span>
+              <div style="display: flex; align-items: center; gap: 6px;">
+                ${statusBadge}
+                <span>${displayTime}</span>
+              </div>
             </div>
-          </div>
-          ${contentHtml}
-          ${item.status === "failed" ? `<div style="font-size: 11px; color: #fca5a5; margin-top: 4px; word-break: break-all;">🔗 待送網址：${escapeHtml(item.url)}</div>` : ""}
-        `;
+            ${contentHtml}
+            ${item.status === "failed" ? `<div style="font-size: 11px; color: #fca5a5; margin-top: 4px; word-break: break-all;">🔗 待送網址：${escapeHtml(item.url)}</div>` : ""}
+          `;
 
-        if (hasUrl) {
-          el.addEventListener("click", () => {
-            window.open(item.url, "_blank", "noopener,noreferrer");
-          });
-        }
+          const retryBtn = el.querySelector(".btn-retry-inbox");
+          if (retryBtn) {
+            retryBtn.addEventListener("click", (e) => {
+              e.stopPropagation();
+              retrySubmitInboxItem(index);
+            });
+          }
 
-        listEl.appendChild(el);
-      });
+          if (hasUrl) {
+            el.addEventListener("click", () => {
+              window.open(item.url, "_blank", "noopener,noreferrer");
+            });
+          }
+
+          listEl.appendChild(el);
+        });
+      } catch (e) {
+        console.error("renderInboxHistory Error:", e);
+      }
     }
 
     function addInboxRecord(url, type, title, status = "success") {
@@ -1294,7 +1334,6 @@
         const data = await res.json();
         if (data && data.status === "success" && Array.isArray(data.items)) {
           const localItems = loadInboxHistory();
-          const failedItems = localItems.filter(i => i.status === "failed");
           const remoteList = data.items.map(rem => {
             const timeStr = formatDisplayTimestamp("", rem.timestamp);
             return {
@@ -1307,12 +1346,26 @@
             };
           }).reverse();
 
+          const reconciledLocal = localItems.map(item => {
+            if (item.status === "failed" && remoteList.some(r => r.url === item.url)) {
+              return { ...item, status: "success" };
+            }
+            return item;
+          });
+
+          const failedItems = reconciledLocal.filter(i => i.status === "failed");
           const combined = [...failedItems];
           remoteList.forEach(r => {
             if (!combined.some(c => c.url === r.url)) {
               combined.push(r);
             }
           });
+          reconciledLocal.filter(i => i.status === "success").forEach(s => {
+            if (!combined.some(c => c.url === s.url)) {
+              combined.push(s);
+            }
+          });
+
           saveInboxHistory(combined);
           renderInboxHistory();
         }
