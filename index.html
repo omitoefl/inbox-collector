@@ -664,6 +664,7 @@
         <div class="history-header">
           <span>今日已投遞靈感</span>
           <div style="display: flex; align-items: center; gap: 8px;">
+            <button id="restoreDeletedBtn" onclick="restoreLastDeletedItem()" style="background: rgba(56, 189, 248, 0.15); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.3); border-radius: 6px; padding: 2px 6px; font-size: 11px; cursor: pointer; display: none;">↩️ 復原刪除</button>
             <button id="clearFailedInboxBtn" onclick="clearFailedInboxItems()" style="background: rgba(239, 68, 68, 0.15); color: #fca5a5; border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 6px; padding: 2px 6px; font-size: 11px; cursor: pointer; display: none;">🧹 刪失敗暫存</button>
             <span id="inboxCountBadge">0 筆</span>
           </div>
@@ -1050,6 +1051,16 @@
           clearBtn.style.display = hasFailed ? "inline-block" : "none";
         }
 
+        const restoreBtn = document.getElementById("restoreDeletedBtn");
+        if (restoreBtn) {
+          try {
+            const lastDel = localStorage.getItem("inbox_last_deleted");
+            restoreBtn.style.display = lastDel ? "inline-block" : "none";
+          } catch(e) {
+            restoreBtn.style.display = "none";
+          }
+        }
+
         listEl.innerHTML = "";
         items.forEach((item, index) => {
           if (!item) return;
@@ -1129,10 +1140,20 @@
       const items = loadInboxHistory();
       if (index < 0 || index >= items.length) return;
       const deletedItem = items[index];
+      const titleText = deletedItem ? (deletedItem.title || deletedItem.url || "這筆靈感") : "這筆靈感";
+
+      if (!confirm(`⚠️ 確定要刪除「${titleText}」嗎？`)) {
+        return;
+      }
+
+      try {
+        localStorage.setItem("inbox_last_deleted", JSON.stringify(deletedItem));
+      } catch(e) {}
+
       items.splice(index, 1);
       saveInboxHistory(items);
       renderInboxHistory();
-      showToast("🗑️ 已刪除該筆靈感");
+      showToast("🗑️ 已刪除！(可點擊上方「↩️ 復原刪除」)");
 
       if (deletedItem && deletedItem.url) {
         try {
@@ -1141,6 +1162,26 @@
       }
     }
     window.deleteInboxHistoryItem = deleteInboxHistoryItem;
+
+    function restoreLastDeletedItem() {
+      try {
+        const raw = localStorage.getItem("inbox_last_deleted");
+        if (!raw) {
+          showToast("⚠️ 無可復原的紀錄");
+          return;
+        }
+        const item = JSON.parse(raw);
+        const items = loadInboxHistory();
+        items.unshift(item);
+        saveInboxHistory(items);
+        localStorage.removeItem("inbox_last_deleted");
+        renderInboxHistory();
+        showToast("✨ 已成功復原誤刪的靈感！");
+      } catch(e) {
+        showToast("⚠️ 復原失敗");
+      }
+    }
+    window.restoreLastDeletedItem = restoreLastDeletedItem;
 
     function openEditInboxModal(index) {
       const items = loadInboxHistory();
