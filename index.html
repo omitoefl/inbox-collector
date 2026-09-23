@@ -575,8 +575,10 @@
       <div class="history-card" id="inboxHistoryCard" style="display: none;">
         <div class="history-header">
           <span>今日已投遞靈感</span>
-          <div style="display: flex; align-items: center; gap: 8px;">
-            <button id="clearFailedInboxBtn" onclick="clearFailedInboxItems()" style="background: rgba(239, 68, 68, 0.15); color: #fca5a5; border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 6px; padding: 2px 6px; font-size: 11px; cursor: pointer; display: none;">🧹 清除舊暫存</button>
+          <div style="display: flex; align-items: center; gap: 6px;">
+            <button id="clearFailedInboxBtn" onclick="clearFailedInboxItems()" style="background: rgba(239, 68, 68, 0.15); color: #fca5a5; border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 6px; padding: 2px 6px; font-size: 11px; cursor: pointer; display: none;">🧹 刪失敗暫存</button>
+            <button id="clearAllInboxBtn" onclick="clearAllInboxHistory()" style="background: rgba(148, 163, 184, 0.15); color: #cbd5e1; border: 1px solid rgba(148, 163, 184, 0.3); border-radius: 6px; padding: 2px 6px; font-size: 11px; cursor: pointer;" title="清空手機本地紀錄">🧹 清空</button>
+            <button id="refreshInboxBtn" onclick="syncRemoteInbox(true)" style="background: rgba(99, 102, 241, 0.15); color: #a5b4fc; border: 1px solid rgba(99, 102, 241, 0.3); border-radius: 6px; padding: 2px 6px; font-size: 11px; cursor: pointer;" title="向雲端檢查待採集狀態">🔄</button>
             <span id="inboxCountBadge">0 筆</span>
           </div>
         </div>
@@ -635,7 +637,11 @@
       <div class="history-card" id="lifeHistoryCard" style="display: none;">
         <div class="history-header">
           <span>今日已記時程（待回家同步）</span>
-          <span id="lifeCountBadge" style="color: var(--purple);">0 筆</span>
+          <div style="display: flex; align-items: center; gap: 6px;">
+            <button id="clearAllLifeBtn" onclick="clearAllLifeHistory()" style="background: rgba(148, 163, 184, 0.15); color: #cbd5e1; border: 1px solid rgba(148, 163, 184, 0.3); border-radius: 6px; padding: 2px 6px; font-size: 11px; cursor: pointer;" title="清空手機本地紀錄">🧹 清空</button>
+            <button id="refreshLifeBtn" onclick="syncRemoteLife(true)" style="background: rgba(168, 85, 247, 0.15); color: #d8b4fe; border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 6px; padding: 2px 6px; font-size: 11px; cursor: pointer;" title="向雲端檢查生命流狀態">🔄</button>
+            <span id="lifeCountBadge" style="color: var(--purple);">0 筆</span>
+          </div>
         </div>
         <div class="history-list" id="lifeHistoryList"></div>
       </div>
@@ -909,6 +915,20 @@
       showToast("🧹 已清理所有未送出的暫存草稿！");
     }
     window.clearFailedInboxItems = clearFailedInboxItems;
+
+    function clearAllInboxHistory() {
+      saveInboxHistory([]);
+      renderInboxHistory();
+      showToast("🧹 已清空今日靈感紀錄！");
+    }
+    window.clearAllInboxHistory = clearAllInboxHistory;
+
+    function clearAllLifeHistory() {
+      saveLifeHistory([]);
+      renderLifeHistory();
+      showToast("🧹 已清空今日時程紀錄！");
+    }
+    window.clearAllLifeHistory = clearAllLifeHistory;
 
     function renderInboxHistory() {
       try {
@@ -1335,7 +1355,8 @@
       return String(url).trim().replace(/\/+$/, "").toLowerCase();
     }
 
-    async function syncRemoteInbox() {
+    async function syncRemoteInbox(manual = false) {
+      if (manual) showToast("🔄 正在檢查雲端狀態...");
       try {
         const res = await fetch(`${gasUrl}?action=fetch_pending&token=${encodeURIComponent(gasToken)}`);
         const data = await res.json();
@@ -1370,9 +1391,19 @@
 
           saveInboxHistory(combined);
           renderInboxHistory();
+          if (manual) {
+            if (remoteList.length === 0) {
+              showToast("✨ 待採集庫已清空（0 筆待處理）");
+            } else {
+              showToast(`📥 雲端待採集：${remoteList.length} 筆`);
+            }
+          }
+        } else if (manual) {
+          showToast("⚠️ 無法取得雲端清單，請確認 GAS 權限");
         }
       } catch (err) {
         console.warn("syncRemoteInbox err:", err);
+        if (manual) showToast("⚠️ 雲端連線失敗");
       }
     }
 
