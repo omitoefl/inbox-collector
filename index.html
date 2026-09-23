@@ -502,6 +502,94 @@
       transform: translateX(-50%) translateY(0);
       opacity: 1;
     }
+
+    /* 編輯靈感 Modal 樣式 */
+    .modal-backdrop {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(15, 23, 42, 0.75);
+      backdrop-filter: blur(8px);
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      box-sizing: border-box;
+    }
+    .modal-card {
+      background: rgba(30, 41, 59, 0.95);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      border-radius: 16px;
+      width: 100%;
+      max-width: 440px;
+      padding: 20px;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      animation: modalFadeIn 0.2s ease-out;
+    }
+    @keyframes modalFadeIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 16px;
+      font-weight: 700;
+      color: #f8fafc;
+    }
+    .modal-close-btn {
+      background: none;
+      border: none;
+      color: #94a3b8;
+      font-size: 18px;
+      cursor: pointer;
+      padding: 4px 8px;
+      border-radius: 6px;
+    }
+    .modal-close-btn:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+    }
+    .modal-body {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .modal-footer {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 8px;
+    }
+    .btn-cancel {
+      background: rgba(148, 163, 184, 0.15);
+      color: #cbd5e1;
+      border: 1px solid rgba(148, 163, 184, 0.3);
+      border-radius: 8px;
+      padding: 8px 16px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .btn-save {
+      background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+      color: #ffffff;
+      border: none;
+      border-radius: 8px;
+      padding: 8px 18px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3);
+    }
   </style>
 </head>
 <body>
@@ -581,6 +669,35 @@
           </div>
         </div>
         <div class="history-list" id="inboxHistoryList"></div>
+      </div>
+
+      <!-- 靈感編輯 Modal -->
+      <div id="editInboxModal" class="modal-backdrop" style="display: none;">
+        <div class="modal-card">
+          <div class="modal-header">
+            <span>✏️ 編輯靈感內容</span>
+            <button class="modal-close-btn" onclick="closeEditInboxModal()">✕</button>
+          </div>
+          <div class="modal-body">
+            <input type="hidden" id="editInboxIndex" />
+            <div class="input-group">
+              <label class="input-label">標題 / 摘要</label>
+              <input type="text" id="editInboxTitle" placeholder="標題內容" />
+            </div>
+            <div class="input-group">
+              <label class="input-label">網址 (URL)</label>
+              <input type="text" id="editInboxUrl" placeholder="https://..." />
+            </div>
+            <div class="input-group">
+              <label class="input-label">分類</label>
+              <input type="text" id="editInboxType" placeholder="例如：Threads, 影片, 文章, 工具, 社群..." />
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button class="btn-cancel" onclick="closeEditInboxModal()">取消</button>
+            <button class="btn-save" onclick="saveEditInboxItem()">💾 儲存修改</button>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -940,10 +1057,7 @@
           const hasUrl = item.url && (item.url.startsWith("http://") || item.url.startsWith("https://"));
           el.className = "history-item" + (hasUrl ? " clickable" : "");
           const statusBadge = item.status === "failed" 
-            ? `<div style="display: flex; align-items: center; gap: 4px;">
-                 <button class="history-tag btn-retry-inbox" data-index="${index}" style="background: rgba(239, 68, 68, 0.25); color: #fca5a5; border: 1px solid rgba(239, 68, 68, 0.5); cursor: pointer; padding: 2px 8px; border-radius: 6px;">⚠️ 暫存 🔄 補傳</button>
-                 <button class="history-tag btn-delete-inbox" data-index="${index}" style="background: rgba(107, 114, 128, 0.3); color: #d1d5db; border: 1px solid rgba(156, 163, 175, 0.5); cursor: pointer; padding: 2px 6px; border-radius: 6px;">🗑️</button>
-               </div>`
+            ? `<button class="history-tag btn-retry-inbox" data-index="${index}" style="background: rgba(239, 68, 68, 0.25); color: #fca5a5; border: 1px solid rgba(239, 68, 68, 0.5); cursor: pointer; padding: 2px 6px; border-radius: 6px;">⚠️ 補傳</button>`
             : "";
           const displayTime = formatDisplayTimestamp(item.time, item.timestamp);
           const displayTitle = item.title || item.url || "無標題";
@@ -965,6 +1079,8 @@
               <span class="history-tag">${escapeHtml(item.type || "靈感")}</span>
               <div style="display: flex; align-items: center; gap: 6px;">
                 ${statusBadge}
+                <button class="history-tag btn-edit-inbox" data-index="${index}" style="background: rgba(56, 189, 248, 0.15); color: #7dd3fc; border: 1px solid rgba(56, 189, 248, 0.4); cursor: pointer; padding: 2px 6px; border-radius: 6px;" title="編輯">✏️</button>
+                <button class="history-tag btn-delete-inbox" data-index="${index}" style="background: rgba(239, 68, 68, 0.15); color: #fca5a5; border: 1px solid rgba(239, 68, 68, 0.3); cursor: pointer; padding: 2px 6px; border-radius: 6px;" title="刪除">🗑️</button>
                 <span>${displayTime}</span>
               </div>
             </div>
@@ -977,6 +1093,14 @@
             retryBtn.addEventListener("click", (e) => {
               e.stopPropagation();
               retrySubmitInboxItem(index);
+            });
+          }
+
+          const editBtn = el.querySelector(".btn-edit-inbox");
+          if (editBtn) {
+            editBtn.addEventListener("click", (e) => {
+              e.stopPropagation();
+              openEditInboxModal(index);
             });
           }
 
@@ -1000,6 +1124,63 @@
         console.error("renderInboxHistory Error:", e);
       }
     }
+
+    function deleteInboxHistoryItem(index) {
+      const items = loadInboxHistory();
+      if (index < 0 || index >= items.length) return;
+      const deletedItem = items[index];
+      items.splice(index, 1);
+      saveInboxHistory(items);
+      renderInboxHistory();
+      showToast("🗑️ 已刪除該筆靈感");
+
+      if (deletedItem && deletedItem.url) {
+        try {
+          fetch(`${gasUrl}?action=delete_archived_items&token=${encodeURIComponent(gasToken)}&urls=${encodeURIComponent(deletedItem.url)}`, { mode: "no-cors" }).catch(() => {});
+        } catch(e) {}
+      }
+    }
+    window.deleteInboxHistoryItem = deleteInboxHistoryItem;
+
+    function openEditInboxModal(index) {
+      const items = loadInboxHistory();
+      if (index < 0 || index >= items.length) return;
+      const item = items[index];
+      document.getElementById("editInboxIndex").value = index;
+      document.getElementById("editInboxTitle").value = item.title || "";
+      document.getElementById("editInboxUrl").value = item.url || "";
+      document.getElementById("editInboxType").value = item.type || "其他";
+      
+      const modal = document.getElementById("editInboxModal");
+      if (modal) modal.style.display = "flex";
+    }
+    window.openEditInboxModal = openEditInboxModal;
+
+    function closeEditInboxModal() {
+      const modal = document.getElementById("editInboxModal");
+      if (modal) modal.style.display = "none";
+    }
+    window.closeEditInboxModal = closeEditInboxModal;
+
+    function saveEditInboxItem() {
+      const idx = parseInt(document.getElementById("editInboxIndex").value, 10);
+      const items = loadInboxHistory();
+      if (isNaN(idx) || idx < 0 || idx >= items.length) return;
+      
+      const newTitle = document.getElementById("editInboxTitle").value.trim();
+      const newUrl = document.getElementById("editInboxUrl").value.trim();
+      const newType = document.getElementById("editInboxType").value.trim() || "其他";
+      
+      items[idx].title = newTitle;
+      items[idx].url = newUrl;
+      items[idx].type = newType;
+      
+      saveInboxHistory(items);
+      renderInboxHistory();
+      closeEditInboxModal();
+      showToast("✏️ 靈感內容已更新！");
+    }
+    window.saveEditInboxItem = saveEditInboxItem;
 
     function addInboxRecord(url, type, title, status = "success") {
       const items = loadInboxHistory();
