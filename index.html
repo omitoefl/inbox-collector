@@ -575,10 +575,8 @@
       <div class="history-card" id="inboxHistoryCard" style="display: none;">
         <div class="history-header">
           <span>今日已投遞靈感</span>
-          <div style="display: flex; align-items: center; gap: 6px;">
+          <div style="display: flex; align-items: center; gap: 8px;">
             <button id="clearFailedInboxBtn" onclick="clearFailedInboxItems()" style="background: rgba(239, 68, 68, 0.15); color: #fca5a5; border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 6px; padding: 2px 6px; font-size: 11px; cursor: pointer; display: none;">🧹 刪失敗暫存</button>
-            <button id="clearAllInboxBtn" onclick="clearAllInboxHistory()" style="background: rgba(148, 163, 184, 0.15); color: #cbd5e1; border: 1px solid rgba(148, 163, 184, 0.3); border-radius: 6px; padding: 2px 6px; font-size: 11px; cursor: pointer;" title="清空手機本地紀錄">🧹 清空</button>
-            <button id="refreshInboxBtn" onclick="syncRemoteInbox(true)" style="background: rgba(99, 102, 241, 0.15); color: #a5b4fc; border: 1px solid rgba(99, 102, 241, 0.3); border-radius: 6px; padding: 2px 6px; font-size: 11px; cursor: pointer;" title="向雲端檢查待採集狀態">🔄</button>
             <span id="inboxCountBadge">0 筆</span>
           </div>
         </div>
@@ -637,11 +635,7 @@
       <div class="history-card" id="lifeHistoryCard" style="display: none;">
         <div class="history-header">
           <span>今日已記時程（待回家同步）</span>
-          <div style="display: flex; align-items: center; gap: 6px;">
-            <button id="clearAllLifeBtn" onclick="clearAllLifeHistory()" style="background: rgba(148, 163, 184, 0.15); color: #cbd5e1; border: 1px solid rgba(148, 163, 184, 0.3); border-radius: 6px; padding: 2px 6px; font-size: 11px; cursor: pointer;" title="清空手機本地紀錄">🧹 清空</button>
-            <button id="refreshLifeBtn" onclick="syncRemoteLife(true)" style="background: rgba(168, 85, 247, 0.15); color: #d8b4fe; border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 6px; padding: 2px 6px; font-size: 11px; cursor: pointer;" title="向雲端檢查生命流狀態">🔄</button>
-            <span id="lifeCountBadge" style="color: var(--purple);">0 筆</span>
-          </div>
+          <span id="lifeCountBadge" style="color: var(--purple);">0 筆</span>
         </div>
         <div class="history-list" id="lifeHistoryList"></div>
       </div>
@@ -912,23 +906,9 @@
       const cleaned = items.filter(i => i.status !== "failed");
       saveInboxHistory(cleaned);
       renderInboxHistory();
-      showToast("🧹 已清理所有未送出的暫存草稿！");
+      showToast("🧹 已清理失敗草稿！");
     }
     window.clearFailedInboxItems = clearFailedInboxItems;
-
-    function clearAllInboxHistory() {
-      saveInboxHistory([]);
-      renderInboxHistory();
-      showToast("🧹 已清空今日靈感紀錄！");
-    }
-    window.clearAllInboxHistory = clearAllInboxHistory;
-
-    function clearAllLifeHistory() {
-      saveLifeHistory([]);
-      renderLifeHistory();
-      showToast("🧹 已清空今日時程紀錄！");
-    }
-    window.clearAllLifeHistory = clearAllLifeHistory;
 
     function renderInboxHistory() {
       try {
@@ -1469,7 +1449,7 @@
       }
     }
 
-    // 初始化時間與歷史暫存清單（本地秒開 + 雲端秒級同步）
+    // 初始化時間與歷史暫存清單（本地秒開 + 雲端自動同步）
     setInterval(initLifeTimeDefault, 60000);
     initLifeTimeDefault();
     renderInboxHistory();
@@ -1477,6 +1457,14 @@
     syncRemoteInbox();
     syncRemoteLife();
     handleSharedUrlParams();
+
+    // 視窗可見性改變時（如手機切換回本 App），自動向雲端檢查狀態並同步
+    document.addEventListener("visibilitychange", () => {
+      if (document.visibilityState === "visible") {
+        syncRemoteInbox();
+        syncRemoteLife();
+      }
+    });
   </script>
 </body>
 </html>
