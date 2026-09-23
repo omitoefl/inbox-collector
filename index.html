@@ -663,8 +663,8 @@
       <div class="history-card" id="inboxHistoryCard" style="display: none;">
         <div class="history-header">
           <span>今日已投遞靈感</span>
-          <div style="display: flex; align-items: center; gap: 8px;">
-            <button id="restoreDeletedBtn" onclick="restoreLastDeletedItem()" style="background: rgba(56, 189, 248, 0.15); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.3); border-radius: 6px; padding: 2px 6px; font-size: 11px; cursor: pointer; display: none;">↩️ 復原刪除</button>
+          <div style="display: flex; align-items: center; gap: 6px;">
+            <button id="openTrashModalBtn" onclick="openTrashModal()" style="background: rgba(148, 163, 184, 0.2); color: #cbd5e1; border: 1px solid rgba(148, 163, 184, 0.4); border-radius: 6px; padding: 2px 8px; font-size: 11px; cursor: pointer;">🗑️ 垃圾桶 (<span id="trashCountBadge">0</span>)</button>
             <button id="clearFailedInboxBtn" onclick="clearFailedInboxItems()" style="background: rgba(239, 68, 68, 0.15); color: #fca5a5; border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 6px; padding: 2px 6px; font-size: 11px; cursor: pointer; display: none;">🧹 刪失敗暫存</button>
             <span id="inboxCountBadge">0 筆</span>
           </div>
@@ -697,6 +697,23 @@
           <div class="modal-footer">
             <button class="btn-cancel" onclick="closeEditInboxModal()">取消</button>
             <button class="btn-save" onclick="saveEditInboxItem()">💾 儲存修改</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 靈感垃圾桶 Modal -->
+      <div id="trashInboxModal" class="modal-backdrop" style="display: none;">
+        <div class="modal-card" style="max-width: 480px;">
+          <div class="modal-header">
+            <span>🗑️ 靈感垃圾桶 (回收站)</span>
+            <button class="modal-close-btn" onclick="closeTrashModal()">✕</button>
+          </div>
+          <div class="modal-body" style="max-height: 380px; overflow-y: auto;">
+            <div id="trashInboxList" style="display: flex; flex-direction: column; gap: 8px;"></div>
+          </div>
+          <div class="modal-footer" style="justify-content: space-between;">
+            <button class="btn-cancel" style="background: rgba(239, 68, 68, 0.2); color: #fca5a5; border-color: rgba(239, 68, 68, 0.4);" onclick="clearAllTrash()">🧹 清空垃圾桶</button>
+            <button class="btn-cancel" onclick="closeTrashModal()">關閉</button>
           </div>
         </div>
       </div>
@@ -1051,15 +1068,9 @@
           clearBtn.style.display = hasFailed ? "inline-block" : "none";
         }
 
-        const restoreBtn = document.getElementById("restoreDeletedBtn");
-        if (restoreBtn) {
-          try {
-            const lastDel = localStorage.getItem("inbox_last_deleted");
-            restoreBtn.style.display = lastDel ? "inline-block" : "none";
-          } catch(e) {
-            restoreBtn.style.display = "none";
-          }
-        }
+        const trash = loadTrashHistory();
+        const trashBadge = document.getElementById("trashCountBadge");
+        if (trashBadge) trashBadge.innerText = trash.length;
 
         listEl.innerHTML = "";
         items.forEach((item, index) => {
@@ -1091,7 +1102,7 @@
               <div style="display: flex; align-items: center; gap: 6px;">
                 ${statusBadge}
                 <button class="history-tag btn-edit-inbox" data-index="${index}" style="background: rgba(56, 189, 248, 0.15); color: #7dd3fc; border: 1px solid rgba(56, 189, 248, 0.4); cursor: pointer; padding: 2px 6px; border-radius: 6px;" title="編輯">✏️</button>
-                <button class="history-tag btn-delete-inbox" data-index="${index}" style="background: rgba(239, 68, 68, 0.15); color: #fca5a5; border: 1px solid rgba(239, 68, 68, 0.3); cursor: pointer; padding: 2px 6px; border-radius: 6px;" title="刪除">🗑️</button>
+                <button class="history-tag btn-delete-inbox" data-index="${index}" style="background: rgba(239, 68, 68, 0.15); color: #fca5a5; border: 1px solid rgba(239, 68, 68, 0.3); cursor: pointer; padding: 2px 6px; border-radius: 6px;" title="移至垃圾桶">🗑️</button>
                 <span>${displayTime}</span>
               </div>
             </div>
@@ -1136,28 +1147,147 @@
       }
     }
 
+    function loadTrashHistory() {
+      try {
+        const raw = localStorage.getItem("inbox_trash_items");
+        return raw ? JSON.parse(raw) : [];
+      } catch (e) {
+        return [];
+      }
+    }
+
+    function saveTrashHistory(list) {
+      try {
+        localStorage.setItem("inbox_trash_items", JSON.stringify(list));
+      } catch (e) {}
+    }
+
+    function renderTrashList() {
+      const listEl = document.getElementById("trashInboxList");
+      const badge = document.getElementById("trashCountBadge");
+      const trash = loadTrashHistory();
+      if (badge) badge.innerText = trash.length;
+      if (!listEl) return;
+
+      if (trash.length === 0) {
+        listEl.innerHTML = '<div style="text-align: center; color: #94a3b8; padding: 20px; font-size: 13px;">🗑️ 垃圾桶空空如也</div>';
+        return;
+      }
+
+      listEl.innerHTML = "";
+      trash.forEach((item, index) => {
+        const el = document.createElement("div");
+        el.style.cssText = "background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 10px; padding: 10px; display: flex; flex-direction: column; gap: 6px;";
+        
+        const titleText = escapeHtml(item.title || item.url || "無標題");
+        const typeText = escapeHtml(item.type || "靈感");
+        const urlText = escapeHtml(item.url || "");
+
+        el.innerHTML = `
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 12px; color: #94a3b8;">
+            <span class="history-tag">${typeText}</span>
+            <span>已移至垃圾桶</span>
+          </div>
+          <div style="font-size: 13px; font-weight: 700; color: #e2e8f0; word-break: break-all;">${titleText}</div>
+          ${urlText ? `<div style="font-size: 11px; color: #38bdf8; word-break: break-all;">${urlText}</div>` : ""}
+          <div style="display: flex; align-items: center; justify-content: flex-end; gap: 8px; margin-top: 4px;">
+            <button onclick="restoreFromTrash(${index})" style="background: rgba(56, 189, 248, 0.2); color: #7dd3fc; border: 1px solid rgba(56, 189, 248, 0.4); border-radius: 6px; padding: 4px 10px; font-size: 12px; cursor: pointer;">↩️ 復原此筆</button>
+            <button onclick="permanentlyDeleteFromTrash(${index})" style="background: rgba(239, 68, 68, 0.2); color: #fca5a5; border: 1px solid rgba(239, 68, 68, 0.4); border-radius: 6px; padding: 4px 10px; font-size: 12px; cursor: pointer;">🔥 永久刪除</button>
+          </div>
+        `;
+        listEl.appendChild(el);
+      });
+    }
+
+    function openTrashModal() {
+      renderTrashList();
+      const modal = document.getElementById("trashInboxModal");
+      if (modal) modal.style.display = "flex";
+    }
+    window.openTrashModal = openTrashModal;
+
+    function closeTrashModal() {
+      const modal = document.getElementById("trashInboxModal");
+      if (modal) modal.style.display = "none";
+    }
+    window.closeTrashModal = closeTrashModal;
+
+    function restoreFromTrash(index) {
+      const trash = loadTrashHistory();
+      if (index < 0 || index >= trash.length) return;
+      const restored = trash.splice(index, 1)[0];
+      saveTrashHistory(trash);
+      
+      const items = loadInboxHistory();
+      items.unshift(restored);
+      saveInboxHistory(items);
+      
+      renderTrashList();
+      renderInboxHistory();
+      showToast("✨ 已成功從垃圾桶復原靈感！");
+    }
+    window.restoreFromTrash = restoreFromTrash;
+
+    function permanentlyDeleteFromTrash(index) {
+      const trash = loadTrashHistory();
+      if (index < 0 || index >= trash.length) return;
+      if (!confirm("⚠️ 確定要永久刪除此筆靈感嗎？永久刪除後將無法復原。")) return;
+      
+      const target = trash.splice(index, 1)[0];
+      saveTrashHistory(trash);
+      renderTrashList();
+      showToast("🔥 已永久刪除！");
+
+      if (target && target.url) {
+        try {
+          fetch(`${gasUrl}?action=delete_item&token=${encodeURIComponent(gasToken)}&url=${encodeURIComponent(target.url)}`, { mode: "no-cors" }).catch(() => {});
+        } catch(e) {}
+      }
+    }
+    window.permanentlyDeleteFromTrash = permanentlyDeleteFromTrash;
+
+    function clearAllTrash() {
+      const trash = loadTrashHistory();
+      if (trash.length === 0) return;
+      if (!confirm(`⚠️ 確定要清空垃圾桶內的 ${trash.length} 筆靈感嗎？`)) return;
+
+      const urls = trash.map(i => i.url).filter(Boolean);
+      saveTrashHistory([]);
+      renderTrashList();
+      showToast("🧹 垃圾桶已清空！");
+
+      if (urls.length > 0) {
+        try {
+          fetch(`${gasUrl}?action=delete_item&token=${encodeURIComponent(gasToken)}&urls=${encodeURIComponent(urls.join(","))}`, { mode: "no-cors" }).catch(() => {});
+        } catch(e) {}
+      }
+    }
+    window.clearAllTrash = clearAllTrash;
+
     function deleteInboxHistoryItem(index) {
       const items = loadInboxHistory();
       if (index < 0 || index >= items.length) return;
       const deletedItem = items[index];
       const titleText = deletedItem ? (deletedItem.title || deletedItem.url || "這筆靈感") : "這筆靈感";
 
-      if (!confirm(`⚠️ 確定要刪除「${titleText}」嗎？`)) {
+      if (!confirm(`⚠️ 確定要把「${titleText}」移至垃圾桶嗎？`)) {
         return;
       }
 
-      try {
-        localStorage.setItem("inbox_last_deleted", JSON.stringify(deletedItem));
-      } catch(e) {}
+      // 移入垃圾桶
+      const trash = loadTrashHistory();
+      trash.unshift(deletedItem);
+      saveTrashHistory(trash);
 
+      // 自活躍歷史刪除
       items.splice(index, 1);
       saveInboxHistory(items);
       renderInboxHistory();
-      showToast("🗑️ 已刪除！(可點擊上方「↩️ 復原刪除」)");
+      showToast("🗑️ 已移至垃圾桶 (點擊「🗑️ 垃圾桶」隨時復原)");
 
       if (deletedItem && deletedItem.url) {
         try {
-          fetch(`${gasUrl}?action=delete_archived_items&token=${encodeURIComponent(gasToken)}&urls=${encodeURIComponent(deletedItem.url)}`, { mode: "no-cors" }).catch(() => {});
+          fetch(`${gasUrl}?action=delete_item&token=${encodeURIComponent(gasToken)}&url=${encodeURIComponent(deletedItem.url)}`, { mode: "no-cors" }).catch(() => {});
         } catch(e) {}
       }
     }
