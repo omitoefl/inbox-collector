@@ -1372,6 +1372,13 @@
         return;
       }
 
+      // 檢查是否為無效通用標題（如手機分享自動填入的 Facebook / Instagram）
+      let finalTitle = title;
+      const genericTitles = ["facebook", "instagram", "threads", "login • instagram", "登入 facebook", "log in to facebook", "explore the things you love."];
+      if (finalTitle && genericTitles.includes(finalTitle.trim().toLowerCase())) {
+        finalTitle = "";
+      }
+
       // 若未手動點選，發送前再做一次精準網址分類補全
       const finalType = isUserManuallySelected ? selectedType : detectTypeFromUrl(url);
 
@@ -1384,7 +1391,7 @@
           token: gasToken,
           url: url,
           type: finalType,
-          title: title
+          title: finalTitle
         };
 
         const res = await fetch(gasUrl, {
@@ -1402,10 +1409,10 @@
           applyDetectedType("其他", true);
           const badge = document.getElementById("autoTypeBadge");
           if (badge) badge.innerText = "⚡ 貼上網址自動辨識";
-          addInboxRecord(url, finalType, title || "自動擷取標題", "success");
+          addInboxRecord(url, finalType, finalTitle || "自動擷取標題", "success");
         } else {
           showToast("❌ " + (data.message || "上傳失敗，已暫存"), "❌");
-          addInboxRecord(url, finalType, title || url, "failed");
+          addInboxRecord(url, finalType, finalTitle || url, "failed");
         }
       } catch (err) {
         showToast("❌ 網路異常，已將靈感暫存於下方！", "⚠️");
@@ -1781,14 +1788,37 @@
       const rawTitle = params.get("title") || "";
 
       let targetUrl = rawUrl;
+      let extraText = "";
       if (!targetUrl && rawText) {
         const match = rawText.match(/https?:\/\/[^\s]+/);
-        if (match) targetUrl = match[0];
+        if (match) {
+          targetUrl = match[0];
+          extraText = rawText.replace(targetUrl, "").trim();
+        } else {
+          extraText = rawText.trim();
+        }
+      } else if (rawText) {
+        extraText = rawText.replace(targetUrl, "").trim();
       }
+
+      const genericTitles = [
+        "facebook", "instagram", "threads", "login • instagram",
+        "登入 facebook", "log in to facebook", "explore the things you love", "無標題"
+      ];
+      const isGeneric = !rawTitle || genericTitles.some(g => rawTitle.trim().toLowerCase().includes(g));
 
       if (targetUrl) {
         urlInputEl.value = targetUrl;
-        if (rawTitle) document.getElementById("titleInput").value = rawTitle;
+
+        // 若不是垃圾通用名稱，且不是純網址，才填入標題；若有附帶手動輸入文字則優先使用
+        if (rawTitle && !isGeneric && !rawTitle.startsWith("http")) {
+          document.getElementById("titleInput").value = rawTitle.trim();
+        } else if (extraText && !extraText.startsWith("http")) {
+          document.getElementById("titleInput").value = extraText.slice(0, 60);
+        } else {
+          document.getElementById("titleInput").value = "";
+        }
+
         const detectedType = detectTypeFromUrl(targetUrl);
         applyDetectedType(detectedType, false);
         showToast(`🔗 已自動帶入分享連結：${detectedType}`, "✨");
