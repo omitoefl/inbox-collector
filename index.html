@@ -924,13 +924,32 @@
 
     const urlInputEl = document.getElementById("urlInput");
     function handleUrlChange() {
-      const val = urlInputEl.value.trim();
+      let val = urlInputEl.value.trim();
       if (!val) {
         applyDetectedType("其他", true);
         const badge = document.getElementById("autoTypeBadge");
         if (badge) badge.innerText = "⚡ 貼上網址自動辨識";
         return;
       }
+
+      // 智慧解構：若貼上的文字中同時包含文字與網址（例如「這篇廚房收納超強 https://...」）
+      const urlMatch = val.match(/https?:\/\/[^\s]+/i);
+      if (urlMatch) {
+        const pureUrl = urlMatch[0];
+        const extraNote = val.replace(pureUrl, "").trim();
+
+        // 若有非網址文字，自動填入標題欄
+        if (extraNote) {
+          urlInputEl.value = pureUrl;
+          val = pureUrl;
+          const titleInput = document.getElementById("titleInput");
+          if (!titleInput.value || titleInput.value.includes("貼文內容") || titleInput.value.includes("Facebook") || titleInput.value.includes("Instagram")) {
+            titleInput.value = extraNote.slice(0, 80);
+            showToast(`✨ 已自動拆解：文字為標題、網址為連結！`, "💡");
+          }
+        }
+      }
+
       if (!isUserManuallySelected) {
         const detected = detectTypeFromUrl(val);
         applyDetectedType(detected, true);
@@ -1364,12 +1383,23 @@
 
     const submitInboxBtn = document.getElementById("submitInboxBtn");
     submitInboxBtn.addEventListener("click", async () => {
-      const url = urlInputEl.value.trim();
-      const title = document.getElementById("titleInput").value.trim();
+      let rawUrl = urlInputEl.value.trim();
+      let title = document.getElementById("titleInput").value.trim();
 
-      if (!url) {
+      if (!rawUrl) {
         showToast("⚠️ 請輸入或貼上網址", "⚠️");
         return;
+      }
+
+      // 二次安全解構：如果使用者直接貼上「文字＋網址」後按送出
+      let finalUrl = rawUrl;
+      const urlMatch = rawUrl.match(/https?:\/\/[^\s]+/i);
+      if (urlMatch) {
+        finalUrl = urlMatch[0];
+        const extraNote = rawUrl.replace(finalUrl, "").trim();
+        if (extraNote && (!title || title.includes("貼文內容") || title.includes("Facebook") || title.includes("Instagram"))) {
+          title = extraNote.slice(0, 80);
+        }
       }
 
       // 檢查是否為無效通用標題（如手機分享自動填入的 Facebook / Instagram）
@@ -1380,7 +1410,7 @@
       }
 
       // 若未手動點選，發送前再做一次精準網址分類補全
-      const finalType = isUserManuallySelected ? selectedType : detectTypeFromUrl(url);
+      const finalType = isUserManuallySelected ? selectedType : detectTypeFromUrl(finalUrl);
 
       submitInboxBtn.disabled = true;
       submitInboxBtn.innerText = "⏳ 傳送中...";
@@ -1389,7 +1419,7 @@
         const payload = {
           action: "submit",
           token: gasToken,
-          url: url,
+          url: finalUrl,
           type: finalType,
           title: finalTitle
         };
