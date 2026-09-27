@@ -264,6 +264,103 @@
       margin-right: 4px;
       margin-bottom: 4px;
     }
+    .collection-status-bar {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 12px;
+      background: rgba(15, 23, 42, 0.75);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 4px;
+    }
+    .status-pill {
+      flex: 1;
+      background: transparent;
+      border: none;
+      border-radius: 8px;
+      padding: 8px 6px;
+      font-size: 12px;
+      font-weight: 700;
+      color: #94a3b8;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      transition: all 0.2s;
+    }
+    .status-pill:hover {
+      color: #f1f5f9;
+      background: rgba(255, 255, 255, 0.05);
+    }
+    .status-pill.active[data-status="active"] {
+      background: rgba(16, 185, 129, 0.2);
+      color: #34d399;
+      box-shadow: 0 0 10px rgba(52, 211, 153, 0.25);
+    }
+    .status-pill.active[data-status="archived"] {
+      background: rgba(168, 85, 247, 0.2);
+      color: #c084fc;
+      box-shadow: 0 0 10px rgba(192, 132, 252, 0.25);
+    }
+    .status-pill.active[data-status="deleted"] {
+      background: rgba(239, 68, 68, 0.2);
+      color: #f87171;
+      box-shadow: 0 0 10px rgba(248, 113, 113, 0.25);
+    }
+    .status-badge-count {
+      font-size: 10px;
+      padding: 1px 5px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.1);
+    }
+    .collection-card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-top: 6px;
+      padding-top: 8px;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+    }
+    .collection-action-group {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .btn-card-action {
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 4px 9px;
+      font-size: 11px;
+      font-weight: 600;
+      color: #cbd5e1;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.2s;
+    }
+    .btn-card-action:hover {
+      border-color: rgba(255, 255, 255, 0.3);
+      color: #fff;
+    }
+    .btn-card-archive:hover {
+      background: rgba(168, 85, 247, 0.15);
+      border-color: #c084fc;
+      color: #c084fc;
+    }
+    .btn-card-delete:hover {
+      background: rgba(239, 68, 68, 0.15);
+      border-color: #f87171;
+      color: #f87171;
+    }
+    .btn-card-restore:hover {
+      background: rgba(16, 185, 129, 0.15);
+      border-color: #34d399;
+      color: #34d399;
+    }
 
     /* 設定區塊（預設收折） */
     .settings-panel {
@@ -968,6 +1065,19 @@
 
     <!-- ==================== 分頁 3: 收藏總覽 (Tab 3) ==================== -->
     <div class="page-section page-collection" id="pageCollection">
+      <!-- 狀態切換列 (活躍 / 封存 / 回收站) -->
+      <div class="collection-status-bar" id="collectionStatusBar">
+        <button class="status-pill active" data-status="active" onclick="selectCollectionStatus('active')">
+          🌟 活躍精選 <span class="status-badge-count" id="countActive">0</span>
+        </button>
+        <button class="status-pill" data-status="archived" onclick="selectCollectionStatus('archived')">
+          📦 歷史封存 <span class="status-badge-count" id="countArchived">0</span>
+        </button>
+        <button class="status-pill" data-status="deleted" onclick="selectCollectionStatus('deleted')">
+          🗑️ 回收站 <span class="status-badge-count" id="countDeleted">0</span>
+        </button>
+      </div>
+
       <!-- 搜尋列 -->
       <div class="collection-search-wrap">
         <span class="collection-search-icon">🔍</span>
@@ -1059,9 +1169,135 @@
       items: [],
       categories: {},
       generatedAt: "",
+      currentStatus: "active", // "active" | "archived" | "deleted"
       currentCat: "all",
       searchQuery: ""
     };
+
+    function escapeJs(str) {
+      return String(str || "")
+        .replace(/\\/g, "\\\\")
+        .replace(/'/g, "\\'")
+        .replace(/"/g, "&quot;")
+        .replace(/\n/g, "\\n");
+    }
+
+    function getItemKey(item) {
+      if (item.url && (item.url.startsWith("http://") || item.url.startsWith("https://"))) {
+        return item.url;
+      }
+      return (item.title || "") + "_" + (item.timestamp || "");
+    }
+
+    function getStatusOverrides() {
+      try {
+        return JSON.parse(localStorage.getItem("collection_status_overrides") || "{}");
+      } catch (e) {
+        return {};
+      }
+    }
+
+    function saveStatusOverrides(map) {
+      try {
+        localStorage.setItem("collection_status_overrides", JSON.stringify(map));
+      } catch (e) {}
+    }
+
+    function getItemEffectiveStatus(it) {
+      const overrides = getStatusOverrides();
+      const key = getItemKey(it);
+      if (overrides[key]) return overrides[key];
+      if (it.url && overrides[it.url]) return overrides[it.url];
+      if (it.title && overrides[it.title]) return overrides[it.title];
+      return it.status || "active";
+    }
+
+    function updateStatusCounts() {
+      let active = 0, archived = 0, deleted = 0;
+      collectionsState.items.forEach(it => {
+        const s = getItemEffectiveStatus(it);
+        if (s === "archived") archived++;
+        else if (s === "deleted") deleted++;
+        else if (s !== "permanently_deleted") active++;
+      });
+      const elA = document.getElementById("countActive");
+      const elAr = document.getElementById("countArchived");
+      const elD = document.getElementById("countDeleted");
+      if (elA) elA.innerText = active;
+      if (elAr) elAr.innerText = archived;
+      if (elD) elD.innerText = deleted;
+    }
+
+    function selectCollectionStatus(status) {
+      collectionsState.currentStatus = status;
+      document.querySelectorAll(".status-pill").forEach(btn => {
+        if (btn.getAttribute("data-status") === status) {
+          btn.classList.add("active");
+        } else {
+          btn.classList.remove("active");
+        }
+      });
+      renderCollectionFilterChips();
+      renderCollectionList();
+    }
+    window.selectCollectionStatus = selectCollectionStatus;
+
+    async function mutateItemStatus(keyOrUrl, title, targetStatus) {
+      const overrides = getStatusOverrides();
+      const item = collectionsState.items.find(it => getItemKey(it) === keyOrUrl || it.url === keyOrUrl || it.title === title);
+      const actualKey = item ? getItemKey(item) : (keyOrUrl || title);
+
+      // 1. 本地立即反應
+      overrides[actualKey] = targetStatus;
+      if (item && item.url) overrides[item.url] = targetStatus;
+      if (item && item.title) overrides[item.title] = targetStatus;
+      saveStatusOverrides(overrides);
+      updateStatusCounts();
+      renderCollectionFilterChips();
+      renderCollectionList();
+
+      const statusLabels = {
+        "active": "✨ 已復原回活躍收藏！",
+        "archived": "📦 已移入歷史封存！",
+        "deleted": "🗑️ 已移至回收站！"
+      };
+      showToast(statusLabels[targetStatus] || "狀態已更新！");
+
+      // 2. 背景即時非同步推送至雲端 GAS
+      try {
+        const payload = {
+          action: "mutate_collection_status",
+          token: gasToken,
+          title: item ? item.title : title,
+          url: item && item.url ? item.url : (keyOrUrl.startsWith("http") ? keyOrUrl : ""),
+          status: targetStatus
+        };
+        fetch(gasUrl, {
+          method: "POST",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify(payload)
+        }).then(r => r.json()).then(res => {
+          console.log("[Collection Sync] Cloud mutation success:", res);
+        }).catch(err => {
+          console.warn("[Collection Sync] Cloud mutation cached locally:", err);
+        });
+      } catch (err) {
+        console.warn("Cloud sync dispatch error:", err);
+      }
+    }
+    window.mutateItemStatus = mutateItemStatus;
+
+    function purgeTrashItem(keyOrUrl) {
+      if (!confirm("⚠️ 確定要徹底刪除此筆收藏嗎？")) return;
+      const overrides = getStatusOverrides();
+      overrides[keyOrUrl] = "permanently_deleted";
+      saveStatusOverrides(overrides);
+      updateStatusCounts();
+      renderCollectionFilterChips();
+      renderCollectionList();
+      showToast("🧹 已徹底抹除！");
+    }
+    window.purgeTrashItem = purgeTrashItem;
 
     async function loadCollectionsData() {
       if (window.COLLECTIONS_DATA && window.COLLECTIONS_DATA.items) {
@@ -1086,6 +1322,7 @@
       collectionsState.categories = data.categories || {};
       collectionsState.generatedAt = data.generated_at || "";
       
+      updateStatusCounts();
       renderCollectionFilterChips();
       renderCollectionList();
     }
@@ -1101,6 +1338,7 @@
           collectionsState.items = data.items || [];
           collectionsState.categories = data.categories || {};
           collectionsState.generatedAt = data.generated_at || "";
+          updateStatusCounts();
           renderCollectionFilterChips();
           renderCollectionList();
           showToast(`✨ 收藏已更新！共 ${collectionsState.items.length} 筆`, "📚");
@@ -1108,6 +1346,7 @@
         }
       } catch (e) {}
       showToast("ℹ️ 目前已是最新快取內容");
+      updateStatusCounts();
       renderCollectionList();
     }
     window.refreshCollectionData = refreshCollectionData;
@@ -1116,8 +1355,19 @@
       const bar = document.getElementById("collectionFilterBar");
       if (!bar) return;
 
-      const total = collectionsState.items.length;
-      const cats = collectionsState.categories;
+      // 計算在當前狀態下的各分類筆數
+      const curStatus = collectionsState.currentStatus;
+      const statusFilteredItems = collectionsState.items.filter(it => {
+        const s = getItemEffectiveStatus(it);
+        if (s === "permanently_deleted") return false;
+        return s === curStatus;
+      });
+
+      const catCounts = {};
+      statusFilteredItems.forEach(it => {
+        const c = it.category || "其他";
+        catCounts[c] = (catCounts[c] || 0) + 1;
+      });
 
       const categoryEmojis = {
         "活動情報": "🏷️",
@@ -1135,12 +1385,12 @@
 
       let html = `
         <button class="cat-chip ${collectionsState.currentCat === 'all' ? 'active' : ''}" onclick="selectCollectionCategory('all')">
-          全部 (${total})
+          全部 (${statusFilteredItems.length})
         </button>
       `;
 
-      Object.keys(cats).forEach(cat => {
-        const count = cats[cat];
+      Object.keys(collectionsState.categories).forEach(cat => {
+        const count = catCounts[cat] || 0;
         const emoji = categoryEmojis[cat] || "📁";
         const isActive = collectionsState.currentCat === cat;
         html += `
@@ -1173,14 +1423,21 @@
       const meta = document.getElementById("collectionSyncMeta");
       if (!container) return;
 
-      let filtered = collectionsState.items;
+      const curStatus = collectionsState.currentStatus;
 
-      // 1. 分類篩選
+      // 1. 狀態篩選
+      let filtered = collectionsState.items.filter(it => {
+        const s = getItemEffectiveStatus(it);
+        if (s === "permanently_deleted") return false;
+        return s === curStatus;
+      });
+
+      // 2. 分類篩選
       if (collectionsState.currentCat !== "all") {
         filtered = filtered.filter(i => i.category === collectionsState.currentCat);
       }
 
-      // 2. 關鍵字搜尋
+      // 3. 關鍵字搜尋
       if (collectionsState.searchQuery) {
         const q = collectionsState.searchQuery;
         filtered = filtered.filter(i => {
@@ -1194,13 +1451,19 @@
 
       if (meta) {
         const syncText = collectionsState.generatedAt ? `｜ 📅 同步於 ${collectionsState.generatedAt}` : "";
-        meta.innerText = `📦 顯示 ${filtered.length} / ${collectionsState.items.length} 筆收藏${syncText}`;
+        const statusTitleMap = { active: "🌟 活躍精選", archived: "📦 歷史封存", deleted: "🗑️ 回收站" };
+        meta.innerText = `${statusTitleMap[curStatus]}：顯示 ${filtered.length} 筆${syncText}`;
       }
 
       if (filtered.length === 0) {
+        const emptyMsgMap = {
+          active: "🌟 活躍精選目前空空如也，新收藏的靈感會出現在這裡！",
+          archived: "📦 歷史封存庫為空，看完的內容點擊「📦 封存」即可收納至此！",
+          deleted: "🗑️ 回收站目前沒有任何已刪除項目。"
+        };
         container.innerHTML = `
           <div style="text-align: center; color: var(--text-muted); padding: 40px 10px; font-size: 14px;">
-            📭 找不到符合條件的收藏靈感
+            ${emptyMsgMap[curStatus] || "📭 找不到符合條件的收藏靈感"}
           </div>
         `;
         return;
@@ -1222,6 +1485,7 @@
 
         const catBadgeStyle = categoryColors[it.category] || "background: rgba(148, 163, 184, 0.15); color: #cbd5e1; border: 1px solid rgba(148, 163, 184, 0.35);";
         const hasUrl = it.url && (it.url.startsWith("http://") || it.url.startsWith("https://"));
+        const itemKey = getItemKey(it);
 
         // 關鍵字標籤
         let kwHtml = "";
@@ -1245,6 +1509,30 @@
         const titleText = escapeHtml(it.title || "無標題");
         const summaryText = escapeHtml(it.summary || "暫無摘要內容");
         const timeDisplay = it.timestamp ? it.timestamp.slice(0, 16).replace("T", " ") : "";
+
+        // 依目前狀態設定底部操作按鈕
+        let actionButtonsHtml = "";
+        let statusTagHtml = "";
+
+        if (curStatus === "active") {
+          statusTagHtml = `<span style="color: #34d399; font-weight: 700;">● 活躍中</span>`;
+          actionButtonsHtml = `
+            <button class="btn-card-action btn-card-archive" onclick="mutateItemStatus('${escapeJs(itemKey)}', '${escapeJs(it.title)}', 'archived')">📦 封存</button>
+            <button class="btn-card-action btn-card-delete" onclick="mutateItemStatus('${escapeJs(itemKey)}', '${escapeJs(it.title)}', 'deleted')">🗑️ 刪除</button>
+          `;
+        } else if (curStatus === "archived") {
+          statusTagHtml = `<span style="color: #c084fc; font-weight: 700;">📦 已封存</span>`;
+          actionButtonsHtml = `
+            <button class="btn-card-action btn-card-restore" onclick="mutateItemStatus('${escapeJs(itemKey)}', '${escapeJs(it.title)}', 'active')">↩️ 復原回活躍</button>
+            <button class="btn-card-action btn-card-delete" onclick="mutateItemStatus('${escapeJs(itemKey)}', '${escapeJs(it.title)}', 'deleted')">🗑️ 刪除</button>
+          `;
+        } else if (curStatus === "deleted") {
+          statusTagHtml = `<span style="color: #f87171; font-weight: 700;">🗑️ 回收站</span>`;
+          actionButtonsHtml = `
+            <button class="btn-card-action btn-card-restore" onclick="mutateItemStatus('${escapeJs(itemKey)}', '${escapeJs(it.title)}', 'active')">↩️ 復原</button>
+            <button class="btn-card-action btn-card-delete" onclick="purgeTrashItem('${escapeJs(itemKey)}')">💥 徹底抹除</button>
+          `;
+        }
 
         el.innerHTML = `
           <div class="collection-card-header">
@@ -1279,13 +1567,19 @@
 
           ${clipsHtml}
 
-          ${hasUrl ? `
-            <div style="display: flex; justify-content: flex-end; margin-top: 2px;">
-              <a href="${escapeHtml(it.url)}" target="_blank" rel="noopener noreferrer" style="font-size: 12px; color: #34d399; text-decoration: none; display: inline-flex; align-items: center; gap: 4px; padding: 4px 8px; background: rgba(16, 185, 129, 0.1); border-radius: 6px;">
-                直達原文 ↗
-              </a>
+          <div class="collection-card-footer">
+            <div style="font-size: 11px; color: var(--text-muted);">
+              ${statusTagHtml}
             </div>
-          ` : ""}
+            <div class="collection-action-group">
+              ${actionButtonsHtml}
+              ${hasUrl ? `
+                <a href="${escapeHtml(it.url)}" target="_blank" rel="noopener noreferrer" class="btn-card-action" style="font-size: 11px; color: #34d399; background: rgba(16, 185, 129, 0.1); border-color: rgba(52, 211, 153, 0.3); text-decoration: none;">
+                  直達原文 ↗
+                </a>
+              ` : ""}
+            </div>
+          </div>
         `;
 
         container.appendChild(el);
