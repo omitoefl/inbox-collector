@@ -1109,13 +1109,13 @@
 
   <script src="./collections_data.js"></script>
   <script>
-    // 正式生產環境 GAS 端點配置 (Version 13: 跨行大綱自動擷取)
-    const PRODUCTION_GAS_URL = "https://script.google.com/macros/s/AKfycbziv1JVlexE6Cl9hsLZsp5tKVar1jwpEuRlIZNMbagw6ZP9BojXuzev1oMXuR9LMg13gg/exec";
+    // 正式生產環境 GAS 端點配置 (Version 38: ANYONE_ANONYMOUS & 動態表頭)
+    const PRODUCTION_GAS_URL = "https://script.google.com/macros/s/AKfycbzDWvFbBXTI0P_N37nHjiAG3ouQrJIGwu9YLAz_9OXDraCQNTMhJsKFOVtbotHQYSniMQ/exec";
     const DEFAULT_TOKEN = "INBOX_SECRET_TOKEN_2026";
 
     let gasUrl = localStorage.getItem("gas_url");
-    // 若無設定、舊端點或舊版本網址，自動修復升級為最新 Version 13 生產端點
-    if (!gasUrl || gasUrl.includes("sample") || gasUrl.includes("AKfycbw1f") || gasUrl.includes("AKfycbx60eRkmqL") || gasUrl.includes("AKfycby5t4c12y9z")) {
+    // 若無設定、舊端點或舊版本網址，自動修復升級為最新 Version 38 生產端點
+    if (!gasUrl || gasUrl.includes("sample") || gasUrl.includes("AKfycbw1f") || gasUrl.includes("AKfycbx60eRkmqL") || gasUrl.includes("AKfycby5t4c12y9z") || gasUrl.includes("AKfycbziv1JVlexE6") || gasUrl.includes("AKfycbw45bng")) {
       gasUrl = PRODUCTION_GAS_URL;
       localStorage.setItem("gas_url", gasUrl);
       localStorage.setItem("inbox_gas_url", gasUrl);
@@ -2236,19 +2236,60 @@
           applyDetectedType("其他", true);
           const badge = document.getElementById("autoTypeBadge");
           if (badge) badge.innerText = "⚡ 貼上網址自動辨識";
-          addInboxRecord(url, finalType, finalTitle || "自動擷取標題", "success");
+          const savedTitle = (data.data && data.data.title) || finalTitle || "自動擷取標題";
+          addInboxRecord(finalUrl, finalType, savedTitle, "success");
         } else {
           showToast("❌ " + (data.message || "上傳失敗，已暫存"), "❌");
-          addInboxRecord(url, finalType, finalTitle || url, "failed");
+          addInboxRecord(finalUrl, finalType, finalTitle || finalUrl, "failed");
         }
       } catch (err) {
         showToast("❌ 網路異常，已將靈感暫存於下方！", "⚠️");
-        addInboxRecord(url, finalType, title || url, "failed");
+        urlInputEl.value = "";
+        document.getElementById("titleInput").value = "";
+        addInboxRecord(finalUrl, finalType, finalTitle || finalUrl, "failed");
       } finally {
         submitInboxBtn.disabled = false;
         submitInboxBtn.innerText = "🚀 即時投遞至待採集庫";
       }
     });
+
+    async function retrySubmitInboxItem(index) {
+      const items = loadInboxHistory();
+      if (index < 0 || index >= items.length) return;
+      const target = items[index];
+      if (!target || !target.url) return;
+
+      showToast("⏳ 正在重新投遞靈感...", "⏳");
+      try {
+        const payload = {
+          action: "submit",
+          token: gasToken,
+          url: target.url,
+          type: target.type || "其他",
+          title: target.title || ""
+        };
+        const res = await fetch(gasUrl, {
+          method: "POST",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+        if (data.status === "success") {
+          items[index].status = "success";
+          if (data.data && data.data.title) {
+            items[index].title = data.data.title;
+          }
+          saveInboxHistory(items);
+          renderInboxHistory();
+          showToast("🎉 補傳成功！已同步至待採集庫！");
+        } else {
+          showToast("❌ 補傳失敗：" + (data.message || "未知錯誤"), "❌");
+        }
+      } catch (err) {
+        showToast("❌ 補傳失敗，請檢查網路連線", "⚠️");
+      }
+    }
+    window.retrySubmitInboxItem = retrySubmitInboxItem;
 
     // ==================== Tab 2: 生命之流時程邏輯 ====================
     let selectedCategory = "💭 隨手靈感";

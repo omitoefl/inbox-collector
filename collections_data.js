@@ -1,5 +1,5 @@
 window.COLLECTIONS_DATA = {
-  "generated_at": "2026-09-27 15:13:39",
+  "generated_at": "2026-09-27 15:53:15",
   "total_count": 80,
   "active_count": 80,
   "archived_count": 0,
