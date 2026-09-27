@@ -652,7 +652,7 @@
             <button class="type-btn" data-type="工具"><span class="emoji">🛠️</span>工具</button>
             <button class="type-btn" data-type="Podcast"><span class="emoji">🎙️</span>Podcast</button>
             <button class="type-btn" data-type="筆記"><span class="emoji">📝</span>筆記</button>
-            <button class="type-btn" data-type="情報活動"><span class="emoji">🏷️</span>情報活動</button>
+            <button class="type-btn" data-type="活動情報"><span class="emoji">🏷️</span>活動情報</button>
             <button class="type-btn active" data-type="其他"><span class="emoji">📦</span>其他</button>
           </div>
         </div>
@@ -929,9 +929,9 @@
         return "影片";
       }
 
-      // 3. 情報活動 / 省錢促銷
-      if (u.includes("lifeismoney") || u.includes("savemoney") || u.includes("coupon") || u.includes("discount") || u.includes("bargain") || u.includes("goodlife.tw") || u.includes("ptt.cc/bbs/lifeismoney")) {
-        return "情報活動";
+      // 3. 活動情報 / 展覽優惠
+      if (u.includes("lifeismoney") || u.includes("savemoney") || u.includes("coupon") || u.includes("discount") || u.includes("bargain") || u.includes("goodlife.tw") || u.includes("ptt.cc/bbs/lifeismoney") || u.includes("klook.com") || u.includes("kkday.com") || u.includes("accupass.com") || u.includes("cityline.com") || u.includes("tixcraft.com")) {
+        return "活動情報";
       }
 
       // 4. 社群平台 (X/Twitter, Facebook, IG, Dcard, PTT, Reddit, LinkedIn)
