@@ -652,6 +652,7 @@
             <button class="type-btn" data-type="工具"><span class="emoji">🛠️</span>工具</button>
             <button class="type-btn" data-type="Podcast"><span class="emoji">🎙️</span>Podcast</button>
             <button class="type-btn" data-type="筆記"><span class="emoji">📝</span>筆記</button>
+            <button class="type-btn" data-type="情報活動"><span class="emoji">🏷️</span>情報活動</button>
             <button class="type-btn active" data-type="其他"><span class="emoji">📦</span>其他</button>
           </div>
         </div>
@@ -770,9 +771,67 @@
       <div class="history-card" id="lifeHistoryCard" style="display: none;">
         <div class="history-header">
           <span>今日已記時程（待回家同步）</span>
-          <span id="lifeCountBadge" style="color: var(--purple);">0 筆</span>
+          <div style="display: flex; align-items: center; gap: 6px;">
+            <button id="openLifeTrashModalBtn" onclick="openLifeTrashModal()" style="background: rgba(148, 163, 184, 0.2); color: #cbd5e1; border: 1px solid rgba(148, 163, 184, 0.4); border-radius: 6px; padding: 2px 8px; font-size: 11px; cursor: pointer;">🗑️ 垃圾桶 (<span id="lifeTrashCountBadge">0</span>)</button>
+            <span id="lifeCountBadge" style="color: var(--purple);">0 筆</span>
+          </div>
         </div>
         <div class="history-list" id="lifeHistoryList"></div>
+      </div>
+
+      <!-- 生命流編輯 Modal -->
+      <div id="editLifeModal" class="modal-backdrop" style="display: none;">
+        <div class="modal-card">
+          <div class="modal-header">
+            <span>✏️ 編輯生命之流時程</span>
+            <button class="modal-close-btn" onclick="closeEditLifeModal()">✕</button>
+          </div>
+          <div class="modal-body">
+            <input type="hidden" id="editLifeIndex" />
+            <div class="input-group">
+              <label class="input-label">時間區間 / 發生時段</label>
+              <input type="text" id="editLifeTime" placeholder="例如：14:00 - 15:30 或 現在" />
+            </div>
+            <div class="input-group">
+              <label class="input-label">生活場景標籤</label>
+              <select id="editLifeCategory" style="width: 100%; background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 8px; padding: 10px; color: #e2e8f0; font-size: 14px;">
+                <option value="💭 隨手靈感">💭 隨手靈感</option>
+                <option value="🚗 外出/交通">🚗 外出/交通</option>
+                <option value="🛒 生活/採買">🛒 生活/採買</option>
+                <option value="🏥 身體/就醫">🏥 身體/就醫</option>
+                <option value="☕ 休息/用餐">☕ 休息/用餐</option>
+                <option value="👥 陪伴/家人">👥 陪伴/家人</option>
+                <option value="📖 閱讀/學習">📖 閱讀/學習</option>
+                <option value="💰 語音記帳">💰 語音記帳</option>
+              </select>
+            </div>
+            <div class="input-group">
+              <label class="input-label">事件描述與想法</label>
+              <textarea id="editLifeContent" rows="4" style="width: 100%; background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 8px; padding: 10px; color: #e2e8f0; font-size: 14px; resize: vertical;"></textarea>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button class="btn-cancel" onclick="closeEditLifeModal()">取消</button>
+            <button class="btn-save" style="background: var(--purple);" onclick="saveEditLifeItem()">💾 儲存修改</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 生命流垃圾桶 Modal -->
+      <div id="trashLifeModal" class="modal-backdrop" style="display: none;">
+        <div class="modal-card" style="max-width: 480px;">
+          <div class="modal-header">
+            <span>🗑️ 生命之流垃圾桶 (回收站)</span>
+            <button class="modal-close-btn" onclick="closeLifeTrashModal()">✕</button>
+          </div>
+          <div class="modal-body" style="max-height: 380px; overflow-y: auto;">
+            <div id="trashLifeList" style="display: flex; flex-direction: column; gap: 8px;"></div>
+          </div>
+          <div class="modal-footer" style="justify-content: space-between;">
+            <button class="btn-cancel" style="background: rgba(239, 68, 68, 0.2); color: #fca5a5; border-color: rgba(239, 68, 68, 0.4);" onclick="clearAllLifeTrash()">🧹 清空垃圾桶</button>
+            <button class="btn-cancel" onclick="closeLifeTrashModal()">關閉</button>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -870,7 +929,12 @@
         return "影片";
       }
 
-      // 3. 社群平台 (X/Twitter, Facebook, IG, Dcard, PTT, Reddit, LinkedIn)
+      // 3. 情報活動 / 省錢促銷
+      if (u.includes("lifeismoney") || u.includes("savemoney") || u.includes("coupon") || u.includes("discount") || u.includes("bargain") || u.includes("goodlife.tw") || u.includes("ptt.cc/bbs/lifeismoney")) {
+        return "情報活動";
+      }
+
+      // 4. 社群平台 (X/Twitter, Facebook, IG, Dcard, PTT, Reddit, LinkedIn)
       if (u.includes("twitter.com") || u.includes("x.com") || u.includes("facebook.com") || u.includes("fb.com") || u.includes("fb.watch") || u.includes("instagram.com") || u.includes("dcard.tw") || u.includes("ptt.cc") || u.includes("reddit.com") || u.includes("linkedin.com") || u.includes("weibo.com") || u.includes("plurk.com")) {
         return "社群";
       }
@@ -953,6 +1017,36 @@
       if (!isUserManuallySelected) {
         const detected = detectTypeFromUrl(val);
         applyDetectedType(detected, true);
+      }
+
+      // 若為 YouTube 影片且尚未自訂標題，前端直接透過 oEmbed API 即時帶出真正標題
+      if (val.includes("youtube.com") || val.includes("youtu.be")) {
+        const titleInput = document.getElementById("titleInput");
+        if (!titleInput.value || titleInput.value.includes("自動擷取") || titleInput.value === val) {
+          fetchTitleFromYouTube(val);
+        }
+      }
+    }
+
+    let lastYtFetchUrl = "";
+    async function fetchTitleFromYouTube(ytUrl) {
+      if (!ytUrl || ytUrl === lastYtFetchUrl) return;
+      lastYtFetchUrl = ytUrl;
+      try {
+        const oeApi = `https://noembed.com/embed?url=${encodeURIComponent(ytUrl)}`;
+        const res = await fetch(oeApi);
+        if (res.ok) {
+          const data = await res.json();
+          if (data && data.title && !data.error) {
+            const titleInput = document.getElementById("titleInput");
+            if (!titleInput.value || titleInput.value === ytUrl || titleInput.value.includes("自動擷取")) {
+              titleInput.value = data.title;
+              showToast("✨ 已自動擷取 YouTube 標題！", "📹");
+            }
+          }
+        }
+      } catch (e) {
+        // 靜默備援
       }
     }
 
@@ -1603,13 +1697,188 @@
       } catch (e) {}
     }
 
+    function loadLifeTrashHistory() {
+      try {
+        const raw = localStorage.getItem("life_trash_items");
+        return raw ? JSON.parse(raw) : [];
+      } catch (e) {
+        return [];
+      }
+    }
+
+    function saveLifeTrashHistory(list) {
+      try {
+        localStorage.setItem("life_trash_items", JSON.stringify(list));
+      } catch (e) {}
+    }
+
+    function renderLifeTrashList() {
+      const listEl = document.getElementById("trashLifeList");
+      const badge = document.getElementById("lifeTrashCountBadge");
+      const trash = loadLifeTrashHistory();
+      if (badge) badge.innerText = trash.length;
+      if (!listEl) return;
+
+      if (trash.length === 0) {
+        listEl.innerHTML = '<div style="text-align: center; color: #94a3b8; padding: 20px; font-size: 13px;">🗑️ 生命之流垃圾桶空空如也</div>';
+        return;
+      }
+
+      listEl.innerHTML = "";
+      trash.forEach((item, index) => {
+        const el = document.createElement("div");
+        el.style.cssText = "background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 10px; padding: 10px; display: flex; flex-direction: column; gap: 6px;";
+        
+        const catText = escapeHtml(item.category || "💭 隨手靈感");
+        const contentText = escapeHtml(item.content || "");
+        const timeText = escapeHtml(item.time || "");
+
+        el.innerHTML = `
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 12px; color: #94a3b8;">
+            <span class="history-tag tag-purple">${catText}</span>
+            <span>${timeText} (已移至垃圾桶)</span>
+          </div>
+          <div style="font-size: 13px; font-weight: 500; color: #e2e8f0; word-break: break-all; margin: 4px 0;">${contentText}</div>
+          <div style="display: flex; align-items: center; justify-content: flex-end; gap: 8px; margin-top: 4px;">
+            <button onclick="restoreLifeFromTrash(${index})" style="background: rgba(168, 85, 247, 0.2); color: #c084fc; border: 1px solid rgba(168, 85, 247, 0.4); border-radius: 6px; padding: 4px 10px; font-size: 12px; cursor: pointer;">↩️ 復原此筆</button>
+            <button onclick="permanentlyDeleteFromLifeTrash(${index})" style="background: rgba(239, 68, 68, 0.2); color: #fca5a5; border: 1px solid rgba(239, 68, 68, 0.4); border-radius: 6px; padding: 4px 10px; font-size: 12px; cursor: pointer;">🔥 永久刪除</button>
+          </div>
+        `;
+        listEl.appendChild(el);
+      });
+    }
+
+    function openLifeTrashModal() {
+      renderLifeTrashList();
+      const modal = document.getElementById("trashLifeModal");
+      if (modal) modal.style.display = "flex";
+    }
+    window.openLifeTrashModal = openLifeTrashModal;
+
+    function closeLifeTrashModal() {
+      const modal = document.getElementById("trashLifeModal");
+      if (modal) modal.style.display = "none";
+    }
+    window.closeLifeTrashModal = closeLifeTrashModal;
+
+    function restoreLifeFromTrash(index) {
+      const trash = loadLifeTrashHistory();
+      if (index < 0 || index >= trash.length) return;
+      const restored = trash.splice(index, 1)[0];
+      saveLifeTrashHistory(trash);
+
+      const items = loadLifeHistory();
+      items.unshift(restored);
+      saveLifeHistory(items);
+
+      renderLifeTrashList();
+      renderLifeHistory();
+      showToast("✨ 已成功從垃圾桶復原生命之流時程！", "⏱️");
+    }
+    window.restoreLifeFromTrash = restoreLifeFromTrash;
+
+    function permanentlyDeleteFromLifeTrash(index) {
+      const trash = loadLifeTrashHistory();
+      if (index < 0 || index >= trash.length) return;
+      if (!confirm("⚠️ 確定要永久刪除此筆時程記錄嗎？永久刪除後將無法復原。")) return;
+
+      trash.splice(index, 1);
+      saveLifeTrashHistory(trash);
+      renderLifeTrashList();
+      showToast("🔥 已永久刪除！");
+    }
+    window.permanentlyDeleteFromLifeTrash = permanentlyDeleteFromLifeTrash;
+
+    function clearAllLifeTrash() {
+      const trash = loadLifeTrashHistory();
+      if (trash.length === 0) return;
+      if (!confirm(`⚠️ 確定要清空生命之流垃圾桶內的 ${trash.length} 筆時程嗎？`)) return;
+
+      saveLifeTrashHistory([]);
+      renderLifeTrashList();
+      showToast("🧹 生命之流垃圾桶已清空！");
+    }
+    window.clearAllLifeTrash = clearAllLifeTrash;
+
+    function deleteLifeHistoryItem(index) {
+      const items = loadLifeHistory();
+      if (index < 0 || index >= items.length) return;
+      const deletedItem = items[index];
+      const previewText = deletedItem.content ? deletedItem.content.slice(0, 20) + "..." : "這筆時程";
+
+      if (!confirm(`⚠️ 確定要把「${previewText}」移至垃圾桶嗎？`)) {
+        return;
+      }
+
+      // 移入垃圾桶
+      const trash = loadLifeTrashHistory();
+      trash.unshift(deletedItem);
+      saveLifeTrashHistory(trash);
+
+      // 自活躍清單移除
+      items.splice(index, 1);
+      saveLifeHistory(items);
+      renderLifeHistory();
+      showToast("🗑️ 已移至垃圾桶 (點擊「🗑️ 垃圾桶」隨時復原)");
+    }
+    window.deleteLifeHistoryItem = deleteLifeHistoryItem;
+
+    function openEditLifeModal(index) {
+      const items = loadLifeHistory();
+      if (index < 0 || index >= items.length) return;
+      const item = items[index];
+      document.getElementById("editLifeIndex").value = index;
+      document.getElementById("editLifeTime").value = item.time || "";
+      document.getElementById("editLifeCategory").value = item.category || "💭 隨手靈感";
+      document.getElementById("editLifeContent").value = item.content || "";
+
+      const modal = document.getElementById("editLifeModal");
+      if (modal) modal.style.display = "flex";
+    }
+    window.openEditLifeModal = openEditLifeModal;
+
+    function closeEditLifeModal() {
+      const modal = document.getElementById("editLifeModal");
+      if (modal) modal.style.display = "none";
+    }
+    window.closeEditLifeModal = closeEditLifeModal;
+
+    function saveEditLifeItem() {
+      const idx = parseInt(document.getElementById("editLifeIndex").value, 10);
+      const items = loadLifeHistory();
+      if (isNaN(idx) || idx < 0 || idx >= items.length) return;
+
+      const newTime = document.getElementById("editLifeTime").value.trim();
+      const newCat = document.getElementById("editLifeCategory").value.trim();
+      const newContent = document.getElementById("editLifeContent").value.trim();
+
+      if (!newContent) {
+        showToast("⚠️ 內容不能為空", "⚠️");
+        return;
+      }
+
+      items[idx].time = newTime;
+      items[idx].category = newCat;
+      items[idx].content = newContent;
+      items[idx].duration = calculateDurationJs(newTime);
+
+      saveLifeHistory(items);
+      renderLifeHistory();
+      closeEditLifeModal();
+      showToast("✏️ 生命之流內容已更新！", "⏱️");
+    }
+    window.saveEditLifeItem = saveEditLifeItem;
+
     function renderLifeHistory() {
       const card = document.getElementById("lifeHistoryCard");
       const listEl = document.getElementById("lifeHistoryList");
       const badge = document.getElementById("lifeCountBadge");
+      const trashBadge = document.getElementById("lifeTrashCountBadge");
       const items = loadLifeHistory();
+      const trash = loadLifeTrashHistory();
 
       if (badge) badge.innerText = `${items.length} 筆`;
+      if (trashBadge) trashBadge.innerText = trash.length;
       if (!card || !listEl) return;
 
       if (items.length === 0) {
@@ -1619,11 +1888,11 @@
       }
       card.style.display = "flex";
       listEl.innerHTML = "";
-      items.forEach((item) => {
+      items.forEach((item, index) => {
         const el = document.createElement("div");
         el.className = "history-item";
         const durTag = (item.duration && item.duration !== "—") 
-          ? `<span class="history-tag" style="background: rgba(168, 85, 247, 0.25); color: #e9d5ff; font-weight: 700;">⏱️ ${item.duration}</span>` 
+          ? `<span class="history-tag" style="background: rgba(168, 85, 247, 0.25); color: #e9d5ff; font-weight: 700;">⏱️ ${escapeHtml(item.duration)}</span>` 
           : "";
         const statusBadge = item.status === "failed" 
           ? `<span class="history-tag" style="background: rgba(239, 68, 68, 0.2); color: #fca5a5;">⚠️ 暫存(未送出)</span>`
@@ -1631,15 +1900,34 @@
         const displayTime = formatDisplayTimestamp(item.time, item.timestamp, item.event_date);
         el.innerHTML = `
           <div class="history-top">
-            <span class="history-tag tag-purple">${item.category}</span>
+            <span class="history-tag tag-purple">${escapeHtml(item.category)}</span>
             <div style="display: flex; align-items: center; gap: 6px;">
               ${statusBadge}
               ${durTag}
+              <button class="history-tag btn-edit-life" data-index="${index}" style="background: rgba(168, 85, 247, 0.15); color: #c084fc; border: 1px solid rgba(168, 85, 247, 0.4); cursor: pointer; padding: 2px 6px; border-radius: 6px;" title="編輯">✏️</button>
+              <button class="history-tag btn-delete-life" data-index="${index}" style="background: rgba(239, 68, 68, 0.15); color: #fca5a5; border: 1px solid rgba(239, 68, 68, 0.3); cursor: pointer; padding: 2px 6px; border-radius: 6px;" title="移至垃圾桶">🗑️</button>
               <span>${displayTime}</span>
             </div>
           </div>
-          <div class="history-content">${item.content}</div>
+          <div class="history-content">${escapeHtml(item.content)}</div>
         `;
+
+        const editBtn = el.querySelector(".btn-edit-life");
+        if (editBtn) {
+          editBtn.addEventListener("click", (e) => {
+            e.stopPropagation();
+            openEditLifeModal(index);
+          });
+        }
+
+        const delBtn = el.querySelector(".btn-delete-life");
+        if (delBtn) {
+          delBtn.addEventListener("click", (e) => {
+            e.stopPropagation();
+            deleteLifeHistoryItem(index);
+          });
+        }
+
         listEl.appendChild(el);
       });
     }
