@@ -1,8 +1,10 @@
-const CACHE_NAME = 'inbox-collector-v33';
+const CACHE_NAME = 'inbox-collector-v34';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
   './manifest.json',
+  './collections_data.js',
+  './collections_data.json',
   './icon-192.png',
   './icon-512.png',
   './apple-touch-icon.png',
@@ -35,8 +37,14 @@ self.addEventListener('fetch', event => {
   if (event.request.url.includes('script.google.com') || event.request.method !== 'GET') {
     return;
   }
-  // HTML / 首頁採用 Network-First，離線才走 Cache，確保最新修復即時生效
-  if (event.request.mode === 'navigate' || event.request.url.endsWith('index.html') || event.request.url.endsWith('/')) {
+  // HTML / 首頁 / 收藏資料採用 Network-First，離線才走 Cache，確保最新內容與修復即時生效
+  const isNetworkFirst = event.request.mode === 'navigate' ||
+    event.request.url.endsWith('index.html') ||
+    event.request.url.endsWith('/') ||
+    event.request.url.includes('collections_data.js') ||
+    event.request.url.includes('collections_data.json');
+
+  if (isNetworkFirst) {
     event.respondWith(
       fetch(event.request)
         .then(res => {

@@ -113,14 +113,14 @@
     }
     .config-trigger:hover { color: var(--text); }
 
-    /* 雙 Tab 切換器 (Segmented Control) */
+    /* 三 Tab 切換器 (Segmented Control) */
     .tab-switch {
       background: rgba(30, 41, 59, 0.7);
       border: 1px solid var(--border);
       border-radius: 16px;
       padding: 4px;
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: 1fr 1fr 1fr;
       gap: 6px;
       backdrop-filter: blur(12px);
     }
@@ -128,16 +128,17 @@
       background: transparent;
       border: none;
       color: var(--text-muted);
-      padding: 10px 12px;
-      font-size: 14px;
+      padding: 10px 8px;
+      font-size: 13px;
       font-weight: 700;
       border-radius: 12px;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 8px;
+      gap: 6px;
       transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      white-space: nowrap;
     }
     .tab-btn.active {
       background: linear-gradient(135deg, rgba(2, 132, 199, 0.9), rgba(56, 189, 248, 0.9));
@@ -148,6 +149,120 @@
       background: linear-gradient(135deg, rgba(147, 51, 234, 0.9), rgba(168, 85, 247, 0.9));
       color: #ffffff;
       box-shadow: 0 4px 12px rgba(168, 85, 247, 0.35);
+    }
+    .tab-btn.active.tab-collection {
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.9), rgba(52, 211, 153, 0.9));
+      color: #022c22;
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.35);
+    }
+
+    /* 收藏總覽專屬樣式 */
+    .collection-filter-bar {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding: 4px 0 10px 0;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+    .collection-filter-bar::-webkit-scrollbar { display: none; }
+    .cat-chip {
+      background: rgba(30, 41, 59, 0.7);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 6px 14px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-muted);
+      cursor: pointer;
+      white-space: nowrap;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.2s;
+    }
+    .cat-chip:hover { border-color: rgba(52, 211, 153, 0.5); color: #e2e8f0; }
+    .cat-chip.active {
+      background: rgba(16, 185, 129, 0.18);
+      border-color: rgba(52, 211, 153, 0.6);
+      color: #34d399;
+      box-shadow: 0 0 10px rgba(52, 211, 153, 0.2);
+    }
+    .collection-search-wrap {
+      position: relative;
+      margin-bottom: 12px;
+    }
+    .collection-search-input {
+      width: 100%;
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 10px 14px 10px 38px;
+      color: #e2e8f0;
+      font-size: 13px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .collection-search-input:focus { border-color: #34d399; }
+    .collection-search-icon {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 14px;
+      color: #64748b;
+      pointer-events: none;
+    }
+    .collection-card {
+      background: rgba(30, 41, 59, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 14px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+    .collection-card:hover {
+      border-color: rgba(52, 211, 153, 0.35);
+      transform: translateY(-1px);
+    }
+    .collection-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      font-size: 12px;
+    }
+    .collection-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: #f1f5f9;
+      line-height: 1.45;
+      text-decoration: none;
+      display: inline-block;
+      transition: color 0.2s;
+    }
+    .collection-title:hover { color: #34d399; }
+    .collection-summary {
+      background: rgba(15, 23, 42, 0.5);
+      border-left: 3px solid #34d399;
+      border-radius: 0 8px 8px 0;
+      padding: 10px 12px;
+      font-size: 13px;
+      color: #cbd5e1;
+      line-height: 1.6;
+      word-break: break-all;
+    }
+    .collection-kw-badge {
+      display: inline-block;
+      font-size: 11px;
+      background: rgba(51, 65, 85, 0.5);
+      color: #94a3b8;
+      border-radius: 6px;
+      padding: 2px 8px;
+      margin-right: 4px;
+      margin-bottom: 4px;
     }
 
     /* 設定區塊（預設收折） */
@@ -606,10 +721,11 @@
       <button class="config-trigger" id="configBtn" aria-label="設定">⚙️</button>
     </header>
 
-    <!-- 雙 Tab 切換 -->
+    <!-- 三 Tab 切換 -->
     <div class="tab-switch">
       <button class="tab-btn active" id="tabInboxBtn">💡 靈感採集</button>
       <button class="tab-btn" id="tabLifeBtn">⏱️ 生命之流</button>
+      <button class="tab-btn" id="tabCollectionBtn">📚 收藏總覽</button>
     </div>
 
     <!-- 設定面板 (收折) -->
@@ -772,11 +888,26 @@
         <div class="history-header">
           <span>今日已記時程（待回家同步）</span>
           <div style="display: flex; align-items: center; gap: 6px;">
+            <button id="archiveAllLifeBtn" onclick="archiveAllLifeItems()" style="background: rgba(34, 197, 94, 0.2); color: #86efac; border: 1px solid rgba(34, 197, 94, 0.4); border-radius: 6px; padding: 2px 8px; font-size: 11px; cursor: pointer;">✅ 全部歸納至已整理</button>
             <button id="openLifeTrashModalBtn" onclick="openLifeTrashModal()" style="background: rgba(148, 163, 184, 0.2); color: #cbd5e1; border: 1px solid rgba(148, 163, 184, 0.4); border-radius: 6px; padding: 2px 8px; font-size: 11px; cursor: pointer;">🗑️ 垃圾桶 (<span id="lifeTrashCountBadge">0</span>)</button>
             <span id="lifeCountBadge" style="color: var(--purple);">0 筆</span>
           </div>
         </div>
         <div class="history-list" id="lifeHistoryList"></div>
+      </div>
+
+      <!-- 生命流已整理紀錄（已同步至 Obsidian） -->
+      <div class="history-card" id="lifeArchivedCard" style="margin-top: 14px; border-color: rgba(34, 197, 94, 0.35); display: none;">
+        <div class="history-header" style="cursor: pointer;" onclick="toggleLifeArchivedList()">
+          <div style="display: flex; align-items: center; gap: 6px;">
+            <span style="color: #86efac; font-weight: 700;">✅ 已整理時程（已歸納至 Obsidian）</span>
+            <span id="lifeArchivedToggleIcon" style="font-size: 11px; color: #94a3b8;">▼</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 6px;">
+            <span id="lifeArchivedCountBadge" style="color: #4ade80; font-weight: 700;">0 筆</span>
+          </div>
+        </div>
+        <div class="history-list" id="lifeArchivedList" style="display: block;"></div>
       </div>
 
       <!-- 生命流編輯 Modal -->
@@ -835,6 +966,29 @@
       </div>
     </div>
 
+    <!-- ==================== 分頁 3: 收藏總覽 (Tab 3) ==================== -->
+    <div class="page-section page-collection" id="pageCollection">
+      <!-- 搜尋列 -->
+      <div class="collection-search-wrap">
+        <span class="collection-search-icon">🔍</span>
+        <input type="text" class="collection-search-input" id="collectionSearchInput" placeholder="搜尋收藏標題、核心大綱、#標籤..." />
+      </div>
+
+      <!-- 分類滾動膠囊 Filter -->
+      <div class="collection-filter-bar" id="collectionFilterBar">
+        <button class="cat-chip active" data-cat="all">全部 <span id="chipCountAll">0</span></button>
+      </div>
+
+      <!-- 統計與同步資訊列 -->
+      <div style="display: flex; align-items: center; justify-content: space-between; font-size: 12px; color: var(--text-muted); margin: 4px 2px 12px 2px;">
+        <span id="collectionSyncMeta">📦 載入中...</span>
+        <button id="refreshCollectionBtn" onclick="refreshCollectionData()" style="background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(52, 211, 153, 0.35); border-radius: 6px; padding: 3px 8px; font-size: 11px; cursor: pointer;">🔄 重新整理</button>
+      </div>
+
+      <!-- 收藏卡片列表 -->
+      <div id="collectionItemsContainer" style="display: flex; flex-direction: column; gap: 12px;"></div>
+    </div>
+
   </div>
 
   <!-- Toast 提示 -->
@@ -843,6 +997,7 @@
     <span id="toastMsg">已記錄！</span>
   </div>
 
+  <script src="./collections_data.js"></script>
   <script>
     // 正式生產環境 GAS 端點配置 (Version 13: 跨行大綱自動擷取)
     const PRODUCTION_GAS_URL = "https://script.google.com/macros/s/AKfycbziv1JVlexE6Cl9hsLZsp5tKVar1jwpEuRlIZNMbagw6ZP9BojXuzev1oMXuR9LMg13gg/exec";
@@ -865,23 +1020,269 @@
     // Tab 切換
     const tabInboxBtn = document.getElementById("tabInboxBtn");
     const tabLifeBtn = document.getElementById("tabLifeBtn");
+    const tabCollectionBtn = document.getElementById("tabCollectionBtn");
     const pageInbox = document.getElementById("pageInbox");
     const pageLife = document.getElementById("pageLife");
+    const pageCollection = document.getElementById("pageCollection");
 
     tabInboxBtn.addEventListener("click", () => {
       tabInboxBtn.classList.add("active");
       tabLifeBtn.classList.remove("active", "tab-life");
+      tabCollectionBtn.classList.remove("active", "tab-collection");
       pageInbox.classList.add("active");
       pageLife.classList.remove("active");
+      pageCollection.classList.remove("active");
     });
 
     tabLifeBtn.addEventListener("click", () => {
       tabLifeBtn.classList.add("active", "tab-life");
       tabInboxBtn.classList.remove("active");
+      tabCollectionBtn.classList.remove("active", "tab-collection");
       pageLife.classList.add("active");
       pageInbox.classList.remove("active");
+      pageCollection.classList.remove("active");
       initLifeTimeDefault();
     });
+
+    tabCollectionBtn.addEventListener("click", () => {
+      tabCollectionBtn.classList.add("active", "tab-collection");
+      tabInboxBtn.classList.remove("active");
+      tabLifeBtn.classList.remove("active", "tab-life");
+      pageCollection.classList.add("active");
+      pageInbox.classList.remove("active");
+      pageLife.classList.remove("active");
+      initCollectionTab();
+    });
+
+    // ==================== Tab 3: 收藏總覽瀏覽邏輯 ====================
+    let collectionsState = {
+      items: [],
+      categories: {},
+      generatedAt: "",
+      currentCat: "all",
+      searchQuery: ""
+    };
+
+    async function loadCollectionsData() {
+      if (window.COLLECTIONS_DATA && window.COLLECTIONS_DATA.items) {
+        return window.COLLECTIONS_DATA;
+      }
+      try {
+        const res = await fetch("./collections_data.json?t=" + Date.now());
+        if (res.ok) {
+          const data = await res.json();
+          window.COLLECTIONS_DATA = data;
+          return data;
+        }
+      } catch (e) {
+        console.warn("Fetch collections_data.json error:", e);
+      }
+      return { items: [], categories: {}, total_count: 0, generated_at: "" };
+    }
+
+    async function initCollectionTab() {
+      const data = await loadCollectionsData();
+      collectionsState.items = data.items || [];
+      collectionsState.categories = data.categories || {};
+      collectionsState.generatedAt = data.generated_at || "";
+      
+      renderCollectionFilterChips();
+      renderCollectionList();
+    }
+
+    async function refreshCollectionData() {
+      const meta = document.getElementById("collectionSyncMeta");
+      if (meta) meta.innerText = "⏳ 正在重新整理最新收藏...";
+      try {
+        const res = await fetch("./collections_data.json?t=" + Date.now());
+        if (res.ok) {
+          const data = await res.json();
+          window.COLLECTIONS_DATA = data;
+          collectionsState.items = data.items || [];
+          collectionsState.categories = data.categories || {};
+          collectionsState.generatedAt = data.generated_at || "";
+          renderCollectionFilterChips();
+          renderCollectionList();
+          showToast(`✨ 收藏已更新！共 ${collectionsState.items.length} 筆`, "📚");
+          return;
+        }
+      } catch (e) {}
+      showToast("ℹ️ 目前已是最新快取內容");
+      renderCollectionList();
+    }
+    window.refreshCollectionData = refreshCollectionData;
+
+    function renderCollectionFilterChips() {
+      const bar = document.getElementById("collectionFilterBar");
+      if (!bar) return;
+
+      const total = collectionsState.items.length;
+      const cats = collectionsState.categories;
+
+      const categoryEmojis = {
+        "活動情報": "🏷️",
+        "科技AI": "🤖",
+        "樂活身心": "🌿",
+        "個人成長": "🌱",
+        "生活技能": "🛠️",
+        "故事笑話": "🎭",
+        "玄學命理": "🔮",
+        "吃喝玩樂": "🍜",
+        "事業行銷": "💼",
+        "影音創作": "🎬",
+        "其他": "📦"
+      };
+
+      let html = `
+        <button class="cat-chip ${collectionsState.currentCat === 'all' ? 'active' : ''}" onclick="selectCollectionCategory('all')">
+          全部 (${total})
+        </button>
+      `;
+
+      Object.keys(cats).forEach(cat => {
+        const count = cats[cat];
+        const emoji = categoryEmojis[cat] || "📁";
+        const isActive = collectionsState.currentCat === cat;
+        html += `
+          <button class="cat-chip ${isActive ? 'active' : ''}" onclick="selectCollectionCategory('${escapeHtml(cat)}')">
+            ${emoji} ${escapeHtml(cat)} (${count})
+          </button>
+        `;
+      });
+
+      bar.innerHTML = html;
+    }
+
+    function selectCollectionCategory(cat) {
+      collectionsState.currentCat = cat;
+      renderCollectionFilterChips();
+      renderCollectionList();
+    }
+    window.selectCollectionCategory = selectCollectionCategory;
+
+    const collectionSearchInput = document.getElementById("collectionSearchInput");
+    if (collectionSearchInput) {
+      collectionSearchInput.addEventListener("input", (e) => {
+        collectionsState.searchQuery = e.target.value.trim().toLowerCase();
+        renderCollectionList();
+      });
+    }
+
+    function renderCollectionList() {
+      const container = document.getElementById("collectionItemsContainer");
+      const meta = document.getElementById("collectionSyncMeta");
+      if (!container) return;
+
+      let filtered = collectionsState.items;
+
+      // 1. 分類篩選
+      if (collectionsState.currentCat !== "all") {
+        filtered = filtered.filter(i => i.category === collectionsState.currentCat);
+      }
+
+      // 2. 關鍵字搜尋
+      if (collectionsState.searchQuery) {
+        const q = collectionsState.searchQuery;
+        filtered = filtered.filter(i => {
+          const t = (i.title || "").toLowerCase();
+          const s = (i.summary || "").toLowerCase();
+          const k = (i.keywords || "").toLowerCase();
+          const u = (i.url || "").toLowerCase();
+          return t.includes(q) || s.includes(q) || k.includes(q) || u.includes(q);
+        });
+      }
+
+      if (meta) {
+        const syncText = collectionsState.generatedAt ? `｜ 📅 同步於 ${collectionsState.generatedAt}` : "";
+        meta.innerText = `📦 顯示 ${filtered.length} / ${collectionsState.items.length} 筆收藏${syncText}`;
+      }
+
+      if (filtered.length === 0) {
+        container.innerHTML = `
+          <div style="text-align: center; color: var(--text-muted); padding: 40px 10px; font-size: 14px;">
+            📭 找不到符合條件的收藏靈感
+          </div>
+        `;
+        return;
+      }
+
+      const categoryColors = {
+        "活動情報": "background: rgba(245, 158, 11, 0.15); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.35);",
+        "科技AI": "background: rgba(56, 189, 248, 0.15); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.35);",
+        "樂活身心": "background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.35);",
+        "生活技能": "background: rgba(249, 115, 22, 0.15); color: #fb923c; border: 1px solid rgba(249, 115, 22, 0.35);",
+        "故事笑話": "background: rgba(236, 72, 153, 0.15); color: #f472b6; border: 1px solid rgba(236, 72, 153, 0.35);",
+        "個人成長": "background: rgba(168, 85, 247, 0.15); color: #c084fc; border: 1px solid rgba(168, 85, 247, 0.35);"
+      };
+
+      container.innerHTML = "";
+      filtered.forEach(it => {
+        const el = document.createElement("div");
+        el.className = "collection-card";
+
+        const catBadgeStyle = categoryColors[it.category] || "background: rgba(148, 163, 184, 0.15); color: #cbd5e1; border: 1px solid rgba(148, 163, 184, 0.35);";
+        const hasUrl = it.url && (it.url.startsWith("http://") || it.url.startsWith("https://"));
+
+        // 關鍵字標籤
+        let kwHtml = "";
+        if (it.keywords) {
+          const tags = it.keywords.split(/\s+/).filter(Boolean);
+          kwHtml = tags.map(tg => `<span class="collection-kw-badge">${escapeHtml(tg)}</span>`).join("");
+        }
+
+        // 字幕切片
+        let clipsHtml = "";
+        if (it.subtitle_clips && it.subtitle_clips.length > 0) {
+          const clipList = it.subtitle_clips.map(c => `<li style="margin-bottom: 2px;">${escapeHtml(c)}</li>`).join("");
+          clipsHtml = `
+            <details style="font-size: 12px; color: #94a3b8; background: rgba(15, 23, 42, 0.4); border-radius: 6px; padding: 6px 10px;">
+              <summary style="cursor: pointer; color: #38bdf8; font-weight: 700;">⏱️ 多模態字幕精彩片段 (${it.subtitle_clips.length})</summary>
+              <ul style="margin: 6px 0 0 16px; padding: 0;">${clipList}</ul>
+            </details>
+          `;
+        }
+
+        const titleText = escapeHtml(it.title || "無標題");
+        const summaryText = escapeHtml(it.summary || "暫無摘要內容");
+        const timeDisplay = it.timestamp ? it.timestamp.slice(0, 16).replace("T", " ") : "";
+
+        el.innerHTML = `
+          <div class="collection-card-header">
+            <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
+              <span class="history-tag" style="${catBadgeStyle}">${escapeHtml(it.category)}</span>
+              <span class="history-tag" style="background: rgba(51, 65, 85, 0.4); color: #94a3b8;">${escapeHtml(it.type || "靈感")}</span>
+            </div>
+            <span style="color: var(--text-muted); font-size: 11px;">${escapeHtml(timeDisplay)}</span>
+          </div>
+
+          <div>
+            ${hasUrl 
+              ? `<a href="${escapeHtml(it.url)}" target="_blank" rel="noopener noreferrer" class="collection-title">
+                  ${titleText} <span style="font-size: 12px; opacity: 0.7;">↗</span>
+                 </a>`
+              : `<div class="collection-title">${titleText}</div>`
+            }
+          </div>
+
+          <div class="collection-summary">
+            💡 ${summaryText}
+          </div>
+
+          ${kwHtml ? `<div>${kwHtml}</div>` : ""}
+          ${clipsHtml}
+
+          ${hasUrl ? `
+            <div style="display: flex; justify-content: flex-end; margin-top: 2px;">
+              <a href="${escapeHtml(it.url)}" target="_blank" rel="noopener noreferrer" style="font-size: 12px; color: #34d399; text-decoration: none; display: inline-flex; align-items: center; gap: 4px; padding: 4px 8px; background: rgba(16, 185, 129, 0.1); border-radius: 6px;">
+                直達原文 ↗
+              </a>
+            </div>
+          ` : ""}
+        `;
+
+        container.appendChild(el);
+      });
+    }
 
     // 設定面板切換
     const configBtn = document.getElementById("configBtn");
@@ -1869,6 +2270,136 @@
     }
     window.saveEditLifeItem = saveEditLifeItem;
 
+    function loadLifeArchivedHistory() {
+      try {
+        const raw = localStorage.getItem("life_archived_history");
+        return raw ? JSON.parse(raw) : [];
+      } catch (e) {
+        return [];
+      }
+    }
+
+    function saveLifeArchivedHistory(list) {
+      try {
+        localStorage.setItem("life_archived_history", JSON.stringify(list));
+      } catch (e) {}
+    }
+
+    function renderLifeArchivedList() {
+      const card = document.getElementById("lifeArchivedCard");
+      const listEl = document.getElementById("lifeArchivedList");
+      const badge = document.getElementById("lifeArchivedCountBadge");
+      const list = loadLifeArchivedHistory();
+      if (badge) badge.innerText = `${list.length} 筆`;
+      if (!card || !listEl) return;
+
+      if (list.length === 0) {
+        card.style.display = "none";
+        listEl.innerHTML = "";
+        return;
+      }
+      card.style.display = "flex";
+      listEl.innerHTML = "";
+      list.forEach((item, index) => {
+        const el = document.createElement("div");
+        el.className = "history-item";
+        el.style.borderColor = "rgba(34, 197, 94, 0.25)";
+        el.style.background = "rgba(15, 23, 42, 0.5)";
+
+        const displayTime = formatDisplayTimestamp(item.time, item.timestamp, item.event_date);
+        const targetDiary = item.target_diary ? `📁 ${escapeHtml(item.target_diary)}` : "📁 Obsidian 日誌";
+
+        el.innerHTML = `
+          <div class="history-top">
+            <div style="display: flex; align-items: center; gap: 6px;">
+              <span class="history-tag" style="background: rgba(34, 197, 94, 0.2); color: #86efac; border: 1px solid rgba(34, 197, 94, 0.3); font-weight: 700;">✅ 已歸檔</span>
+              <span class="history-tag tag-purple">${escapeHtml(item.category || "💭 隨手靈感")}</span>
+              <span class="history-tag" style="background: rgba(56, 189, 248, 0.15); color: #7dd3fc; border: 1px solid rgba(56, 189, 248, 0.3);">${targetDiary}</span>
+            </div>
+            <span>${displayTime}</span>
+          </div>
+          <div class="history-content" style="color: #cbd5e1;">${escapeHtml(item.content)}</div>
+        `;
+        listEl.appendChild(el);
+      });
+    }
+
+    function toggleLifeArchivedList() {
+      const listEl = document.getElementById("lifeArchivedList");
+      const icon = document.getElementById("lifeArchivedToggleIcon");
+      if (!listEl) return;
+      if (listEl.style.display === "none") {
+        listEl.style.display = "block";
+        if (icon) icon.innerText = "▼";
+      } else {
+        listEl.style.display = "none";
+        if (icon) icon.innerText = "▶";
+      }
+    }
+    window.toggleLifeArchivedList = toggleLifeArchivedList;
+
+    async function sendGasArchiveLifestream(items) {
+      if (!items || items.length === 0) return;
+      try {
+        const payload = {
+          action: "archive_lifestream",
+          token: gasToken,
+          items: items
+        };
+        fetch(gasUrl, {
+          method: "POST",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify(payload),
+          mode: "no-cors"
+        }).catch(() => {});
+      } catch (e) {
+        console.warn("GAS archive lifestream failed:", e);
+      }
+    }
+
+    async function archiveLifeHistoryItem(index) {
+      const items = loadLifeHistory();
+      if (index < 0 || index >= items.length) return;
+      const item = items.splice(index, 1)[0];
+      item.archived_at = new Date().toISOString();
+      item.target_diary = item.event_date ? `${item.event_date}.md` : "Obsidian O.Diary";
+
+      const archived = loadLifeArchivedHistory();
+      archived.unshift(item);
+      saveLifeArchivedHistory(archived);
+      saveLifeHistory(items);
+
+      renderLifeHistory();
+      renderLifeArchivedList();
+      showToast("✅ 已成功歸納至已整理區域！", "📦");
+      sendGasArchiveLifestream([item]);
+    }
+    window.archiveLifeHistoryItem = archiveLifeHistoryItem;
+
+    async function archiveAllLifeItems() {
+      const items = loadLifeHistory();
+      if (items.length === 0) return;
+      if (!confirm(`確定要將目前的 ${items.length} 筆待同步時程全數標記為已整理並歸納嗎？`)) return;
+
+      const archived = loadLifeArchivedHistory();
+      const toSend = [];
+      items.forEach(it => {
+        it.archived_at = new Date().toISOString();
+        it.target_diary = it.event_date ? `${it.event_date}.md` : "Obsidian O.Diary";
+        archived.unshift(it);
+        toSend.push(it);
+      });
+
+      saveLifeArchivedHistory(archived);
+      saveLifeHistory([]);
+
+      renderLifeHistory();
+      renderLifeArchivedList();
+      showToast(`🎉 已成功歸納 ${toSend.length} 筆時程！`, "✅");
+      sendGasArchiveLifestream(toSend);
+    }
+    window.archiveAllLifeItems = archiveAllLifeItems;
+
     function renderLifeHistory() {
       const card = document.getElementById("lifeHistoryCard");
       const listEl = document.getElementById("lifeHistoryList");
@@ -1876,6 +2407,35 @@
       const trashBadge = document.getElementById("lifeTrashCountBadge");
       const items = loadLifeHistory();
       const trash = loadLifeTrashHistory();
+
+      // 自動清查並歸納已同步至 Obsidian 的歷史已知項目（如 9/25 肯德基優惠券、9/26 YouTube標題）
+      const knownSyncedPatterns = ["肯德基", "YouTube 的標題無法辨識", "YouTube標題"];
+      let autoArchivedAny = false;
+      const remainingItems = [];
+      const archivedList = loadLifeArchivedHistory();
+
+      items.forEach(it => {
+        const text = (it.content || "") + " " + (it.category || "");
+        const isMatched = knownSyncedPatterns.some(p => text.includes(p));
+        if (isMatched) {
+          it.archived_at = new Date().toISOString();
+          it.target_diary = it.event_date ? `${it.event_date}.md` : "Obsidian O.Diary";
+          if (!archivedList.some(a => a.content === it.content)) {
+            archivedList.unshift(it);
+          }
+          autoArchivedAny = true;
+        } else {
+          remainingItems.push(it);
+        }
+      });
+
+      if (autoArchivedAny) {
+        saveLifeArchivedHistory(archivedList);
+        saveLifeHistory(remainingItems);
+        items.length = 0;
+        remainingItems.forEach(r => items.push(r));
+        renderLifeArchivedList();
+      }
 
       if (badge) badge.innerText = `${items.length} 筆`;
       if (trashBadge) trashBadge.innerText = trash.length;
@@ -1904,6 +2464,7 @@
             <div style="display: flex; align-items: center; gap: 6px;">
               ${statusBadge}
               ${durTag}
+              <button class="history-tag btn-archive-life" data-index="${index}" style="background: rgba(34, 197, 94, 0.2); color: #86efac; border: 1px solid rgba(34, 197, 94, 0.4); cursor: pointer; padding: 2px 6px; border-radius: 6px;" title="標記已同步歸納至 Obsidian">✅ 歸納</button>
               <button class="history-tag btn-edit-life" data-index="${index}" style="background: rgba(168, 85, 247, 0.15); color: #c084fc; border: 1px solid rgba(168, 85, 247, 0.4); cursor: pointer; padding: 2px 6px; border-radius: 6px;" title="編輯">✏️</button>
               <button class="history-tag btn-delete-life" data-index="${index}" style="background: rgba(239, 68, 68, 0.15); color: #fca5a5; border: 1px solid rgba(239, 68, 68, 0.3); cursor: pointer; padding: 2px 6px; border-radius: 6px;" title="移至垃圾桶">🗑️</button>
               <span>${displayTime}</span>
@@ -1911,6 +2472,14 @@
           </div>
           <div class="history-content">${escapeHtml(item.content)}</div>
         `;
+
+        const archiveBtn = el.querySelector(".btn-archive-life");
+        if (archiveBtn) {
+          archiveBtn.addEventListener("click", (e) => {
+            e.stopPropagation();
+            archiveLifeHistoryItem(index);
+          });
+        }
 
         const editBtn = el.querySelector(".btn-edit-life");
         if (editBtn) {
@@ -2085,13 +2654,18 @@
           }).reverse();
 
           const combined = [...failedItems];
+          const archived = loadLifeArchivedHistory();
+          const archivedKeys = new Set(archived.map(a => a.timestamp || (a.time + a.content)));
+
           remoteList.forEach(r => {
-            if (!combined.some(c => c.timestamp === r.timestamp || (c.time === r.time && c.content === r.content))) {
+            const key = r.timestamp || (r.time + r.content);
+            if (!archivedKeys.has(key) && !combined.some(c => c.timestamp === r.timestamp || (c.time === r.time && c.content === r.content))) {
               combined.push(r);
             }
           });
           saveLifeHistory(combined);
           renderLifeHistory();
+          renderLifeArchivedList();
         }
       } catch (err) {
         console.warn("syncRemoteLife err:", err);
@@ -2154,6 +2728,7 @@
     initLifeTimeDefault();
     renderInboxHistory();
     renderLifeHistory();
+    renderLifeArchivedList();
     syncRemoteInbox();
     syncRemoteLife();
     handleSharedUrlParams();
