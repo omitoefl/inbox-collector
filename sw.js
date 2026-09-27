@@ -1,17 +1,17 @@
-const CACHE_NAME = 'inbox-collector-v40';
+const CACHE_NAME = 'inbox-collector-v41';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
   './manifest.json',
   './collections_data.js',
   './collections_data.json',
-  './icon-192.png',
-  './icon-512.png',
-  './apple-touch-icon.png',
-  './apple-touch-icon-180x180.png',
-  './favicon.png',
-  './favicon.ico',
-  './favicon.svg'
+  './icons/icon-192.png',
+  './icons/icon-512.png',
+  './icons/apple-touch-icon.png',
+  './icons/apple-touch-icon-180x180.png',
+  './icons/favicon.png',
+  './icons/favicon.ico',
+  './icons/favicon.svg'
 ];
 
 self.addEventListener('install', event => {
