@@ -2243,7 +2243,8 @@
           addInboxRecord(finalUrl, finalType, finalTitle || finalUrl, "failed");
         }
       } catch (err) {
-        showToast("❌ 網路異常，已將靈感暫存於下方！", "⚠️");
+        console.error("Submit inbox error:", err);
+        showToast("❌ 投遞未完成（" + (err.message || "連線異常") + "），已暫存於下方！", "⚠️");
         urlInputEl.value = "";
         document.getElementById("titleInput").value = "";
         addInboxRecord(finalUrl, finalType, finalTitle || finalUrl, "failed");
@@ -2286,7 +2287,8 @@
           showToast("❌ 補傳失敗：" + (data.message || "未知錯誤"), "❌");
         }
       } catch (err) {
-        showToast("❌ 補傳失敗，請檢查網路連線", "⚠️");
+        console.error("Retry submit error:", err);
+        showToast("❌ 補傳失敗（" + (err.message || "請檢查連線") + "）", "⚠️");
       }
     }
     window.retrySubmitInboxItem = retrySubmitInboxItem;
