@@ -1,22 +1,323 @@
 window.COLLECTIONS_DATA = {
-  "generated_at": "2026-09-28 22:14:08",
-  "total_count": 76,
-  "active_count": 76,
+  "generated_at": "2026-09-29 05:53:23",
+  "total_count": 95,
+  "active_count": 91,
   "archived_count": 0,
   "categories": {
     "玄學命理": 5,
-    "影音創作": 1,
-    "故事笑話": 4,
+    "影音創作": 4,
+    "故事笑話": 5,
     "事業行銷": 1,
-    "其他": 4,
-    "樂活身心": 14,
-    "個人成長": 6,
+    "其他": 8,
+    "樂活身心": 17,
+    "個人成長": 9,
     "吃喝玩樂": 2,
-    "生活技能": 5,
-    "科技AI": 32,
-    "活動情報": 2
+    "生活技能": 7,
+    "科技AI": 34,
+    "活動情報": 3
   },
   "items": [
+    {
+      "title": "瑤 ↟ᐝ - 中秋節快樂",
+      "category": "生活技能",
+      "type": "短影音",
+      "status": "active",
+      "keywords": "#中秋節快樂 #月亮 #iPhone",
+      "summary": "中秋節快樂！！！🌕先把這篇存起來！ 不用專業相機iPhone就可以拍出月亮的細節🥳 影片太快沒記起來的步驟直接幫你整理好啦👇 ① 打開原相機 → 切到「錄影模式」 左上角調成「4K・60」 ② 找到「曝光」 調整到 0.3 ③ 回到錄影畫面 → 放大月亮 點月亮對焦後把旁邊的小太陽往下拉 慢慢降低曝光直到月亮的輪廓跟細節出現 ④ 按下錄影鍵 → 往右滑鎖定錄影 再按右邊的白色拍照鍵📸 這樣就完成啦！ 今年中秋賞月的時候直接拿出來試試看🌕 𖤐 記得先收藏♡每個滿月都用得上～",
+      "subtitle_clips": [],
+      "url": "https://www.instagram.com/reel/DdtannPS3PU/?stkn=djJ2ZDdsamFvMnox",
+      "timestamp": "2026-09-29T04:27:37+08:00",
+      "obsidian_connections": [
+        "13c4_Iphone輸入",
+        "34a7_iphone草稿",
+        "影片的節奏 藍諾Eleanor"
+      ]
+    },
+    {
+      "title": "倫敦印象 - 你知道 iPhone 手電筒「怎麼關」嗎",
+      "category": "影音創作",
+      "type": "短影音",
+      "status": "active",
+      "keywords": "#iPhone #App #Shift #london_apple #倫敦印象 #你知道",
+      "summary": "你知道 iPhone 手電筒「怎麼關」嗎？單手就能關了😎 其實 iPhone 有 5 個地方「長按」都藏了隱藏功能，很多人用了好幾年都不知道 👇 ❶鎖定畫面長按手電筒 → 開燈，長按、上下滑可以調亮度、微微左滑就能直接關掉 ❷相機長按快門往右滑 → 直接開始錄影（小心機：錄影前先開音樂 App，影片就自帶背景音樂🎵） ❸⇧ 長按 Shift → 直接打大寫，打密碼一秒完成 ❹長按鍵盤數字鍵 → 跳出 ①②③ 特殊字形，列點、突出重點 ❺先切到英文鍵盤，再按左下角123 長按「?」鍵 → 打出倒立的俏皮問號¿ 📌 先收藏，等等每個都想試一遍！ 學會的在留言區打一個「¿」讓我知道 想看更多 iPhone 小技巧 👉 追蹤 @london_apple",
+      "subtitle_clips": [],
+      "url": "https://www.instagram.com/reel/DakZbr5TLEl/?stkn=enljYTBrNGIyenNm",
+      "timestamp": "2026-09-29T04:26:05+08:00",
+      "obsidian_connections": [
+        "13c4_Iphone輸入",
+        "34a7_iphone草稿",
+        "6.2c2c_Hulda_Clark博士正偏移電流Zapper破壞病原體膜電位之去活性化機制"
+      ]
+    },
+    {
+      "title": "Remember you enterprise 记得你电脑店 - 6 Things Your Cat Would Never Tell You, Even If You Buried I",
+      "category": "影音創作",
+      "type": "短影音",
+      "status": "active",
+      "keywords": "#CatCareTips #Remember #you #enterprise #Things #Your",
+      "summary": "6 Things Your Cat Would Never Tell You, Even If You Buried It in the Ground 😹",
+      "subtitle_clips": [],
+      "url": "https://www.instagram.com/reel/Ddp05zpOnek/?stkn=MWl2NmQ0MDg3am5xYQ==",
+      "timestamp": "2026-09-29T04:25:36+08:00",
+      "obsidian_connections": [
+        "1.1e8_Impact Theory × Cal Newport 數位極簡主義與獨處能力研究整理",
+        "3.4_YouTube快捷鍵",
+        "1.3a0_Steven Bartlett專訪 AI 安全專家Dr. Roman Yampolskiy"
+      ]
+    },
+    {
+      "title": "愛莉莎莎 Alisasa 🐨 - 這樣的助理可以打幾分",
+      "category": "影音創作",
+      "type": "短影音",
+      "status": "need_review",
+      "keywords": "#Alisasa #愛莉莎莎 #這樣的助理可以打幾分",
+      "summary": "這是一部由 愛莉莎莎 Alisasa 🐨 分享的《愛莉莎莎 Alisasa 🐨 - 這樣的助理可以打幾分》影音內容。",
+      "subtitle_clips": [],
+      "url": "https://www.instagram.com/reel/Dd0PDjVSxhJ/?stkn=MWd5M2E1eWltaGJ6aQ==",
+      "timestamp": "2026-09-29T04:23:54+08:00",
+      "obsidian_connections": [
+        "001f0_短影音操盤手的訪問技巧",
+        "001a5_為什麼我會依據談話內容，有時看著對方右眼說話有時卻看著左眼",
+        "001b5_陳修平的短影音課程重點"
+      ]
+    },
+    {
+      "title": "林北溟 - 【不能直接追求的「身體流動」】",
+      "category": "樂活身心",
+      "type": "社群",
+      "status": "active",
+      "keywords": "#orthosomnia #深層睡眠 #林北溟 #不能直接追求的 #身體流動",
+      "summary": "【不能直接追求的「身體流動」】  這篇是想寫一點我練太極拳的心得。 在這之前，先討論一個更普遍的現象。  2017年一篇發表在臨床睡眠醫學期刊的文章，提出「完美睡眠強迫症」(orthosomnia)這個概念。 它探討的是，人們開始習慣用穿戴式裝置，來監測睡眠品質之後，反而帶來反效果。  研究提到幾個臨床案例。  案例一： 一名女性因為手環顯示睡眠未達8小時，刻意每天躺在床上9-10小時，以「補足」",
+      "subtitle_clips": [],
+      "url": "https://www.facebook.com/share/p/1DuoQA7cER/?mibextid=wwXIfr",
+      "timestamp": "2026-09-28T18:50:01+08:00",
+      "obsidian_connections": [
+        "6.2b3e5_自體免疫與腫瘤檢查之CDS打蟲藥及Biotrohn整合臨床案例",
+        "6.2d7_低劑量乳清酸鋰改善深層睡眠與大腦神經重塑",
+        "6.2d1a_急性中風之口服DMSO與CDS外用噴霧急救協議及臨床案例"
+      ]
+    },
+    {
+      "title": "@1c__.an on Threads",
+      "category": "樂活身心",
+      "type": "Threads貼文",
+      "status": "active",
+      "keywords": "#c__ #Threads #week3 #1c__ #an #on",
+      "summary": "當代認知神經科學_腦與心智week3心得\n這週老師繼續介紹有關我們看到的錯覺相關的議題和顏色的判別，有提到人們在看到一些明明沒有完整畫出來的圖形時，會自己腦補出剩下的圖形，使得好像真的有一條線或一個形狀在那。 接著有一組倒過來的人臉，乍看之下兩個都沒什麼異常，但當兩張臉轉正之後會發現，有一邊的人臉的五官是倒的。因為我們平常根本不會習慣看到倒過來的臉，所以只要沒有太誇張的移位（即眼睛鼻子嘴巴都在原本",
+      "subtitle_clips": [],
+      "url": "https://www.threads.com/@1c__.an/post/Dd05E4Fj4Nu?xmt=AQG00HcfuuLcWwwAA3o0IPZ_Ir64FrGvCoCaSfJ58R3mk0rLjAa1HrkxABw-NQ65zYBpdO71&slof=1",
+      "timestamp": "2026-09-28T18:01:46+08:00",
+      "obsidian_connections": [
+        "o2026a 口語練習如何改變一個人：全面的科學與心理學解析",
+        "001d5_地球生命科學",
+        "000b0_瓦基化輸入為輸出的五堂課"
+      ]
+    },
+    {
+      "title": "黑貓老師 (@black_cat_teacher) - 推薦剪輯軟體：我一律推薦 Claude",
+      "category": "故事笑話",
+      "type": "Threads貼文",
+      "status": "need_review",
+      "keywords": "#black_cat_teacher #Threads #claude #黑貓老師 #on",
+      "summary": "現在有人問我推薦什麼剪輯軟體，我一率推薦 claude：",
+      "subtitle_clips": [],
+      "url": "https://www.threads.com/@black_cat_teacher/post/DdzPUFoj94B?xmt=AQG0MVhhXAZQ_TU0ksqF4CaSNEGsfIHD-2K863dg0eLYOkEea0ZJ-1sbCZ1rFNFzOCrU6gnk&slof=1",
+      "timestamp": "2026-09-28T18:01:29+08:00",
+      "obsidian_connections": [
+        "5a6_吾愛吾詩 The Kindergarten Teacher",
+        "1.3a5_Claude 社群平台設計 Prompt",
+        "1.3a6_六個 Claude 使用者層級"
+      ]
+    },
+    {
+      "title": "⚠️ [需補貼] Threads貼文 (@vbochang - Ddz0i1yEyoz)",
+      "category": "其他",
+      "type": "Threads貼文",
+      "status": "active",
+      "keywords": "#需補貼內容 #Threads貼文 #待手動檢視",
+      "summary": "⚠️ 該內容受 Threads 登入牆限制或設為私人瀏覽未能自動爬取。請點擊下方原始連結直達閱讀並手動補充重點。",
+      "subtitle_clips": [],
+      "url": "https://www.threads.com/@vbochang/post/Ddz0i1yEyoz?xmt=AQG0JxnjGkaJVJZqGfw4EezKwWbC11WX4hFNnVp1OhghNfTRWA2hdczlpoQWX1ynfF0tWnI&slof=1",
+      "timestamp": "2026-09-28T18:00:57+08:00",
+      "obsidian_connections": [
+        "5c2_這就是我們THIS IS US(第一季)"
+      ]
+    },
+    {
+      "title": "Water ｜竹北自由教練｜登山教練 (@water.outdoor) on Threads",
+      "category": "個人成長",
+      "type": "Threads貼文",
+      "status": "active",
+      "keywords": "#Water #outdoor #Threads #竹北自由教練 #登山教練 #water",
+      "summary": "「寫下來的力量比你想像中更強大。」 推薦這本書：\n「少，但是更好｜90天的生活實踐。」 每天早上大概花十分鐘的思考\n就足以改變人生⋯真特別😻✨\n對我來說真的很有用！ 你覺得人生複利還有哪些更重要的事情？",
+      "subtitle_clips": [],
+      "url": "https://www.threads.com/@water.outdoor/post/Ddz1GAqk1rp?xmt=AQG0tdruVuHwgRzbqpMAWOuFc9lPzPVOnQWlGbhkHvTFCgL36At0bv7pRQU92kp1EXmFUcOA&slof=1",
+      "timestamp": "2026-09-28T17:56:08+08:00",
+      "obsidian_connections": [
+        "001e4_易筋經晨練課程推薦書單",
+        "6.5a0_苦行推薦",
+        "13.1c6_【哈佛研究「每天感恩就能延壽」？】"
+      ]
+    },
+    {
+      "title": "aitech___study (@aitech___study) on Threads",
+      "category": "個人成長",
+      "type": "Threads貼文",
+      "status": "active",
+      "keywords": "#aitech___study #Threads #EngFluent #good #tips #shadowing",
+      "summary": "還是要每周一 個學英語YT: 📍EngFluent\n有很多百萬觀看的學英語方法分享! 講者會提供許多訓練聽說讀寫的good tips 像是如何透過影片學英文/做shadowing 如何真正開口說英文 如何讓口說更加自然流利等等 乾貨滿滿🥣\n講者本身的口條/影片的lines也非常適合做shadowing🗣️🗣️強力推薦想學英語口語的朋友們去看看!",
+      "subtitle_clips": [],
+      "url": "https://www.threads.com/@aitech___study/post/Ddy3O4lnSES?xmt=AQG0RiCkZpZ2A7Hw2kpDKh6wzD_aC3EGLjXw_OERdNPbTy7g5KehJxz4cvcaWUkCQyFS5bv-&slof=1",
+      "timestamp": "2026-09-28T17:54:48+08:00",
+      "obsidian_connections": [
+        "影片的節奏 藍諾Eleanor",
+        "《救命飲食：越營養，越危險！？（10年經典全新增訂）The China Study》",
+        "5.2 是愛還是自戀"
+      ]
+    },
+    {
+      "title": "xinyi (@xinyi.studyenglish) on Threads",
+      "category": "個人成長",
+      "type": "Threads貼文",
+      "status": "active",
+      "keywords": "#xinyi #studyenglish #Threads #Speaking #YouTube #Shadowing",
+      "summary": "剛剛挖到一個超神英文口說組合🤩\n是從一位雅思 Speaking 9.0 大神那裡學來的偷吃步：\nYouTube 的 Shadowing 頻道 搭配 Saylo App！ 這個頻道做影片真的超級聰明：\n每句台詞都會重複三次。\n第一次你只要專心聽就好，第二次就跟著他們的語調做跟讀（Shadowing）。\n句子和句子中間留的停頓時間剛剛好，如果遇到比較難的單字或新詞，還可以趁空檔多唸幾次把嘴巴練順。\n而",
+      "subtitle_clips": [],
+      "url": "https://www.threads.com/@xinyi.studyenglish/post/Dd0nqKTk4jV?xmt=AQG0f80zu2O7t31pNiPO63aPhZwytrqRcC7IDED3gdHHJQbGKEx2i5m5UA647Bq8jGBofnrc&slof=1",
+      "timestamp": "2026-09-28T17:52:58+08:00",
+      "obsidian_connections": [
+        "6.2c2c_Hulda_Clark博士正偏移電流Zapper破壞病原體膜電位之去活性化機制",
+        "o 2026a2 第二季復盤",
+        "o 2026a1 第一季復盤"
+      ]
+    },
+    {
+      "title": "阿偉ㄐㄧㄝˊ (@aaa_weijie) on Threads",
+      "category": "其他",
+      "type": "Threads貼文",
+      "status": "need_review",
+      "keywords": "#aaa_weijie #Threads #阿偉ㄐㄧㄝˊ #on",
+      "summary": "這個cp值超高的雅思口說資源，真的值得被更多人看到～～",
+      "subtitle_clips": [],
+      "url": "https://www.threads.com/@aaa_weijie/post/Ddyv2AaH5T8?xmt=AQG0OIN904eCKoqBmJcr_kJ8BsnO1nhCmtpqdRvsrzQ9pas_HndEw49WHFLJSs3fRf1SbfI&slof=1",
+      "timestamp": "2026-09-28T17:51:54+08:00",
+      "obsidian_connections": [
+        "13.1c1_【提醒：很多人不曾注意的阿茲海默成因】",
+        "1.1f0_MBTI 16型人格心理學全方位資源庫總覽",
+        "《加速理想成真的顯化練習》"
+      ]
+    },
+    {
+      "title": "陳鍾誠 (@ccckmit) on Threads",
+      "category": "科技AI",
+      "type": "Threads貼文",
+      "status": "active",
+      "keywords": "#ccckmit #Threads #OpenCode #Zen #Muse #Spark",
+      "summary": "使用 OpenCode 免費模型的人 我目前的體感最佳方案是 1. 寫程式用 OpenCode Zen - Muse Spark 1.3 2. 寫文章或書請用 Nvidia - Nemotron 3.5 Lightning (否則太強的模型通常速度太慢） Muse Spark 或 BigPickle 現在用來寫文章，一下就耗盡了，但是寫程式可以寫很久。 所以寫文章寫書，請改申請 Nvidia AP",
+      "subtitle_clips": [],
+      "url": "https://www.threads.com/@ccckmit/post/Dd0EXB9E_Q0?xmt=AQG00BHHSDl6r7WJqy4Np375uNK4BFpLl83qrXbtW0ZV5SfJanz2TX5C5OktWw0c1AJR-Bo6&slof=1",
+      "timestamp": "2026-09-28T17:50:15+08:00",
+      "obsidian_connections": [
+        "6.2a4_長期使用CDS之安全性與定期排毒機制",
+        "1.3a6_六個 Claude 使用者層級",
+        "《SEO白話文：贏得免費流量，創造長期營收的「SEO行銷指南」》"
+      ]
+    },
+    {
+      "title": "小李 (@dvjtgmhdg) on Threads",
+      "category": "樂活身心",
+      "type": "Threads貼文",
+      "status": "active",
+      "keywords": "#當代認知神經科學_腦與心智 #dvjtgmhdg #Threads #小李 #on",
+      "summary": "#當代認知神經科學_腦與心智\n第三次上課心得～～\n這次課程接著深度解析「感知與認知」，才發現原來「眼睛看到的」和「大腦分析出來的結果」是完全不一樣的事情！！\n以前總很好奇「物盲症」跟「臉盲症」到底是怎樣的感覺，上完這堂課直接有了解答。一般人看到圖中的拐杖和雨傘，就算視覺外觀再相似，也能瞬間區分出它們的功能不同；或是能一眼把折疊椅與一般椅子歸為同類。然而，物盲症患者明明能清晰看見線條、顏色與形狀，卻",
+      "subtitle_clips": [],
+      "url": "https://www.threads.com/@dvjtgmhdg/post/DdzfNWRCh4D?xmt=AQG0Hhfa1zWSeCjz2S9ZUwjI8Y3_Cy5FPkvbj6vDJ96cf55L51rioA5i8sZeF6G0uFGklYvN&slof=1",
+      "timestamp": "2026-09-28T17:48:35+08:00",
+      "obsidian_connections": [
+        "9.9d2_巨蟹座深度解析",
+        "9.9d3_雙魚座深度解析",
+        "1.1f8_ENFP人格深度解析報告"
+      ]
+    },
+    {
+      "title": "Shane (@shane412335) on Threads",
+      "category": "科技AI",
+      "type": "Threads貼文",
+      "status": "active",
+      "keywords": "#Shane #shane412335 #Threads #token #codebase-memory-mcp #MIT",
+      "summary": "我承認，\n我分享這個有一點故意，\n故意給那些賣AI寫程式省token祕技的人看！\ncodebase-memory-mcp是MIT授權的開源工具，\nGitHub上4.4萬顆星，\n它把你整個程式專案整理成一張關係圖，\n讓Claude Code、Cursor、Codex這些AI寫程式工具直接查圖，\n不用一個檔案一個檔案翻，\n官方實測五次查詢用了約3400個token，\n一個個檔案搜要約41.2萬個，\n全",
+      "subtitle_clips": [],
+      "url": "https://www.threads.com/@shane412335/post/Dd0RuhNkqMY?xmt=AQG0mnA6PJF16JiDxDrcQYq-cmmfAvlyk5Nk0WGF61nnsX1QdZOYJDJBV1edkgVdAjkaSbSb&slof=1",
+      "timestamp": "2026-09-28T17:48:02+08:00",
+      "obsidian_connections": [
+        "1.3a5_Claude 社群平台設計 Prompt",
+        "1.3a6_六個 Claude 使用者層級",
+        "1.3a3_NotebookLM超強用法！MIT研究生靠「3個關鍵提問指令」"
+      ]
+    },
+    {
+      "title": "贊尼工作室 (@zanny__official) on Threads",
+      "category": "活動情報",
+      "type": "Threads貼文",
+      "status": "active",
+      "keywords": "#zanny__official #Threads #Email #Microsoft #Canva #for",
+      "summary": "📍大學生不要踩雷（17/100）\n你的學校 Email其實超值錢\n很多軟體都有學生免費版／教育版／學生優惠\n🔗Microsoft 365\n🔗Canva for Education\n🔗GitHub Student Developer Pack\n🔗Autodesk Education\n🔗Notion",
+      "subtitle_clips": [],
+      "url": "https://www.threads.com/@zanny__official/post/DdyXjCencmm?xmt=AQG0aUcelyZIZ5tGzG8FnhtgEZJRKzRevzbYb2M_zmGQQkapQZ139WVMjs-NqOPQsqEn7CUK&slof=1",
+      "timestamp": "2026-09-28T17:47:25+08:00",
+      "obsidian_connections": [
+        "13.1d3_【降腦波其實很簡單】",
+        "13.1c1_【提醒：很多人不曾注意的阿茲海默成因】",
+        "1.1b2_密涅瓦大學的思考習慣訓練"
+      ]
+    },
+    {
+      "title": "保羅麥文具 - What we make? Ep10.硬殼海報套",
+      "category": "生活技能",
+      "type": "短影音",
+      "status": "active",
+      "keywords": "#海報 #好物分享 #poster #開箱 #收納 #What",
+      "summary": "What we make? Ep10.硬殼海報套 如果你去常去電影院， 也會拿特典海報⋯ 那麼這款硬殼海報套你一定要用看看～ 有別於L夾的保護力不足、手提盒體積太大 硬殼海報套更像是加厚版的資料夾！ 可以好好地保護海報， 不會因為碰撞而凹到。 回家後，也可以直接把硬殼海報套黏在牆上 變成一個海報透明框✨ 一方面簡約好看， 另一方面因為硬殼海報套很輕， 就不會有掛不住的問題， 用輝柏的萬用黏土或者是奈米貼都可以輕鬆上牆💪 推薦給每位有收集海報的朋友👫",
+      "subtitle_clips": [],
+      "url": "https://www.instagram.com/reel/DdYzxtFP3Ag/?stkn=MW1lbjZuNXRvbzVmcw==",
+      "timestamp": "2026-09-28T10:51:36+08:00",
+      "obsidian_connections": [
+        "1.3a1_How to Use AI to Make Money, Save Time, and Be More Productive",
+        "12d2_個人愛用好物與靈感雜誌推薦",
+        "001e4_易筋經晨練課程推薦書單"
+      ]
+    },
+    {
+      "title": "Win 投資",
+      "category": "其他",
+      "type": "文章",
+      "status": "need_review",
+      "keywords": "#Win #投資",
+      "summary": "Win 投資",
+      "subtitle_clips": [],
+      "url": "https://winvest.tw/",
+      "timestamp": "2026-09-28T07:15:50+08:00",
+      "obsidian_connections": [
+        "000b5_「周哈里窗模式」(Johari Window)",
+        "《寫作，是最好的自我投資》"
+      ]
+    },
+    {
+      "title": "以前沒啥人買！「台灣老牌1神鞋」爆紅　內行推好穿：走30KM不會痛 | ETtoday生活新聞 | ETtoday新聞雲",
+      "category": "其他",
+      "type": "文章",
+      "status": "active",
+      "keywords": "#ETtoday #Wave #Sky #以前沒啥人買 #台灣老牌1神鞋 #爆紅",
+      "summary": "近期不少人討論「出國到底穿什麼鞋」，意外讓台灣老字號牛頭牌拖鞋翻紅，其中「土豆星球足弓拖」被大批網友狂推，有人穿去日本每天走近2萬步，也有人穿去白沙屯媽祖進香、日走30公里以上都不喊痛，加上價格CP值高，瞬間掀起搶購潮，訂單更暴增10倍。(老字號,牛頭牌,拖鞋,,白沙屯媽祖,進香神鞋,美津濃,Wave Sky 9,訂單暴增)",
+      "subtitle_clips": [],
+      "url": "https://www.ettoday.net/news/20260902/3229902.htm?from=line_et_news",
+      "timestamp": "2026-09-27T16:06:11+08:00",
+      "obsidian_connections": [
+        "6.4c5_健康新聞與臨床案例生活監測",
+        "000b7_台灣全國知名超大建商(避雷)",
+        "6.4c3a_乳癌防治與生活型態調理預防"
+      ]
+    },
     {
       "title": "水璉 謝謝你",
       "category": "生活技能",
@@ -205,11 +506,11 @@ window.COLLECTIONS_DATA = {
       ]
     },
     {
-      "title": "Facebook 貼文內容",
+      "title": "Himari - 當代水彩與繪畫脈絡觀點：簡仲威與楊立作品比較",
       "category": "故事笑話",
       "type": "社群",
       "status": "active",
-      "keywords": "#Hima #Himari #沒有要護航的意思",
+      "keywords": "#當代藝術 #水彩 #簡仲威 #楊立 #繪畫脈絡",
       "summary": "沒有要護航的意思  我個人觀點是從視覺效果來說簡仲威老師和楊立絕對是不能比的 另外我最喜歡的水彩畫家是阿瓦羅 正文開始⬇️ ————————————————————————— 楊立的畫法是有一個脈絡存在的 他自己是推崇完全還原畫面這件事 不將一些繪畫技法或是畫面表現性的東西屏除掉 留下所謂真實的「繪畫」 這件事情的思考是非常當代的  由一個主題/議題去發想把作品做出來 這個脈絡在當代藝術成立 甚至",
       "subtitle_clips": [],
       "url": "https://www.facebook.com/share/1DZtEMzjNp/?mibextid=wwXIfr",
@@ -424,11 +725,11 @@ window.COLLECTIONS_DATA = {
       ]
     },
     {
-      "title": "Facebook 貼文內容",
+      "title": "皮克敏四葉飾品抽卡討論：花費探測器數量與課金猶豫",
       "category": "其他",
       "type": "社群",
       "status": "active",
-      "keywords": "#社群",
+      "keywords": "#皮克敏 #四葉幸運草 #探測器 #課金 #盆栽飾品",
       "summary": "目前四葉差3隻就可以開稀有\n  有沒有人可以分享要抽齊全部四葉的盆栽大概花幾個探測器？ 我一口氣開過開過超市、咖啡杯、麵包店 都在純點 超市35個探測器（香蕉+蘑菇） 咖啡杯28個探測器 麵包店29個探測器（法國麵包+糕點） 正在猶豫要不要課金公園系列",
       "subtitle_clips": [],
       "url": "https://www.facebook.com/share/p/1ENtT44ZRi/?mibextid=wwXIfr",
@@ -440,11 +741,11 @@ window.COLLECTIONS_DATA = {
       ]
     },
     {
-      "title": "Facebook 貼文內容",
+      "title": "愛小宜的甜蜜小窩 - 《直到T恤乾了沒》日劇日常台詞與演員魅力觀後感",
       "category": "其他",
       "type": "社群",
       "status": "active",
-      "keywords": "#愛小宜的甜蜜小窩 #我覺得日劇真的太厲害 #直到T恤乾了沒 #我竟然沒快轉還覺得好看",
+      "keywords": "#愛小宜的甜蜜小窩 #日劇 #直到T恤乾了沒 #演員魅力 #日常台詞",
       "summary": "我覺得日劇真的太厲害，《直到T恤乾了沒》最終回咲子和充洗衣䁁衣那段，我竟然沒快轉還覺得好看。 等回過神來，他們就真的只在䁁衣服，超級日常的劇情，卻因為有強大的台詞和演員的詮釋魅力，而變成有意義的一段。 「事情沒有發生在自己身上，就沒辦法想像。人的想像力，說到底也就只有這樣。」最後一集似乎也在回應這段。…",
       "subtitle_clips": [],
       "url": "https://www.facebook.com/share/1GLibaaWVS/?mibextid=wwXIfr",
