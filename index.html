@@ -811,7 +811,7 @@
     <header>
       <div class="brand">
         <div class="brand-icon" style="background: none; box-shadow: none;">
-          <img src="favicon.png?v=flower_gold_1" alt="生命之花" style="width: 34px; height: 34px; display: block; border-radius: 50%; filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.6));" />
+          <img src="./icons/favicon.png?v=flower_gold_2" alt="生命之花" style="width: 34px; height: 34px; display: block; border-radius: 50%; filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.6));" onerror="this.onerror=null; this.src='favicon.png';" />
         </div>
         <h1 id="appTitle">靈感 ＆ 生命之流</h1>
       </div>
@@ -983,28 +983,13 @@
       <!-- 生命流最近紀錄 -->
       <div class="history-card" id="lifeHistoryCard" style="display: none;">
         <div class="history-header">
-          <span>今日已記時程（待回家同步）</span>
+          <span>今日已記時程（待同步）</span>
           <div style="display: flex; align-items: center; gap: 6px;">
-            <button id="archiveAllLifeBtn" onclick="archiveAllLifeItems()" style="background: rgba(34, 197, 94, 0.2); color: #86efac; border: 1px solid rgba(34, 197, 94, 0.4); border-radius: 6px; padding: 2px 8px; font-size: 11px; cursor: pointer;">✅ 全部歸納至已整理</button>
             <button id="openLifeTrashModalBtn" onclick="openLifeTrashModal()" style="background: rgba(148, 163, 184, 0.2); color: #cbd5e1; border: 1px solid rgba(148, 163, 184, 0.4); border-radius: 6px; padding: 2px 8px; font-size: 11px; cursor: pointer;">🗑️ 垃圾桶 (<span id="lifeTrashCountBadge">0</span>)</button>
             <span id="lifeCountBadge" style="color: var(--purple);">0 筆</span>
           </div>
         </div>
         <div class="history-list" id="lifeHistoryList"></div>
-      </div>
-
-      <!-- 生命流已整理紀錄（已同步至 Obsidian） -->
-      <div class="history-card" id="lifeArchivedCard" style="margin-top: 14px; border-color: rgba(34, 197, 94, 0.35); display: none;">
-        <div class="history-header" style="cursor: pointer;" onclick="toggleLifeArchivedList()">
-          <div style="display: flex; align-items: center; gap: 6px;">
-            <span style="color: #86efac; font-weight: 700;">✅ 已整理時程（已歸納至 Obsidian）</span>
-            <span id="lifeArchivedToggleIcon" style="font-size: 11px; color: #94a3b8;">▼</span>
-          </div>
-          <div style="display: flex; align-items: center; gap: 6px;">
-            <span id="lifeArchivedCountBadge" style="color: #4ade80; font-weight: 700;">0 筆</span>
-          </div>
-        </div>
-        <div class="history-list" id="lifeArchivedList" style="display: block;"></div>
       </div>
 
       <!-- 生命流編輯 Modal -->
@@ -2615,136 +2600,6 @@
     }
     window.saveEditLifeItem = saveEditLifeItem;
 
-    function loadLifeArchivedHistory() {
-      try {
-        const raw = localStorage.getItem("life_archived_history");
-        return raw ? JSON.parse(raw) : [];
-      } catch (e) {
-        return [];
-      }
-    }
-
-    function saveLifeArchivedHistory(list) {
-      try {
-        localStorage.setItem("life_archived_history", JSON.stringify(list));
-      } catch (e) {}
-    }
-
-    function renderLifeArchivedList() {
-      const card = document.getElementById("lifeArchivedCard");
-      const listEl = document.getElementById("lifeArchivedList");
-      const badge = document.getElementById("lifeArchivedCountBadge");
-      const list = loadLifeArchivedHistory();
-      if (badge) badge.innerText = `${list.length} 筆`;
-      if (!card || !listEl) return;
-
-      if (list.length === 0) {
-        card.style.display = "none";
-        listEl.innerHTML = "";
-        return;
-      }
-      card.style.display = "flex";
-      listEl.innerHTML = "";
-      list.forEach((item, index) => {
-        const el = document.createElement("div");
-        el.className = "history-item";
-        el.style.borderColor = "rgba(34, 197, 94, 0.25)";
-        el.style.background = "rgba(15, 23, 42, 0.5)";
-
-        const displayTime = formatDisplayTimestamp(item.time, item.timestamp, item.event_date);
-        const targetDiary = item.target_diary ? `📁 ${escapeHtml(item.target_diary)}` : "📁 Obsidian 日誌";
-
-        el.innerHTML = `
-          <div class="history-top">
-            <div style="display: flex; align-items: center; gap: 6px;">
-              <span class="history-tag" style="background: rgba(34, 197, 94, 0.2); color: #86efac; border: 1px solid rgba(34, 197, 94, 0.3); font-weight: 700;">✅ 已歸檔</span>
-              <span class="history-tag tag-purple">${escapeHtml(item.category || "💭 隨手靈感")}</span>
-              <span class="history-tag" style="background: rgba(56, 189, 248, 0.15); color: #7dd3fc; border: 1px solid rgba(56, 189, 248, 0.3);">${targetDiary}</span>
-            </div>
-            <span>${displayTime}</span>
-          </div>
-          <div class="history-content" style="color: #cbd5e1;">${escapeHtml(item.content)}</div>
-        `;
-        listEl.appendChild(el);
-      });
-    }
-
-    function toggleLifeArchivedList() {
-      const listEl = document.getElementById("lifeArchivedList");
-      const icon = document.getElementById("lifeArchivedToggleIcon");
-      if (!listEl) return;
-      if (listEl.style.display === "none") {
-        listEl.style.display = "block";
-        if (icon) icon.innerText = "▼";
-      } else {
-        listEl.style.display = "none";
-        if (icon) icon.innerText = "▶";
-      }
-    }
-    window.toggleLifeArchivedList = toggleLifeArchivedList;
-
-    async function sendGasArchiveLifestream(items) {
-      if (!items || items.length === 0) return;
-      try {
-        const payload = {
-          action: "archive_lifestream",
-          token: gasToken,
-          items: items
-        };
-        fetch(gasUrl, {
-          method: "POST",
-          headers: { "Content-Type": "text/plain;charset=utf-8" },
-          body: JSON.stringify(payload),
-          mode: "no-cors"
-        }).catch(() => {});
-      } catch (e) {
-        console.warn("GAS archive lifestream failed:", e);
-      }
-    }
-
-    async function archiveLifeHistoryItem(index) {
-      const items = loadLifeHistory();
-      if (index < 0 || index >= items.length) return;
-      const item = items.splice(index, 1)[0];
-      item.archived_at = new Date().toISOString();
-      item.target_diary = item.event_date ? `${item.event_date}.md` : "Obsidian O.Diary";
-
-      const archived = loadLifeArchivedHistory();
-      archived.unshift(item);
-      saveLifeArchivedHistory(archived);
-      saveLifeHistory(items);
-
-      renderLifeHistory();
-      renderLifeArchivedList();
-      showToast("✅ 已成功歸納至已整理區域！", "📦");
-      sendGasArchiveLifestream([item]);
-    }
-    window.archiveLifeHistoryItem = archiveLifeHistoryItem;
-
-    async function archiveAllLifeItems() {
-      const items = loadLifeHistory();
-      if (items.length === 0) return;
-      if (!confirm(`確定要將目前的 ${items.length} 筆待同步時程全數標記為已整理並歸納嗎？`)) return;
-
-      const archived = loadLifeArchivedHistory();
-      const toSend = [];
-      items.forEach(it => {
-        it.archived_at = new Date().toISOString();
-        it.target_diary = it.event_date ? `${it.event_date}.md` : "Obsidian O.Diary";
-        archived.unshift(it);
-        toSend.push(it);
-      });
-
-      saveLifeArchivedHistory(archived);
-      saveLifeHistory([]);
-
-      renderLifeHistory();
-      renderLifeArchivedList();
-      showToast(`🎉 已成功歸納 ${toSend.length} 筆時程！`, "✅");
-      sendGasArchiveLifestream(toSend);
-    }
-    window.archiveAllLifeItems = archiveAllLifeItems;
-
     function renderLifeHistory() {
       const card = document.getElementById("lifeHistoryCard");
       const listEl = document.getElementById("lifeHistoryList");
@@ -2752,35 +2607,6 @@
       const trashBadge = document.getElementById("lifeTrashCountBadge");
       const items = loadLifeHistory();
       const trash = loadLifeTrashHistory();
-
-      // 自動清查並歸納已同步至 Obsidian 的歷史已知項目（如 9/25 肯德基優惠券、9/26 YouTube標題）
-      const knownSyncedPatterns = ["肯德基", "YouTube 的標題無法辨識", "YouTube標題"];
-      let autoArchivedAny = false;
-      const remainingItems = [];
-      const archivedList = loadLifeArchivedHistory();
-
-      items.forEach(it => {
-        const text = (it.content || "") + " " + (it.category || "");
-        const isMatched = knownSyncedPatterns.some(p => text.includes(p));
-        if (isMatched) {
-          it.archived_at = new Date().toISOString();
-          it.target_diary = it.event_date ? `${it.event_date}.md` : "Obsidian O.Diary";
-          if (!archivedList.some(a => a.content === it.content)) {
-            archivedList.unshift(it);
-          }
-          autoArchivedAny = true;
-        } else {
-          remainingItems.push(it);
-        }
-      });
-
-      if (autoArchivedAny) {
-        saveLifeArchivedHistory(archivedList);
-        saveLifeHistory(remainingItems);
-        items.length = 0;
-        remainingItems.forEach(r => items.push(r));
-        renderLifeArchivedList();
-      }
 
       if (badge) badge.innerText = `${items.length} 筆`;
       if (trashBadge) trashBadge.innerText = trash.length;
@@ -2809,7 +2635,6 @@
             <div style="display: flex; align-items: center; gap: 6px;">
               ${statusBadge}
               ${durTag}
-              <button class="history-tag btn-archive-life" data-index="${index}" style="background: rgba(34, 197, 94, 0.2); color: #86efac; border: 1px solid rgba(34, 197, 94, 0.4); cursor: pointer; padding: 2px 6px; border-radius: 6px;" title="標記已同步歸納至 Obsidian">✅ 歸納</button>
               <button class="history-tag btn-edit-life" data-index="${index}" style="background: rgba(168, 85, 247, 0.15); color: #c084fc; border: 1px solid rgba(168, 85, 247, 0.4); cursor: pointer; padding: 2px 6px; border-radius: 6px;" title="編輯">✏️</button>
               <button class="history-tag btn-delete-life" data-index="${index}" style="background: rgba(239, 68, 68, 0.15); color: #fca5a5; border: 1px solid rgba(239, 68, 68, 0.3); cursor: pointer; padding: 2px 6px; border-radius: 6px;" title="移至垃圾桶">🗑️</button>
               <span>${displayTime}</span>
@@ -2817,14 +2642,6 @@
           </div>
           <div class="history-content">${escapeHtml(item.content)}</div>
         `;
-
-        const archiveBtn = el.querySelector(".btn-archive-life");
-        if (archiveBtn) {
-          archiveBtn.addEventListener("click", (e) => {
-            e.stopPropagation();
-            archiveLifeHistoryItem(index);
-          });
-        }
 
         const editBtn = el.querySelector(".btn-edit-life");
         if (editBtn) {
@@ -2998,19 +2815,18 @@
             };
           }).reverse();
 
-          const combined = [...failedItems];
-          const archived = loadLifeArchivedHistory();
-          const archivedKeys = new Set(archived.map(a => a.timestamp || (a.time + a.content)));
-
-          remoteList.forEach(r => {
-            const key = r.timestamp || (r.time + r.content);
-            if (!archivedKeys.has(key) && !combined.some(c => c.timestamp === r.timestamp || (c.time === r.time && c.content === r.content))) {
-              combined.push(r);
+          // 當遠端待同步已由本機同步至 Obsidian 並清空時，本地歷史即時重置為 0 筆（與靈感採集機制一致）
+          // 僅保留：1. 遠端最新待同步項目 + 2. 本地尚未成功送出 (failed) 的暫存
+          const combined = [];
+          remoteList.forEach(r => combined.push(r));
+          failedItems.forEach(f => {
+            if (!combined.some(c => c.timestamp === f.timestamp || (c.time === f.time && c.content === f.content))) {
+              combined.push(f);
             }
           });
+
           saveLifeHistory(combined);
           renderLifeHistory();
-          renderLifeArchivedList();
         }
       } catch (err) {
         console.warn("syncRemoteLife err:", err);
@@ -3073,7 +2889,6 @@
     initLifeTimeDefault();
     renderInboxHistory();
     renderLifeHistory();
-    renderLifeArchivedList();
     syncRemoteInbox();
     syncRemoteLife();
     handleSharedUrlParams();

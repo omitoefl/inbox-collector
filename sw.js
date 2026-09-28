@@ -1,10 +1,14 @@
-const CACHE_NAME = 'inbox-collector-v41';
+const CACHE_NAME = 'inbox-collector-v44';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
   './manifest.json',
   './collections_data.js',
   './collections_data.json',
+  './favicon.png',
+  './favicon.ico',
+  './favicon.svg',
+  './apple-touch-icon.png',
   './icons/icon-192.png',
   './icons/icon-512.png',
   './icons/apple-touch-icon.png',
