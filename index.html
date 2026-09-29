@@ -2753,8 +2753,10 @@
           ? `<span class="history-tag" style="background: rgba(168, 85, 247, 0.25); color: #e9d5ff; font-weight: 700;">⏱️ ${escapeHtml(item.duration)}</span>` 
           : "";
         const statusBadge = item.status === "failed" 
-          ? `<span class="history-tag" style="background: rgba(239, 68, 68, 0.2); color: #fca5a5;">⚠️ 暫存(未送出)</span>`
-          : "";
+          ? `<button class="history-tag btn-retry-life" data-index="${index}" style="background: rgba(239, 68, 68, 0.2); color: #fca5a5; border: 1px solid rgba(239, 68, 68, 0.4); cursor: pointer; padding: 2px 6px; border-radius: 6px;" title="點擊補傳">⚠️ 點此補傳</button>`
+          : (item.status === "syncing" 
+              ? `<span class="history-tag" style="background: rgba(168, 85, 247, 0.2); color: #d8b4fe;">⏳ 傳送中...</span>`
+              : "");
         const displayTime = formatDisplayTimestamp(item.time, item.timestamp, item.event_date);
         el.innerHTML = `
           <div class="history-top">
@@ -2769,6 +2771,14 @@
           </div>
           <div class="history-content">${escapeHtml(item.content)}</div>
         `;
+
+        const retryBtn = el.querySelector(".btn-retry-life");
+        if (retryBtn) {
+          retryBtn.addEventListener("click", (e) => {
+            e.stopPropagation();
+            retrySubmitLifeItem(index);
+          });
+        }
 
         const editBtn = el.querySelector(".btn-edit-life");
         if (editBtn) {
@@ -2790,14 +2800,74 @@
       });
     }
 
-    function addLifeRecord(timeStr, cat, content, duration = "—", status = "success") {
+    function addLifeRecord(timeStr, cat, content, duration = "—", status = "success", id = null) {
       const items = loadLifeHistory();
       const now = new Date();
       const displayTime = formatDisplayTimestamp(timeStr, now.toISOString());
-      items.unshift({ time: displayTime, category: cat, content: content, duration: duration, timestamp: now.toISOString(), status: status });
+      const recId = id || ("life_" + Date.now() + "_" + Math.random().toString(36).substr(2, 6));
+      items.unshift({
+        id: recId,
+        time: displayTime,
+        rawTime: timeStr,
+        category: cat,
+        content: content,
+        duration: duration,
+        timestamp: now.toISOString(),
+        status: status
+      });
       saveLifeHistory(items);
       renderLifeHistory();
+      return recId;
     }
+
+    function updateLifeRecordStatus(recId, newStatus, newTimestamp = null) {
+      const items = loadLifeHistory();
+      const target = items.find(i => i.id === recId || (i.content && i.content === recId));
+      if (target) {
+        target.status = newStatus;
+        if (newTimestamp) target.timestamp = newTimestamp;
+        saveLifeHistory(items);
+        renderLifeHistory();
+      }
+    }
+
+    async function retrySubmitLifeItem(index) {
+      const items = loadLifeHistory();
+      if (index < 0 || index >= items.length) return;
+      const target = items[index];
+      if (!target || !target.content) return;
+
+      showToast("⏳ 正在重新傳送生命流時程...", "⏳");
+      try {
+        const payload = {
+          action: "submit_lifestream",
+          token: gasToken,
+          event_date: target.event_date || (new Date().toISOString().slice(0, 10)),
+          time_range: target.rawTime || target.time || "",
+          duration: target.duration || "—",
+          category: target.category || "💭 隨手靈感",
+          content: target.content
+        };
+        const res = await fetch(gasUrl, {
+          method: "POST",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+        if (data.status === "success") {
+          items[index].status = "success";
+          saveLifeHistory(items);
+          renderLifeHistory();
+          showToast("🎉 補傳成功！已同步至雲端生命之流！", "💜");
+          syncRemoteLife();
+        } else {
+          showToast("❌ 補傳失敗：" + (data.message || "未知錯誤"), "❌");
+        }
+      } catch (err) {
+        showToast("❌ 補傳失敗（" + (err.message || "請檢查連線") + "）", "⚠️");
+      }
+    }
+    window.retrySubmitLifeItem = retrySubmitLifeItem;
 
     const submitLifeBtn = document.getElementById("submitLifeBtn");
     submitLifeBtn.addEventListener("click", async () => {
@@ -2816,6 +2886,13 @@
         showToast("⚠️ 請填寫事件或想法描述", "⚠️");
         return;
       }
+
+      // 1. 【關鍵修復】輸入框「立即清空」，絕不讓文字滯留在輸入視窗內
+      lifeContentInput.value = "";
+      initLifeTimeDefault();
+
+      // 2. 【即時樂觀更新】立即於下方清單呈現記錄卡片（狀態設為傳送中）
+      const tempId = addLifeRecord(finalTimeRange, selectedCategory, content, duration, "syncing");
 
       submitLifeBtn.disabled = true;
       submitLifeBtn.innerText = "⏳ 記錄中...";
@@ -2841,15 +2918,18 @@
         if (data.status === "success") {
           const durBadge = duration !== "—" ? ` (${duration})` : "";
           showToast(`⏱️ 已記錄至生命之流${durBadge}！`, "💜");
-          lifeContentInput.value = "";
-          addLifeRecord(finalTimeRange, selectedCategory, content, duration, "success");
+          updateLifeRecordStatus(tempId, "success", data.data ? data.data.timestamp : null);
+          syncRemoteLife();
         } else {
-          showToast("❌ " + (data.message || "上傳失敗，已暫存"), "❌");
-          addLifeRecord(finalTimeRange, selectedCategory, content, duration, "failed");
+          showToast("❌ " + (data.message || "上傳未完成，已暫存"), "❌");
+          updateLifeRecordStatus(tempId, "failed");
         }
       } catch (err) {
-        showToast("❌ 網路異常，已將時程暫存於下方！", "⚠️");
-        addLifeRecord(finalTimeRange, selectedCategory, content, duration, "failed");
+        console.warn("Submit life stream network error:", err);
+        showToast("⚠️ 網路稍有延遲，已先安全暫存於下方！", "⚠️");
+        updateLifeRecordStatus(tempId, "failed");
+        // 延遲 3 秒背景向雲端驗證（防止 GAS 已實際寫入但 response 因網路中斷被攔截）
+        setTimeout(syncRemoteLife, 3000);
       } finally {
         submitLifeBtn.disabled = false;
         submitLifeBtn.innerText = "⏱️ 記錄至生命之流";
@@ -2922,17 +3002,18 @@
       }
     }
 
-    async function syncRemoteLife() {
+    async function syncRemoteLife(manual = false) {
+      if (manual) showToast("🔄 正在檢查生命之流狀態...");
       try {
         const res = await fetch(`${gasUrl}?action=fetch_lifestream&token=${encodeURIComponent(gasToken)}`);
         const data = await res.json();
         if (data && data.status === "success" && Array.isArray(data.items)) {
           const localItems = loadLifeHistory();
-          const failedItems = localItems.filter(i => i.status === "failed");
           const remoteList = data.items.map(rem => {
             const timeStr = formatDisplayTimestamp(rem.time_range, rem.timestamp, rem.event_date);
             return {
               time: timeStr,
+              rawTime: rem.time_range,
               category: rem.category || "💭 隨手靈感",
               content: rem.content || "",
               duration: rem.duration || "—",
@@ -2942,21 +3023,37 @@
             };
           }).reverse();
 
-          // 當遠端待同步已由本機同步至 Obsidian 並清空時，本地歷史即時重置為 0 筆（與靈感採集機制一致）
-          // 僅保留：1. 遠端最新待同步項目 + 2. 本地尚未成功送出 (failed) 的暫存
-          const combined = [];
-          remoteList.forEach(r => combined.push(r));
-          failedItems.forEach(f => {
-            if (!combined.some(c => c.timestamp === f.timestamp || (c.time === f.time && c.content === f.content))) {
-              combined.push(f);
+          // 核心對齊規則：
+          // 1. 遠端最新待同步項目一律採信為 success（已在雲端）
+          // 2. 本地項目若內容 (content) 與雲端相符，代表已成功送達雲端，絕不可判定為 failed
+          // 3. 僅保留「雲端確實尚未收到」且狀態為 failed/syncing 的本機暫存
+          const normalize = str => String(str || "").trim().replace(/\s+/g, ' ');
+          
+          const combined = [...remoteList];
+          localItems.forEach(loc => {
+            if (loc.status === "failed" || loc.status === "syncing") {
+              const alreadyOnRemote = remoteList.some(rem => normalize(rem.content) === normalize(loc.content));
+              if (!alreadyOnRemote) {
+                combined.push(loc);
+              }
             }
           });
 
           saveLifeHistory(combined);
           renderLifeHistory();
+          if (manual) {
+            if (remoteList.length === 0) {
+              showToast("✨ 生命之流待同步已清空（0 筆待處理）");
+            } else {
+              showToast(`📥 雲端待同步：${remoteList.length} 筆`);
+            }
+          }
+        } else if (manual) {
+          showToast("⚠️ 無法取得雲端清單，請確認 GAS 權限");
         }
       } catch (err) {
         console.warn("syncRemoteLife err:", err);
+        if (manual) showToast("⚠️ 雲端連線失敗");
       }
     }
 
