@@ -1997,9 +1997,14 @@
           const el = document.createElement("div");
           const hasUrl = item.url && (item.url.startsWith("http://") || item.url.startsWith("https://"));
           el.className = "history-item" + (hasUrl ? " clickable" : "");
-          const statusBadge = item.status === "failed" 
-            ? `<button class="history-tag btn-retry-inbox" data-index="${index}" style="background: rgba(239, 68, 68, 0.25); color: #fca5a5; border: 1px solid rgba(239, 68, 68, 0.5); cursor: pointer; padding: 2px 6px; border-radius: 6px;">⚠️ 補傳</button>`
-            : `<span class="history-tag" style="background: rgba(56, 189, 248, 0.12); color: #7dd3fc; border: 1px solid rgba(56, 189, 248, 0.25); font-size: 10.5px;">⏳ 雲端排隊</span>`;
+          let statusBadge = "";
+          if (item.status === "failed") {
+            statusBadge = `<button class="history-tag btn-retry-inbox" data-index="${index}" style="background: rgba(239, 68, 68, 0.25); color: #fca5a5; border: 1px solid rgba(239, 68, 68, 0.5); cursor: pointer; padding: 2px 6px; border-radius: 6px;">⚠️ 補傳</button>`;
+          } else if (item.status === "syncing") {
+            statusBadge = `<span class="history-tag" style="background: rgba(234, 179, 8, 0.2); color: #fef08a; border: 1px solid rgba(234, 179, 8, 0.4); font-size: 10.5px;">⏳ 傳送中...</span>`;
+          } else {
+            statusBadge = `<span class="history-tag" style="background: rgba(56, 189, 248, 0.12); color: #7dd3fc; border: 1px solid rgba(56, 189, 248, 0.25); font-size: 10.5px;">⏳ 雲端排隊</span>`;
+          }
           const displayTime = formatDisplayTimestamp(item.time, item.timestamp);
           const displayTitle = item.title || item.url || "無標題";
           
@@ -2276,13 +2281,27 @@
     }
     window.saveEditInboxItem = saveEditInboxItem;
 
-    function addInboxRecord(url, type, title, status = "success", image = "") {
+    function addInboxRecord(url, type, title, status = "success", image = "", id = null) {
       const items = loadInboxHistory();
       const now = new Date();
       const displayTime = formatDisplayTimestamp("", now.toISOString());
-      items.unshift({ url, type, title, image, time: displayTime, timestamp: now.toISOString(), status });
+      const recId = id || ("inbox_" + Date.now() + "_" + Math.random().toString(36).substr(2, 6));
+      items.unshift({ id: recId, url, type, title, image, time: displayTime, timestamp: now.toISOString(), status });
       saveInboxHistory(items);
       renderInboxHistory();
+      return recId;
+    }
+
+    function updateInboxRecordStatus(recId, newStatus, newTitle = null, newImage = null) {
+      const items = loadInboxHistory();
+      const target = items.find(i => i.id === recId || (i.url && normalizeUrl(i.url) === normalizeUrl(recId)));
+      if (target) {
+        target.status = newStatus;
+        if (newTitle) target.title = newTitle;
+        if (newImage) target.image = newImage;
+        saveInboxHistory(items);
+        renderInboxHistory();
+      }
     }
 
     const submitInboxBtn = document.getElementById("submitInboxBtn");
@@ -2320,6 +2339,17 @@
       // 若未手動點選，發送前再做一次精準網址分類補全
       const finalType = isUserManuallySelected ? selectedType : detectTypeFromUrl(finalUrl);
 
+      // 1. 【關鍵修復】輸入框「立即清空」，絕不讓網址與文字滯留在輸入視窗內
+      urlInputEl.value = "";
+      document.getElementById("titleInput").value = "";
+      isUserManuallySelected = false;
+      applyDetectedType("其他", true);
+      const badge = document.getElementById("autoTypeBadge");
+      if (badge) badge.innerText = "⚡ 貼上網址自動辨識";
+
+      // 2. 【即時樂觀更新】立即於下方清單呈現記錄卡片（狀態設為傳送中）
+      const tempId = addInboxRecord(finalUrl, finalType, finalTitle || finalUrl, "syncing");
+
       submitInboxBtn.disabled = true;
       submitInboxBtn.innerText = "⏳ 傳送中...";
 
@@ -2341,25 +2371,21 @@
         const data = await res.json();
         if (data.status === "success") {
           showToast(`🎉 【${finalType}】靈感投遞成功！`);
-          urlInputEl.value = "";
-          document.getElementById("titleInput").value = "";
-          isUserManuallySelected = false;
-          applyDetectedType("其他", true);
-          const badge = document.getElementById("autoTypeBadge");
-          if (badge) badge.innerText = "⚡ 貼上網址自動辨識";
-          const savedTitle = (data.data && data.data.title) || finalTitle || "自動擷取標題";
+          const savedTitle = (data.data && data.data.title) || finalTitle || finalUrl;
           const savedImg = (data.data && data.data.image) || "";
-          addInboxRecord(finalUrl, finalType, savedTitle, "success", savedImg);
+          updateInboxRecordStatus(tempId, "success", savedTitle, savedImg);
+          syncRemoteInbox();
         } else {
-          showToast("❌ " + (data.message || "上傳失敗，已暫存"), "❌");
-          addInboxRecord(finalUrl, finalType, finalTitle || finalUrl, "failed");
+          showToast("❌ " + (data.message || "上傳未完成，已暫存"), "❌");
+          updateInboxRecordStatus(tempId, "failed");
+          setTimeout(syncRemoteInbox, 2500);
         }
       } catch (err) {
         console.error("Submit inbox error:", err);
-        showToast("❌ 投遞未完成（" + (err.message || "連線異常") + "），已暫存於下方！", "⚠️");
-        urlInputEl.value = "";
-        document.getElementById("titleInput").value = "";
-        addInboxRecord(finalUrl, finalType, finalTitle || finalUrl, "failed");
+        showToast("⚠️ 網路稍有延遲，已先安全暫存於下方！", "⚠️");
+        updateInboxRecordStatus(tempId, "failed");
+        // 延遲 2.5 秒背景向雲端驗證（防止 GAS 已實際寫入但 response 因行動網路延遲被中斷）
+        setTimeout(syncRemoteInbox, 2500);
       } finally {
         submitInboxBtn.disabled = false;
         submitInboxBtn.innerText = "🚀 即時投遞至待採集庫";
@@ -2372,7 +2398,7 @@
       const target = items[index];
       if (!target || !target.url) return;
 
-      showToast("⏳ 正在重新投遞靈感...", "⏳");
+      showToast("⏳ 正在驗證雲端狀態並重新投遞...", "⏳");
       try {
         const payload = {
           action: "submit",
@@ -2395,12 +2421,15 @@
           saveInboxHistory(items);
           renderInboxHistory();
           showToast("🎉 補傳成功！已同步至待採集庫！");
+          syncRemoteInbox();
         } else {
           showToast("❌ 補傳失敗：" + (data.message || "未知錯誤"), "❌");
+          syncRemoteInbox();
         }
       } catch (err) {
         console.error("Retry submit error:", err);
         showToast("❌ 補傳失敗（" + (err.message || "請檢查連線") + "）", "⚠️");
+        setTimeout(syncRemoteInbox, 2500);
       }
     }
     window.retrySubmitInboxItem = retrySubmitInboxItem;
@@ -2947,7 +2976,19 @@
 
     function normalizeUrl(url) {
       if (!url) return "";
-      return String(url).trim().replace(/\/+$/, "").toLowerCase();
+      try {
+        let str = String(url).trim().toLowerCase();
+        // 移除追蹤參數與錨點 (?xmt=..., &..., #...)
+        str = str.replace(/[?#].*$/, "");
+        // 移除通訊協定
+        str = str.replace(/^https?:\/\//, "");
+        // 移除 www.
+        str = str.replace(/^www\./, "");
+        // 移除末端斜線
+        return str.replace(/\/+$/, "");
+      } catch (e) {
+        return String(url).trim().toLowerCase().replace(/\/+$/, "");
+      }
     }
 
     async function syncRemoteInbox(manual = false) {
@@ -2969,9 +3010,9 @@
             };
           }).reverse();
 
-          // 當遠端 pending 已經由 Worker 處理完成變為 0 筆時，本地歷史即時開同步重置為 0 筆
-          // 僅保留：1. 遠端最新 pending 項目 + 2. 本地尚未成功送出 (failed) 的草稿
-          const failedItems = localItems.filter(i => i.status === "failed");
+          // 當遠端 pending 已經由 Worker 處理完成變為 0 筆時，本地歷史即時自動重置為 0 筆
+          // 僅保留：1. 遠端最新 pending 項目 + 2. 本地草稿中遠端「完全不存在」的項目
+          const failedItems = localItems.filter(i => (i.status === "failed" || i.status === "syncing") && !remoteList.some(r => normalizeUrl(r.url) === normalizeUrl(i.url)));
           const combined = [];
           
           remoteList.forEach(r => {
