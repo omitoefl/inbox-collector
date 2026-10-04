@@ -188,6 +188,62 @@
       color: #34d399;
       box-shadow: 0 0 10px rgba(52, 211, 153, 0.2);
     }
+    /* 台灣 22 行政區 地區篩選列 (吃喝玩樂美食專屬/可自訂切換) */
+    .collection-region-bar {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      padding: 0 0 10px 0;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+    .collection-region-bar::-webkit-scrollbar { display: none; }
+    .region-chip {
+      background: rgba(30, 41, 59, 0.7);
+      border: 1px solid rgba(251, 191, 36, 0.35);
+      border-radius: 16px;
+      padding: 4px 11px;
+      font-size: 11px;
+      font-weight: 700;
+      color: #fde68a;
+      cursor: pointer;
+      white-space: nowrap;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.2s;
+    }
+    .region-chip:hover { border-color: #fbbf24; color: #ffffff; background: rgba(245, 158, 11, 0.15); }
+    .region-chip.active {
+      background: rgba(245, 158, 11, 0.25);
+      border-color: #fbbf24;
+      color: #ffffff;
+      box-shadow: 0 0 10px rgba(245, 158, 11, 0.35);
+    }
+    .region-badge-btn {
+      background: rgba(245, 158, 11, 0.12);
+      border: 1px dashed rgba(251, 191, 36, 0.45);
+      color: #fbbf24;
+      border-radius: 8px;
+      padding: 2px 7px;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      transition: all 0.2s;
+    }
+    .region-badge-btn:hover {
+      background: rgba(245, 158, 11, 0.25);
+      border-style: solid;
+      color: #ffffff;
+    }
+    .region-badge-btn.has-region {
+      background: rgba(245, 158, 11, 0.22);
+      border: 1px solid #fbbf24;
+      color: #fef3c7;
+    }
     .collection-search-wrap {
       position: relative;
       margin-bottom: 12px;
@@ -1098,6 +1154,9 @@
         <button class="cat-chip active" data-cat="all">全部 <span id="chipCountAll">0</span></button>
       </div>
 
+      <!-- 台灣 22 行政區 地區篩選列 (吃喝玩樂美食專屬/可自訂切換) -->
+      <div class="collection-region-bar" id="collectionRegionBar" style="display: none;"></div>
+
       <!-- 統計與同步資訊列 -->
       <div style="display: flex; align-items: center; justify-content: space-between; font-size: 12px; color: var(--text-muted); margin: 4px 2px 12px 2px;">
         <span id="collectionSyncMeta">📦 載入中...</span>
@@ -1108,6 +1167,25 @@
       <div id="collectionItemsContainer" style="display: flex; flex-direction: column; gap: 12px;"></div>
     </div>
 
+  </div>
+
+  <!-- 地區選擇 Modal (台灣 22 行政區) -->
+  <div id="regionPickerModal" class="modal-backdrop" style="display: none; z-index: 10000;">
+    <div class="modal-card" style="max-width: 480px; width: 92%;">
+      <div class="modal-header">
+        <span>📍 選擇美食地區標籤（台灣 22 行政區）</span>
+        <button class="modal-close-btn" onclick="closeRegionPicker()">✕</button>
+      </div>
+      <div class="modal-body" style="max-height: 420px; overflow-y: auto;">
+        <input type="hidden" id="regionPickerTargetKey" />
+        <p style="font-size: 12px; color: var(--text-muted); margin: 0 0 12px 0;" id="regionPickerTargetTitle">為此收藏標記所在行政區：</p>
+        <div id="regionPickerGrid"></div>
+      </div>
+      <div class="modal-footer" style="justify-content: space-between;">
+        <button class="btn-cancel" style="background: rgba(239, 68, 68, 0.15); color: #fca5a5; border-color: rgba(239, 68, 68, 0.3);" onclick="applyRegionSelection('')">✕ 清除地區標籤</button>
+        <button class="btn-cancel" onclick="closeRegionPicker()">取消</button>
+      </div>
+    </div>
   </div>
 
   <!-- Toast 提示 -->
@@ -1180,8 +1258,76 @@
       generatedAt: "",
       currentStatus: "active", // "active" | "archived" | "deleted"
       currentCat: "all",
+      currentRegion: "all",
       searchQuery: ""
     };
+
+    // 台灣 22 行政區定義（包含北中南東離島，支援標籤與關鍵字自動比對）
+    const TAIWAN_REGIONS = [
+      { id: "基隆市", short: "基隆", group: "北部", patterns: [/基隆/i] },
+      { id: "台北市", short: "台北", group: "北部", patterns: [/台北|臺北|大安|信義區|中山區|松山區|士林|內湖|南港|北投|文山區|中正區|萬華|西門町/i] },
+      { id: "新北市", short: "新北", group: "北部", patterns: [/新北|板橋|新莊|中和|永和|三重|新店|土城|蘆洲|汐止|淡水|林口|三峽|鶯歌/i] },
+      { id: "桃園市", short: "桃園", group: "北部", patterns: [/桃園|中壢|平鎮|八德|楊梅|蘆竹|龜山|大溪/i] },
+      { id: "新竹市", short: "新竹市", group: "北部", patterns: [/新竹市|竹市/i] },
+      { id: "新竹縣", short: "新竹縣", group: "北部", patterns: [/新竹縣|竹縣|竹北|竹東/i] },
+      { id: "宜蘭縣", short: "宜蘭", group: "北部", patterns: [/宜蘭|羅東|礁溪|頭城/i] },
+      { id: "苗栗縣", short: "苗栗", group: "中部", patterns: [/苗栗|頭份|竹南/i] },
+      { id: "台中市", short: "台中", group: "中部", patterns: [/台中|臺中|西屯|北屯|南屯|逢甲|一中街/i] },
+      { id: "彰化縣", short: "彰化", group: "中部", patterns: [/彰化|員林|鹿港/i] },
+      { id: "南投縣", short: "南投", group: "中部", patterns: [/南投|草屯|埔里|日月潭/i] },
+      { id: "雲林縣", short: "雲林", group: "中部", patterns: [/雲林|斗六|虎尾|北港/i] },
+      { id: "嘉義市", short: "嘉義市", group: "南部", patterns: [/嘉義市/i] },
+      { id: "嘉義縣", short: "嘉義縣", group: "南部", patterns: [/嘉義縣|民雄|阿里山/i] },
+      { id: "台南市", short: "台南", group: "南部", patterns: [/台南|臺南|安平|中西區|東區|永康/i] },
+      { id: "高雄市", short: "高雄", group: "南部", patterns: [/高雄|左營|三民|前鎮|苓雅|鳳山|楠梓|鼓山/i] },
+      { id: "屏東縣", short: "屏東", group: "南部", patterns: [/屏東|潮州|東港|恆春|墾丁/i] },
+      { id: "花蓮縣", short: "花蓮", group: "東部", patterns: [/花蓮|吉安|玉里/i] },
+      { id: "台東縣", short: "台東", group: "東部", patterns: [/台東|臺東|知本|池上/i] },
+      { id: "澎湖縣", short: "澎湖", group: "離島", patterns: [/澎湖|馬公/i] },
+      { id: "金門縣", short: "金門", group: "離島", patterns: [/金門|金城|金湖/i] },
+      { id: "連江縣", short: "連江(馬祖)", group: "離島", patterns: [/連江|馬祖|南竿|北竿/i] }
+    ];
+
+    function getRegionOverrides() {
+      try {
+        return JSON.parse(localStorage.getItem("collection_region_overrides") || "{}");
+      } catch (e) {
+        return {};
+      }
+    }
+
+    function saveRegionOverride(keyOrUrl, regionId) {
+      try {
+        const map = getRegionOverrides();
+        if (regionId) {
+          map[keyOrUrl] = regionId;
+        } else {
+          delete map[keyOrUrl];
+        }
+        localStorage.setItem("collection_region_overrides", JSON.stringify(map));
+      } catch (e) {}
+    }
+
+    function getItemEffectiveRegion(it) {
+      const overrides = getRegionOverrides();
+      const key = getItemKey(it);
+      if (overrides[key] !== undefined) return overrides[key];
+      if (it.url && overrides[it.url] !== undefined) return overrides[it.url];
+      if (it.title && overrides[it.title] !== undefined) return overrides[it.title];
+      if (it.region) return it.region;
+
+      // 自動從標題、大綱與關鍵字標籤智慧辨識台灣縣市
+      const text = ((it.title || "") + " " + (it.summary || "") + " " + (it.keywords || ""));
+      for (let i = 0; i < TAIWAN_REGIONS.length; i++) {
+        const reg = TAIWAN_REGIONS[i];
+        for (let j = 0; j < reg.patterns.length; j++) {
+          if (reg.patterns[j].test(text)) {
+            return reg.id;
+          }
+        }
+      }
+      return "";
+    }
 
     function escapeJs(str) {
       return String(str || "")
@@ -1333,6 +1479,7 @@
       
       updateStatusCounts();
       renderCollectionFilterChips();
+      renderCollectionRegionChips();
       renderCollectionList();
     }
 
@@ -1349,6 +1496,7 @@
           collectionsState.generatedAt = data.generated_at || "";
           updateStatusCounts();
           renderCollectionFilterChips();
+          renderCollectionRegionChips();
           renderCollectionList();
           showToast(`✨ 收藏已更新！共 ${collectionsState.items.length} 筆`, "📚");
           return;
@@ -1356,6 +1504,7 @@
       } catch (e) {}
       showToast("ℹ️ 目前已是最新快取內容");
       updateStatusCounts();
+      renderCollectionRegionChips();
       renderCollectionList();
     }
     window.refreshCollectionData = refreshCollectionData;
@@ -1412,12 +1561,141 @@
       bar.innerHTML = html;
     }
 
+    // 渲染台灣 22 行政區 地區篩選列
+    function renderCollectionRegionChips() {
+      const bar = document.getElementById("collectionRegionBar");
+      if (!bar) return;
+
+      // 只要是「吃喝玩樂」或「全部」，或當前已有特定地區篩選時，即刻展示地區列
+      const shouldShow = (collectionsState.currentCat === "吃喝玩樂" || collectionsState.currentCat === "all" || collectionsState.currentRegion !== "all");
+      if (!shouldShow) {
+        bar.style.display = "none";
+        return;
+      }
+      bar.style.display = "flex";
+
+      const curStatus = collectionsState.currentStatus;
+      const baseItems = collectionsState.items.filter(it => {
+        const s = getItemEffectiveStatus(it);
+        if (s === "permanently_deleted" || s !== curStatus) return false;
+        if (collectionsState.currentCat !== "all" && it.category !== collectionsState.currentCat) return false;
+        return true;
+      });
+
+      const regionCounts = {};
+      baseItems.forEach(it => {
+        const reg = getItemEffectiveRegion(it);
+        if (reg) {
+          regionCounts[reg] = (regionCounts[reg] || 0) + 1;
+        }
+      });
+
+      let html = `
+        <button class="region-chip ${collectionsState.currentRegion === 'all' ? 'active' : ''}" onclick="selectCollectionRegion('all')">
+          📍 全部地區 (${baseItems.length})
+        </button>
+      `;
+
+      TAIWAN_REGIONS.forEach(reg => {
+        const count = regionCounts[reg.id] || 0;
+        const isActive = (collectionsState.currentRegion === reg.id);
+        html += `
+          <button class="region-chip ${isActive ? 'active' : ''}" onclick="selectCollectionRegion('${escapeHtml(reg.id)}')">
+            ${escapeHtml(reg.short)} ${count > 0 ? `(${count})` : ''}
+          </button>
+        `;
+      });
+
+      bar.innerHTML = html;
+    }
+
+    function selectCollectionRegion(regionId) {
+      collectionsState.currentRegion = regionId;
+      renderCollectionRegionChips();
+      renderCollectionList();
+    }
+    window.selectCollectionRegion = selectCollectionRegion;
+
     function selectCollectionCategory(cat) {
       collectionsState.currentCat = cat;
+      if (cat !== "吃喝玩樂" && cat !== "all") {
+        collectionsState.currentRegion = "all";
+      }
       renderCollectionFilterChips();
+      renderCollectionRegionChips();
       renderCollectionList();
     }
     window.selectCollectionCategory = selectCollectionCategory;
+
+    // 地區選擇 Modal 操作邏輯
+    let currentRegionPickerKey = "";
+    function openRegionPicker(key, title) {
+      currentRegionPickerKey = key;
+      const modal = document.getElementById("regionPickerModal");
+      const titleEl = document.getElementById("regionPickerTargetTitle");
+      const grid = document.getElementById("regionPickerGrid");
+      if (!modal || !grid) return;
+
+      if (titleEl) {
+        titleEl.innerText = `為「${title || '此靈感'}」標記所在台灣行政區：`;
+      }
+
+      const targetItem = collectionsState.items.find(it => getItemKey(it) === key || it.url === key || it.title === title);
+      const currentReg = targetItem ? getItemEffectiveRegion(targetItem) : "";
+
+      const groups = {
+        "北部": [],
+        "中部": [],
+        "南部": [],
+        "東部與離島": []
+      };
+
+      TAIWAN_REGIONS.forEach(reg => {
+        if (reg.group === "北部") groups["北部"].push(reg);
+        else if (reg.group === "中部") groups["中部"].push(reg);
+        else if (reg.group === "南部") groups["南部"].push(reg);
+        else groups["東部與離島"].push(reg);
+      });
+
+      let gridHtml = "";
+      Object.keys(groups).forEach(gName => {
+        gridHtml += `
+          <div style="font-size: 11px; font-weight: 700; color: #94a3b8; margin: 4px 0 2px 2px;">${gName}</div>
+          <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(88px, 1fr)); gap: 6px; margin-bottom: 8px;">
+        `;
+        groups[gName].forEach(r => {
+          const isSelected = (currentReg === r.id);
+          gridHtml += `
+            <button onclick="applyRegionSelection('${escapeJs(r.id)}')" style="background: ${isSelected ? 'rgba(245, 158, 11, 0.3)' : 'rgba(30, 41, 59, 0.7)'}; border: 1px solid ${isSelected ? '#fbbf24' : 'rgba(255, 255, 255, 0.1)'}; color: ${isSelected ? '#ffffff' : '#cbd5e1'}; font-weight: 700; padding: 6px 4px; font-size: 12px; border-radius: 8px; cursor: pointer; text-align: center; transition: all 0.2s;">
+              ${isSelected ? '✓ ' : ''}${escapeHtml(r.id)}
+            </button>
+          `;
+        });
+        gridHtml += `</div>`;
+      });
+
+      grid.innerHTML = gridHtml;
+      modal.style.display = "flex";
+    }
+    window.openRegionPicker = openRegionPicker;
+
+    function applyRegionSelection(regId) {
+      if (currentRegionPickerKey) {
+        saveRegionOverride(currentRegionPickerKey, regId);
+        showToast(regId ? `📍 已標記地區為：${regId}` : "🗑️ 已清除地區標籤", "📍");
+        closeRegionPicker();
+        renderCollectionRegionChips();
+        renderCollectionList();
+      }
+    }
+    window.applyRegionSelection = applyRegionSelection;
+
+    function closeRegionPicker() {
+      const modal = document.getElementById("regionPickerModal");
+      if (modal) modal.style.display = "none";
+      currentRegionPickerKey = "";
+    }
+    window.closeRegionPicker = closeRegionPicker;
 
     const collectionSearchInput = document.getElementById("collectionSearchInput");
     if (collectionSearchInput) {
@@ -1444,6 +1722,11 @@
       // 2. 分類篩選
       if (collectionsState.currentCat !== "all") {
         filtered = filtered.filter(i => i.category === collectionsState.currentCat);
+      }
+
+      // 2.5 台灣 22 行政區 地區篩選
+      if (collectionsState.currentRegion && collectionsState.currentRegion !== "all") {
+        filtered = filtered.filter(i => getItemEffectiveRegion(i) === collectionsState.currentRegion);
       }
 
       // 3. 關鍵字搜尋
@@ -1518,6 +1801,12 @@
         const titleText = escapeHtml(it.title || "無標題");
         const summaryText = escapeHtml(it.summary || "暫無摘要內容");
         const timeDisplay = it.timestamp ? it.timestamp.slice(0, 16).replace("T", " ") : "";
+        const effectiveRegion = getItemEffectiveRegion(it);
+        const regionBadgeHtml = (it.category === "吃喝玩樂" || effectiveRegion)
+          ? `<button class="region-badge-btn ${effectiveRegion ? 'has-region' : ''}" onclick="openRegionPicker('${escapeJs(itemKey)}', '${escapeJs(it.title)}')">
+               📍 ${effectiveRegion ? escapeHtml(effectiveRegion) : '+ 標記地區'}
+             </button>`
+          : "";
 
         // 依目前狀態設定底部操作按鈕
         let actionButtonsHtml = "";
@@ -1548,6 +1837,7 @@
             <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
               <span class="history-tag" style="${catBadgeStyle}">${escapeHtml(it.category)}</span>
               <span class="history-tag" style="background: rgba(51, 65, 85, 0.4); color: #94a3b8;">${escapeHtml(it.type || "靈感")}</span>
+              ${regionBadgeHtml}
             </div>
             <span style="color: var(--text-muted); font-size: 11px;">${escapeHtml(timeDisplay)}</span>
           </div>
