@@ -1,22 +1,803 @@
 {
-  "generated_at": "2026-10-04 21:17:33",
-  "total_count": 95,
-  "active_count": 91,
+  "generated_at": "2026-10-05 22:57:21",
+  "total_count": 145,
+  "active_count": 137,
   "archived_count": 0,
   "categories": {
-    "玄學命理": 5,
+    "玄學命理": 8,
     "影音創作": 4,
-    "故事笑話": 5,
+    "故事笑話": 6,
     "事業行銷": 1,
-    "其他": 8,
-    "樂活身心": 17,
-    "個人成長": 9,
-    "吃喝玩樂": 2,
-    "生活技能": 7,
-    "科技AI": 34,
-    "活動情報": 3
+    "其他": 18,
+    "樂活身心": 25,
+    "個人成長": 11,
+    "吃喝玩樂": 9,
+    "生活技能": 9,
+    "科技AI": 47,
+    "活動情報": 7
   },
   "items": [
+    {
+      "title": "伊梗 1gen｜一人事業．公開寫作 (@1gennn__) on Threads - 1. 公開進行『思維重訓』才能進步卓越",
+      "category": "樂活身心",
+      "type": "Threads貼文",
+      "status": "active",
+      "keywords": "#gen #gennn__ #Threads #伊梗 #1gen #一人事業",
+      "summary": "1. 公開進行『思維重訓』才能進步卓越  為了持續投入並產出有價值的內容 必須建立知識系統才能吸收高品質輸入 有意識地去鍛鍊寫作肌肉 讓改變真實發生  2. 透過追求好奇心，讓自己變得無可取代  擁有多元興趣的人 最怕的是從未開始行動 而寫作紀錄可以讓自己每天看見我們如何過生活 從中找出自己的『獨特知識』 並嘗試組合出嚮往的生活狀態與自己的約定  3. 懂得遵守與自己的約定  跟自己承諾好的目標要",
+      "subtitle_clips": [],
+      "url": "https://www.threads.com/@1gennn__/post/DeEr8A-E9Cw?xmt=AQG042KFcnM3KJWVGwSptOhdGreQm3bnygM7LeGkZkf4Fx_CDT4pPnrhNi48pb1vDYkve7Mg&slof=1",
+      "timestamp": "2026-10-05T03:31:48+08:00",
+      "obsidian_connections": [
+        "3.1 小型知識點聚落",
+        "1.1c3_Dan Koe主題七：【深度】公開思考與長文寫作的 6大實踐法則",
+        "1.1d2_Dan Koe 兩部「數位寫作與變現系統」"
+      ]
+    },
+    {
+      "title": "瑰玄｜拿毛筆的命理師 (@tuzka.exe) on Threads - 【能夠理解萬物的心】",
+      "category": "玄學命理",
+      "type": "Threads貼文",
+      "status": "active",
+      "keywords": "#tuzka #exe #Threads #瑰玄 #拿毛筆的命理師 #on",
+      "summary": "【能夠理解萬物的心】  除了遷移宮的強連結之外 錫蘭命盤最獨特的地方是「命宮的連鎖效應」  從這幾張附圖中左側可以觀察到 命宮同時跟多個宮位也有連結 這幾乎可以說是錫蘭腦袋好的根基  命宮跟某宮位連結 代表此人有能力去理解該宮位相關事物 子女宮：有能力理解年輕世代的想法 財帛宮：對於金錢有高度領悟力與掌控力 遷移宮：對於社會趨勢有高度敏銳力 交友宮：很懂得人際關係是怎麼一回事 事業宮：在工作表現上",
+      "subtitle_clips": [],
+      "url": "https://www.threads.com/@tuzka.exe/post/DeE_zO7k0C_?xmt=AQG05Zq_cAJVLzoiGUoglqPNeIOV4fhgiwamhibe2jP-HCNukxS8bpoNUDvA-QnjhT7AIiY&slof=1",
+      "timestamp": "2026-10-05T03:30:53+08:00",
+      "obsidian_connections": [
+        "10.6a7_我們對於演算法的理解，全都是錯的",
+        "13a4_AI的心靈角落 創意IP企劃",
+        "13.3a1_epa001 辦公室能量花精，這幾瓶讓你上班不崩潰"
+      ]
+    },
+    {
+      "title": "氣質女生養成計畫 🎀✨ (@a._.classy_girl) on Threads - 睡前動作晚上試試看吧(❁´◡`❁)",
+      "category": "其他",
+      "type": "Threads貼文",
+      "status": "need_review",
+      "keywords": "#classy_girl #Threads #氣質女生養成計畫 #on #睡前動作晚上試試看吧",
+      "summary": "睡前動作晚上試試看吧(❁´◡`❁)",
+      "subtitle_clips": [],
+      "url": "https://www.threads.com/@a._.classy_girl/post/DeD7SlikV-Q?xmt=AQG0cDE7dJXeqJM0A1fxUnJkYCs2QHN3i896qTyzqF8adLgqoH3EZJzCu8DvHUNz1RXES5S7&slof=1",
+      "timestamp": "2026-10-05T03:29:03+08:00",
+      "obsidian_connections": [
+        "13a3_華德福教育 — 孩子的四種氣質",
+        "1.1b5_Dan Koe系統：全矩陣人生實戰計畫表 (終極列印版)"
+      ]
+    },
+    {
+      "title": "等風等雨 (@ddelaarra) on Threads - 第五件事：海外ETF配息，走的是另一套規則。",
+      "category": "個人成長",
+      "type": "Threads貼文",
+      "status": "active",
+      "keywords": "#ddelaarra #Threads #ETF #等風等雨 #on #第五件事",
+      "summary": "第五件事：海外ETF配息，走的是另一套規則。 你如果買的是美股ETF或海外掛牌的ETF，配息屬於海外所得。 同一申報戶全年海外所得合計達一百萬，就要全數計入基本所得額。 注意，是「申報戶」，不是「個人」。 你和你配偶的海外所得要合併計算。 不是超過一百萬的部分才計入，是達一百萬就全部計入。 但一百萬是「計入門檻」，七百五十萬才是「課稅門檻」。 基本所得額超過七百五十萬，超過部分才按百分之二十計算基",
+      "subtitle_clips": [],
+      "url": "https://www.threads.com/@ddelaarra/post/DeEjERTE56_?xmt=AQG0hwA9rnAB2_R-edC1P3DXY_DRTyt08vSFb8v2BtqHXFeBdch7iHAxseGL6DML6EGnGeyq&slof=1",
+      "timestamp": "2026-10-05T03:24:52+08:00",
+      "obsidian_connections": [
+        "34a6_Netflix 《神效蘋果醋》",
+        "9.8a0_改名注意事項",
+        "001c1_查理·蒙格是個人成長推手"
+      ]
+    },
+    {
+      "title": "Demi (@0552_wang) on Threads - 沒有完全類似，但我覺得就是要拋開過去熟悉的模式。人很容易一直跟同類型的人交往、失敗分手，又再度喜歡上類似的人。我以前最著",
+      "category": "吃喝玩樂",
+      "type": "Threads貼文",
+      "status": "active",
+      "keywords": "#Demi #wang #Threads #0552_wang #on #沒有完全類似",
+      "summary": "沒有完全類似，但我覺得就是要拋開過去熟悉的模式。人很容易一直跟同類型的人交往、失敗分手，又再度喜歡上類似的人。我以前最著迷大家說的才子類型，對這種人充滿仰慕之情，但不停地被背叛、劈腿，有一天我告訴自己，不想再走同一條路，開始嘗試跟那種「以前的我認為很無聊很普的男生」約會。 後來遇見現在伴侶，他確實不是什麼才子，但老實善良懂存錢，生長在充滿愛的家庭裡，我是認識他之後才知道充滿愛的家庭裡，互動是什麼樣",
+      "subtitle_clips": [],
+      "url": "https://www.threads.com/@0552_wang/post/DeDSkKhEy-3?xmt=AQG09j-NmbD1HgmAIsTiXTUFRIdOgVJtEkEVTT6j9yPJqrksTzYx_fih1Xe-xc9KXRhZhY0&slof=1",
+      "timestamp": "2026-10-05T03:23:39+08:00",
+      "obsidian_connections": [
+        "5c0_親愛的家人",
+        "1.1d3_Dan Koe  一人公司商業模式：如何將你自己產品化",
+        "1.1d5_Dan Koe 一人公司商業模式 2.0：將你自己產品化"
+      ]
+    },
+    {
+      "title": "高正 (@kc__dy) on Threads - 爆幹好吃= =",
+      "category": "吃喝玩樂",
+      "type": "Threads貼文",
+      "status": "active",
+      "keywords": "#kc__dy #Threads #高正 #on #爆幹好吃",
+      "summary": "爆幹好吃= = 但就是飽到天靈蓋… 吃到後面我雙眼直接空洞  但要排很久 兩次都開門就去 差不多要排一個半小時",
+      "subtitle_clips": [],
+      "url": "https://www.threads.com/@kc__dy/post/DeB129cmhJL?xmt=AQG0y23fOi4AsM-X7Rkxk9l8jm4wmkbcI5Rp4LnD_zQPsAsttzrKgcHfxJilhnF5sBWh7nQf&slof=1",
+      "timestamp": "2026-10-04T09:40:55+08:00",
+      "obsidian_connections": []
+    },
+    {
+      "title": "Sun (@ching_sun88) on Threads - 最近意外發現西門竟然藏著一個超好玩的地方 - 國家圖書館 Open Lab！✨",
+      "category": "個人成長",
+      "type": "Threads貼文",
+      "status": "active",
+      "keywords": "#國家圖書館多媒體創意實驗中心 #手作 #手作體驗 #設計日常 #熱轉印 #Sun",
+      "summary": "最近意外發現西門竟然藏著一個超好玩的地方 - 國家圖書館 Open Lab！✨  裡面的多媒體創意實驗空間根本是手作人的天堂🥹 熱轉印、雷射切割、3D 列印、大圖輸出、電腦刺繡⋯⋯各種設備看到直接興奮起來，立馬預約體驗！  而且體驗費用也不貴，整個空間明亮舒服，還有大片落地窗可以看風景，光待在裡面就覺得很療癒 🤍  對喜歡設計、手作、自己動手做東西的人來說，真的會忍不住一直想玩下去 😂  已經默默",
+      "subtitle_clips": [],
+      "url": "https://www.threads.com/@ching_sun88/post/DeBcrN6FSfk?xmt=AQG0mV00sqj-1_sOU0hsV64Gn1lqhoC4Bwi8EZYhhTvMVi_Me1hxwT7ZRC1ziluczd2apAhJ&slof=1",
+      "timestamp": "2026-10-04T09:38:26+08:00",
+      "obsidian_connections": [
+        "1.1e8_社群媒體隱藏的多巴胺陷阱",
+        "1.1e7_Huberman Lab × Cal Newport 大腦專注力與慢速工作力研究整理",
+        "《做自己的生命設計師》"
+      ]
+    },
+    {
+      "title": "𝓛𝓾𝓷𝓪 (@luna_yuchen) on Threads - 📍不是詐騙啦！我先打電話去門市訂外帶",
+      "category": "吃喝玩樂",
+      "type": "Threads貼文",
+      "status": "active",
+      "keywords": "#luna_yuchen #Threads #𝓛𝓾𝓷𝓪 #on #不是詐騙啦 #我先打電話去門市訂外帶",
+      "summary": "📍不是詐騙啦！我先打電話去門市訂外帶 😋從小吃到大的最愛口味-地中海漁夫 💕雞翅氣炸鍋170度3分鐘後脆皮好吃",
+      "subtitle_clips": [],
+      "url": "https://www.threads.com/@luna_yuchen/post/DeDC0STkxP9?xmt=AQG0KeP0vgbG3wS7xTAEFN1JT1Rse1anpUCnHVzs7u96F5aHmZK_E06EtjOryrnXrg52vtE&slof=1",
+      "timestamp": "2026-10-04T09:36:07+08:00",
+      "obsidian_connections": [
+        "6.4d1_焦慮急性發作之5分鐘緊急安神應對法",
+        "34a2_《不是我太敏感, 而是你太過份了》",
+        "34a4_ch2《不是我太敏感, 而是你太過份了》"
+      ]
+    },
+    {
+      "title": "一條貓貓燒（台北大貓店） (@mao_mao_shao) on Threads - 我突然又發現一件事了！！尤其如果你是老闆或是自營業者或是創作者一定要學會感覺：",
+      "category": "故事笑話",
+      "type": "Threads貼文",
+      "status": "active",
+      "keywords": "#mao_mao_shao #Threads #一條貓貓燒 #台北大貓店 #on #我突然又發現一件事了",
+      "summary": "我突然又發現一件事了！！尤其如果你是老闆或是自營業者或是創作者一定要學會感覺：  1.有陌生人來跟你講話，覺得對方非常的自來熟，一定要小心他這個人。  2.這個陌生人讓你感覺到他很冷淡很生疏，很有疑問感，會覺得他到底想問什麼？那就是正常的，不用太小心沒關係。￼",
+      "subtitle_clips": [],
+      "url": "https://www.threads.com/@mao_mao_shao/post/DeBn2MVFKQQ?xmt=AQG0R-0_0VIsAI3kteHfRPjh_lJNv18mcVtfOWBT7S2VgMQ16-7SQKVrcodUT5g6gHwLrZs&slof=1",
+      "timestamp": "2026-10-04T09:35:15+08:00",
+      "obsidian_connections": [
+        "1.4_諮商關係中的移情",
+        "9.3a2_揭露人無法掙脫魔鬼捆綁的真正理由！被雪藏70年才敢公開的秘密是什麼？",
+        "001a5_為什麼我會依據談話內容，有時看著對方右眼說話有時卻看著左眼"
+      ]
+    },
+    {
+      "title": "namii.studiez (@namii.studiez) on Threads - 我媽是語言學專家，這是讓我1年內拿下JLPT N2的「祖傳秘方」(不是隨便說說，是有科學依據的喔！)",
+      "category": "其他",
+      "type": "Threads貼文",
+      "status": "active",
+      "keywords": "#namii #studiez #Threads #JLPT #Tadoku #App",
+      "summary": "我媽是語言學專家，這是讓我1年內拿下JLPT N2的「祖傳秘方」(不是隨便說說，是有科學依據的喔！) 說實話，剛開始聽到我媽指點這3個原則時，我覺得超「硬核」，因為準備資料太繁瑣了。她太了解我有多懶，直接丟給我一個叫 Tadoku 的App當「救生圈」。起初我還半信半疑沒馬上用，直到在網上抱怨了無數次後，又看到我朋友（學校日語系的第一名）發文狂推同一個App。那時我才認真下載來試用，發誓...結果",
+      "subtitle_clips": [],
+      "url": "https://www.threads.com/@namii.studiez/post/DeCd4yJEy27?xmt=AQG0j2ZU7ktwcvMBQ2ehtM2c9XUQQjpvSIqlZCj3Iii0eRnJachwVYJIFjQJLjDhBQ__Kwl5&slof=1",
+      "timestamp": "2026-10-04T08:59:42+08:00",
+      "obsidian_connections": [
+        "6.2c2c_Hulda_Clark博士正偏移電流Zapper破壞病原體膜電位之去活性化機制",
+        "34a2_《不是我太敏感, 而是你太過份了》",
+        "34a4_ch2《不是我太敏感, 而是你太過份了》"
+      ]
+    },
+    {
+      "title": "黃蹦蹦 (@butter_bb_0914) on Threads - 因為超討厭每次生日想換優惠，到了現場店員才說「要生日前一個月加會員」或「上週規則改了」，上個月我自己手搓了一個全台壽星優",
+      "category": "活動情報",
+      "type": "Threads貼文",
+      "status": "active",
+      "keywords": "#butter_bb_0914 #Threads #黃蹦蹦 #on #到了現場店員才說 #要生日前一個月加會員",
+      "summary": "因為超討厭每次生日想換優惠，到了現場店員才說「要生日前一個月加會員」或「上週規則改了」，上個月我自己手搓了一個全台壽星優惠網站  ​原本只是想自己查，結果上線一個月莫名其妙跑進來 3 萬多人，還累積了 600 多筆大家實測換成功的紀錄  ​目前整理了 208 家，手搖、火鍋、速食都有，重點是可以看到其他人今天有沒有換成功，不用怕撲空  9 月壽星可以存起來，連結丟留言",
+      "subtitle_clips": [],
+      "url": "https://www.threads.com/@butter_bb_0914/post/DeBBbqqkxNR?xmt=AQG0-9V_qzku0FHvUg4WoTEOCIwwohQWuc1rWIT92_RH7ihRqwBCwcv1g8zqJTxXh1JKNZw&slof=1",
+      "timestamp": "2026-10-04T08:58:17+08:00",
+      "obsidian_connections": [
+        "001b5_陳修平的短影音課程重點",
+        "6.4b4_父系能量連結與心理停滯突破",
+        "6.4d6b_寵物生病之能量與情緒心理連結"
+      ]
+    },
+    {
+      "title": "愛麗絲 (@aliceiyh) on Threads - 想了想決定還是來發文推廣一下",
+      "category": "樂活身心",
+      "type": "Threads貼文",
+      "status": "active",
+      "keywords": "#aliceiyh #Threads #Fighting #PEACE #P-E-A-C-E- #愛麗絲",
+      "summary": "想了想決定還是來發文推廣一下  九月中在脆上偶然看到脆友說吃左旋茶氨酸可以降低自己的「Fighting 機制」 我問了一下Ai  說是可以促進腦內產生a 波（平靜放鬆但保持清醒的波形） 抑制交感神經過度興奮 降低皮質醇 總之怎麼聽怎麼適合我 我就立刻去下單  拿到手的第一天我搞錯份量一次吃了兩顆 結果第二天睡醒 一路PEACE到下午 好特別的感受  大腦好舒服好平靜好放鬆好柔軟 好難以形容 好像有",
+      "subtitle_clips": [],
+      "url": "https://www.threads.com/@aliceiyh/post/DeCNSuRkzJ2?xmt=AQG0OrVR8LpKuMnganlMh-yhF9jBZ_Hr3LL2ARPEMnFR1EnmzAmbNjgWIZ-AGfSLDHBlDPs&slof=1",
+      "timestamp": "2026-10-04T08:55:05+08:00",
+      "obsidian_connections": [
+        "1.1e7_Huberman Lab × Cal Newport 大腦專注力與慢速工作力研究整理",
+        "001a6_眼神接觸產生情感共鳴",
+        "6.2a0_二氧化氯CDS與MMS的基礎化學與氧化還原機制"
+      ]
+    },
+    {
+      "title": "勁秦吃喝 (@jinchinlikeeat) on Threads - 在這裡宣佈這是我們目前吃到最強的當日壽星優惠！",
+      "category": "活動情報",
+      "type": "Threads貼文",
+      "status": "active",
+      "keywords": "#jinchinlikeeat #Threads #App #勁秦吃喝 #on",
+      "summary": "在這裡宣佈這是我們目前吃到最強的當日壽星優惠！ 什麼App都不用下載 憑證件就送＞特製生日鬆餅！ 鬆餅超大一份 還滿滿新鮮水果  當月壽星也有甜點 巴斯克乳酪蛋糕/焦糖蘋果肉桂捲/覆盆子檸香乳酪蛋糕 三選一  📍武蔵野森珈啡",
+      "subtitle_clips": [],
+      "url": "https://www.threads.com/@jinchinlikeeat/post/DeA0mYRkn5j?xmt=AQG05hsRPrmYQ4gSBZJfrcGZOCr_OkYyjc2VF5vTWoz697uV5Vut4DG05GT1Mzio83005Npr&slof=1",
+      "timestamp": "2026-10-04T08:47:43+08:00",
+      "obsidian_connections": [
+        "6.2c2c_Hulda_Clark博士正偏移電流Zapper破壞病原體膜電位之去活性化機制",
+        "5c2_這就是我們THIS IS US(第一季)",
+        "34a2_《不是我太敏感, 而是你太過份了》"
+      ]
+    },
+    {
+      "title": "匯聚創意 Effusion Creatives (@effusioncreatives) on Threads - 上禮拜有個接短影音代工的朋友，",
+      "category": "科技AI",
+      "type": "Threads貼文",
+      "status": "active",
+      "keywords": "#Effusion #Creatives #effusioncreatives #Threads #ReelMimic #GitHub",
+      "summary": "上禮拜有個接短影音代工的朋友， 看到我要分享這個臉直接垮下來， ReelMimic 在 GitHub 開源， 丟一支你喜歡的影片， 它拆解剪輯節奏、鏡頭長度、轉場、配色， 再派最多 6 個 AI 代理分工做一支同風格的原創動畫！ MIT 授權免費， 還有繁中介面， 他臉垮他的， 我照分享！！",
+      "subtitle_clips": [],
+      "url": "https://www.threads.com/@effusioncreatives/post/DeBNKZxkr2s?xmt=AQG0ifENiAOvf0UEFaq5vTDTFh6tWoxtuG9l-w2ljcR1a5JoUrZ3HRsdydAVTXKshCenqOw&slof=1",
+      "timestamp": "2026-10-04T08:47:10+08:00",
+      "obsidian_connections": [
+        "1.3a3_NotebookLM超強用法！MIT研究生靠「3個關鍵提問指令」",
+        "1.1a1_嘔吐（Vomit）日記系統",
+        "001f0_短影音操盤手的訪問技巧"
+      ]
+    },
+    {
+      "title": "超人行銷 (@superman.marketing) on Threads - ✨ 想讓 AI 影片更流暢，關鍵不只在工具，也在腳本與片段之間的連貫安排。先規劃完整內容，再分段生成、檢查轉場，能讓製作",
+      "category": "科技AI",
+      "type": "Threads貼文",
+      "status": "active",
+      "keywords": "#superman #marketing #Threads #aiautoblog #e6if40 #meta",
+      "summary": "✨ 想讓 AI 影片更流暢，關鍵不只在工具，也在腳本與片段之間的連貫安排。先規劃完整內容，再分段生成、檢查轉場，能讓製作流程更有條理。  查看完整教學： https://s.aiautoblog.cc/s/e6if40   @meta.ai 如何在 AI 生成影片仍受片段長度與一致性限制時，設計工作流程來兼顧效率、敘事連貫與畫面品質？",
+      "subtitle_clips": [],
+      "url": "https://www.threads.com/@superman.marketing/post/DeBek6wkR5N?xmt=AQG0lnUdbqilxbsmBiCQUm7xg1A9V5yDDmMsikICmXZ5FNHjHh3_mbvB6xkzklGcwfJwEAg3&slof=1",
+      "timestamp": "2026-10-04T08:44:25+08:00",
+      "obsidian_connections": [
+        "1.1d0_Dan Koe  如何在 6 到 12 個月內超越 99% 的人",
+        "9.8a4_波瑟芬妮(專業論命)表單規劃與諮詢設計",
+        "6.2b3e5_自體免疫與腫瘤檢查之CDS打蟲藥及Biotrohn整合臨床案例"
+      ]
+    },
+    {
+      "title": "小英 Eileen (@rueiyun_no.1) on Threads - 地址：台北市信義區忠孝東路五段423巷6弄34號1樓",
+      "category": "其他",
+      "type": "Threads貼文",
+      "status": "active",
+      "keywords": "#Eileen #rueiyun_no #Threads #小英 #on #地址",
+      "summary": "地址：台北市信義區忠孝東路五段423巷6弄34號1樓 永春站五號出口棉花田左轉虎林街第二條巷子左轉。 板南線捷運車廂以2號、3號、4號車廂靠近手扶梯。 搭高鐵可坐到南港高鐵站，再轉捷運往頂埔或亞東醫院的方向。 搭火車可搭到松山火車站，在轉公車坐三站。",
+      "subtitle_clips": [],
+      "url": "https://www.threads.com/@rueiyun_no.1/post/DeCVHUEGcpr?xmt=AQG00N5_ClCtTn_OZyaZXEAdwj5NvAIOT0Z6tMDfPDdcQgyfEF6FINP1tYUUirBkxbuzbXRh&slof=1",
+      "timestamp": "2026-10-04T08:35:56+08:00",
+      "obsidian_connections": []
+    },
+    {
+      "title": "Kelu Lee (@kelu_lee) on Threads - 好，一條一條對。先講清楚：口訣只幫你認形態，不幫你給人定罪。",
+      "category": "玄學命理",
+      "type": "Threads貼文",
+      "status": "active",
+      "keywords": "#面相 #面相學 #看面相 #面相教學 #識人術 #觀人術",
+      "summary": "好，一條一條對。先講清楚：口訣只幫你認形態，不幫你給人定罪。 什麼人心狠手辣 常被拿眼神凶、眉壓眼來套。凶是當下的神，不是人品判決。看他怎麼對弱者。 什麼人家境好 天庭飽滿、耳垂有肉，傳統聯想早年有依、根基看起來穩。不等于家境一定好。 什麼人喜歡較真 眉偏直、眉尾收得緊，常被說認死理。較不較真，看做事，不看一對眉。 什麼人心眼多 眼細、神往裡收。心思細不等于心術不正，這句上次講過。 什麼人性格倔",
+      "subtitle_clips": [],
+      "url": "https://www.threads.com/@kelu_lee/post/DeCFvM4Ggi5?xmt=AQG0bmn4u2M5xuHH_aD03OKpGue311Z6Bm2T6RtLRnD1x2mLVKswUsffrDV0zBz3UW5WhdFo&slof=1",
+      "timestamp": "2026-10-04T08:33:49+08:00",
+      "obsidian_connections": [
+        "9.8a2_相術精華與面相手相辨析",
+        "9.3a2_揭露人無法掙脫魔鬼捆綁的真正理由！被雪藏70年才敢公開的秘密是什麼？",
+        "001a5_為什麼我會依據談話內容，有時看著對方右眼說話有時卻看著左眼"
+      ]
+    },
+    {
+      "title": "AI平凡人創業學院 (@aistart_up) on Threads - 兩天後，一個叫 CopilotKit 的第三方團隊放出了開源版 OpenDots，",
+      "category": "科技AI",
+      "type": "Threads貼文",
+      "status": "active",
+      "keywords": "#aistart_up #Threads #CopilotKit #OpenDots #MIT #Dot",
+      "summary": "兩天後，一個叫 CopilotKit 的第三方團隊放出了開源版 OpenDots， MIT 授權可以免費自己部署。 每個 Dot 可以設定名字、角色、 能用哪些工具和權限，還能配一台含瀏覽器、 檔案、終端機的獨立環境。 要找的話到 GitHub 搜「CopilotKit OpenDots」就有， 不過目前還是 Alpha 階段， 要有一點技術底子自己架設和接服務才跑得起來。",
+      "subtitle_clips": [],
+      "url": "https://www.threads.com/@aistart_up/post/DeBQ_itAkOI?xmt=AQG0ZMlmSUBlQ40_w-lI470qRqmoXzs1F9QJGjBUPeFcJRwcigWMUJ-kswwksZhAo4QaHFzL&slof=1",
+      "timestamp": "2026-10-03T23:59:31+08:00",
+      "obsidian_connections": [
+        "1.3a3_NotebookLM超強用法！MIT研究生靠「3個關鍵提問指令」",
+        "1.1a1_嘔吐（Vomit）日記系統",
+        "6.2b1_協議W驚奇之環境消毒與延伸應用"
+      ]
+    },
+    {
+      "title": "🐈‍⬛《Annie 與美食的一期一會》 (@food_diary.tw) on Threads - 從台北搭火車到菁桐",
+      "category": "吃喝玩樂",
+      "type": "Threads貼文",
+      "status": "active",
+      "keywords": "#新北景點 #平溪景點 #菁桐景點 #台北景點 #新北一日遊 #Annie",
+      "summary": "從台北搭火車到菁桐 就能走進京都感老宅！  菁桐站出站後 走路5分鐘就到 平溪最美的古美術館  600坪日式老宅 珍藏上萬件藝術品 每個角落都超有氛圍 還能體驗銅鑼浴、塔羅牌  午餐享用私廚準備的無菜單料理 還能品嚐三種私房茶 一邊聽演奏好享受✨ 每個活動都很有沉浸感！ 推薦給你們！ 預約制！記得先預約再前往唷🫶🏻  一見菁桐古美術館 📍 新北市平溪區菁桐街167號  ☎️電話 02-255801",
+      "subtitle_clips": [],
+      "url": "https://www.threads.com/@food_diary.tw/post/DeCA6XMmUhG?xmt=AQG0ad3JMnNEUlpIBrUPjku8ef3Ijq2M8btFAC_Tx4jdjda7yJH2jRROsW2SQuKK-JR_Om8&slof=1",
+      "timestamp": "2026-10-03T23:58:43+08:00",
+      "obsidian_connections": [
+        "13.2c3 INFJ塔羅牌",
+        "001e4_易筋經晨練課程推薦書單",
+        "6.5a0_苦行推薦"
+      ]
+    },
+    {
+      "title": "Muse · 台北｜半永久遮瑕｜韓系半永久臥蠶 (@themuse.tw) on Threads - 什麼情況下會覺得伴侶最有吸引力？",
+      "category": "樂活身心",
+      "type": "Threads貼文",
+      "status": "active",
+      "keywords": "#Muse #themuse #Threads #台北 #半永久遮瑕 #韓系半永久臥蠶",
+      "summary": "什麼情況下會覺得伴侶最有吸引力？ 全球一致的首要答案是：看到伴侶在發光的時候。  不管是彈琴、在台上、騎馬，只要是做他擅長的事情，就讓對方閃閃發光。最重要的是：他是獨立自主的，也就是「他不需要你」。  當他「不需要你」時，你才會對他產生「渴望」，而不會進入有照顧對方責任的「母職」或「父職」的角色，此時的你才能感受到「慾望」。  吸引力的底氣，來自於他不依賴你來完整自己。很多人把關係過成互相捆綁，一",
+      "subtitle_clips": [],
+      "url": "https://www.threads.com/@themuse.tw/post/DeCEKJDmmI7?xmt=AQG0sFaWYkE48-M2T2xqJAEjonezQPfHNz74Kr9ExIol084NocZlLl3gAmEFF-0PlHr3yho&slof=1",
+      "timestamp": "2026-10-03T23:58:22+08:00",
+      "obsidian_connections": [
+        "《我要實現願望！怦然心動的28日吸引力課程》",
+        "《財富的吸引力法則》",
+        "《揭密：吸引力法則的謊言與真相》"
+      ]
+    },
+    {
+      "title": "✐ᝰ.ᐟ (@09.ssw.27) on Threads - Usar la regla del 60/30/10 es dar proporciones de color equi",
+      "category": "其他",
+      "type": "Threads貼文",
+      "status": "active",
+      "keywords": "#video #filmmaker #composición #wesanderson #nissei #ssw",
+      "summary": "Usar la regla del 60/30/10 es dar proporciones de color equilibradas a una composición, así es como el director Wes Anderson aplica el concepto en su simetría estricta 👌🎥  Via:cinemahow  #video #filmm",
+      "subtitle_clips": [],
+      "url": "https://www.threads.com/@09.ssw.27/post/DeBtrP-j0l9?xmt=AQG0xZpyS8Qr9cyFBBSQ3NVKSYM3NebGvIZPPa_s8tkNNeLGIVrbRci5Ms4rUa-CLnFf58__&slof=1",
+      "timestamp": "2026-10-03T23:57:19+08:00",
+      "obsidian_connections": [
+        "12b3_劉易斯·豪斯 (Lewis Howes)  財富覺醒：從心態重塑到價值變現的進階指南"
+      ]
+    },
+    {
+      "title": "老司機看盤 (@fafahitienne) on Threads - 🔥老司機提醒您",
+      "category": "科技AI",
+      "type": "Threads貼文",
+      "status": "active",
+      "keywords": "#fafahitienne #Threads #PCB #ROM #老司機看盤 #on",
+      "summary": "🔥老司機提醒您 股票要賺錢 買第一名的公司 長期放著就夠了 🔥世界第一大晶圓製造廠「台積電」 🔥世界第一大電子代工廠「鴻海」 🔥世界第一大筆電代工廠「廣達」 🔥世界第一大電競品牌「華碩」 🔥世界第一大手機晶片商「聯發科」 🔥世界第一大電源供應器廠「台達電」 🔥世界第一大手機鏡頭廠「大立光」 🔥世界第一大IC封測廠「日月光」 🔥世界第一大PCB電路板廠「臻鼎」 🔥世界第一大IC載板廠「欣興」 🔥世界",
+      "subtitle_clips": [],
+      "url": "https://www.threads.com/@fafahitienne/post/DeBt8JHmTXZ?xmt=AQG01CyEWSUNCfeClN5A0WSEgELWz7a5wtFWu0It3AkKM65tgskBRG5fXj7q_kzlHLX8qic&slof=1",
+      "timestamp": "2026-10-03T23:55:31+08:00",
+      "obsidian_connections": [
+        "1.3a5_Claude 社群平台設計 Prompt",
+        "1.3a0_Steven Bartlett專訪 AI 安全專家Dr. Roman Yampolskiy",
+        "001f3_網友筆記 - 簡湘庭筆記 如何用能量看世界"
+      ]
+    },
+    {
+      "title": "@yumous on Threads - 我收到大一新生的乾女兒傳來的簡訊，這正是為何這麼多人會不斷討論在康乃爾所發生的事。",
+      "category": "其他",
+      "type": "Threads貼文",
+      "status": "active",
+      "keywords": "#yumous #Threads #Jake #on",
+      "summary": "我收到大一新生的乾女兒傳來的簡訊，這正是為何這麼多人會不斷討論在康乃爾所發生的事。  她說： 如果我跟你說件事，你可以先不要告訴媽媽嗎？  你知道到處都在討論康乃爾，尤其社群上的每支影片。儘管發生了，我一直努力不讓自己被嚇到，因為我很喜歡這裡。  我昨晚跟朋友在校外的宿舍，有群男學生，平時我們會一起自習或吃晚飯，他們並不是兄弟會的。當時我們幾個女生在樓下庭院，有兩個男生在樓上的陽台，他們不知道我們",
+      "subtitle_clips": [],
+      "url": "https://www.threads.com/@yumous/post/DeBOS9KCSte?xmt=AQG07ZKOKB1QeXUcYHOcJXL8mhfQEVTBYyZqF3qYFoonVO0d8gr7ZkX_e5rxit-WHZsFcW-b&slof=1",
+      "timestamp": "2026-10-03T23:54:02+08:00",
+      "obsidian_connections": [
+        "5b3_未來的十個月",
+        "17a5_書介影片骨架(整理書介)",
+        "13a0_11個童年創傷 你可能未曾察觉的問題"
+      ]
+    },
+    {
+      "title": "穩飲茶府♦冰磚茶飲專賣♦ (@wincha_official) on Threads - 小抱怨一下▓",
+      "category": "其他",
+      "type": "Threads貼文",
+      "status": "active",
+      "keywords": "#wincha_official #Threads #穩飲茶府 #冰磚茶飲專賣 #on #小抱怨一下",
+      "summary": "小抱怨一下▓ 頭份店品質很不穩定，同品項同甜度，都是現買現喝今天買跟隔3天買，真的喝起來濃淡度差很多， 頭份的家人買也遇過這個狀況，冰磚怎麼了▓",
+      "subtitle_clips": [],
+      "url": "https://www.threads.com/@wincha_official/post/Dd9QSWYE0B6?xmt=AQG0jP4552DN51Lnx8KgXqt7uYlXs0XQbxTcqbIUX5f1dnmgOKngPWzaEWrKhRAbKdusxcA&slof=1",
+      "timestamp": "2026-10-02T22:57:35+08:00",
+      "obsidian_connections": [
+        "10.6a7_我們對於演算法的理解，全都是錯的",
+        "《十二星座都是騙人的！？》",
+        "《加速理想成真的顯化練習》"
+      ]
+    },
+    {
+      "title": "Ch (@minshu217) on Threads - 想告訴您：",
+      "category": "樂活身心",
+      "type": "Threads貼文",
+      "status": "active",
+      "keywords": "#minshu217 #Threads #Ch #on #想告訴您",
+      "summary": "想告訴您： 希望在您累在您感覺到重擔過大，透支了自己的情緒的時候 ，我能給您一個小小的避風塘，可能愛情不是最重要的，但有一個能撐着您比起自己努力撐着還要好，辛苦您了～ 風箏拉太緊沒辦法飛更遠，適當的放手才是最好的選擇🌷 我愛您 但我更充許您做自已 有自己的生活以及自己的人生 🫶🏻 不是越努力的人越容易失去 ，而是越把自己想得太重要的人越讓對方窒息 ，最近的感悟，愛是很溫柔的一件事，但不能以愛之名去",
+      "subtitle_clips": [],
+      "url": "https://www.threads.com/@minshu217/post/Dd_eWerk0NT?xmt=AQG0Bpo56TzlSCqOqKLD5PrOjiAH1tLsPvhnD4gYyWopyA-4HKFW8Rg4SsbXs8R3EZfMRsS8&slof=1",
+      "timestamp": "2026-10-02T22:52:18+08:00",
+      "obsidian_connections": [
+        "34a2_《不是我太敏感, 而是你太過份了》",
+        "34a4_ch2《不是我太敏感, 而是你太過份了》",
+        "34a3_ch1《不是我太敏感, 而是你太過份了》"
+      ]
+    },
+    {
+      "title": "Samil Kuo | 接案攝影師｜旅遊體驗家 (@samil_shoot) on Threads",
+      "category": "吃喝玩樂",
+      "type": "Threads貼文",
+      "status": "need_review",
+      "keywords": "#Samil #Kuo #samil_shoot #Threads #接案攝影師 #旅遊體驗家",
+      "summary": "我在台北發現一個時空隧道，竟然就在川端橋下",
+      "subtitle_clips": [],
+      "url": "https://www.threads.com/@samil_shoot/post/Dd_MoMzj7I7?xmt=AQG0iI2YKcawUPGnJqPK6_k7xpQeMblOensz3R5bN61xPWIYM4-3XNX17LzuT6h9ovofdKo&slof=1",
+      "timestamp": "2026-10-02T22:51:21+08:00",
+      "obsidian_connections": [
+        "o2026a 口語練習如何改變一個人：全面的科學與心理學解析",
+        "《打造第二大腦：多一個數位大腦，資訊超載時代的高效能知識管理術》",
+        "《要有一個人》"
+      ]
+    },
+    {
+      "title": "Shane (@shane412335) on Threads",
+      "category": "科技AI",
+      "type": "Threads貼文",
+      "status": "active",
+      "keywords": "#Shane #shane412335 #Threads #GitHub #Tusk #MIT",
+      "summary": "「資料庫軟體本來就該收訂閱費」，\n這是做付費工具的朋友上週跟我說的，\n結果這兩天 GitHub 冒出 Tusk，\nMIT 授權完全免費，\n一個 Mac App 連 20 種資料庫，\nAI 幫你寫查詢但絕不自己執行，\n沒帳號也不回傳資料！\n我就是忍不住要分享，\nMac 用戶自己去拿！！",
+      "subtitle_clips": [],
+      "url": "https://www.threads.com/@shane412335/post/Dd8ADVIAN86?xmt=AQG0A8_6gSBd6_Ki01CFsp14wibXNcEfe6LDl1NSsqopfk4fvqx1EfhqRaR-wkS91pcSbDA&slof=1",
+      "timestamp": "2026-10-02T22:49:15+08:00",
+      "obsidian_connections": [
+        "3.2c_Mac鍵盤替代文字",
+        "3.2b_Mac快捷鍵與重置",
+        "9.1a0_紫微macbook"
+      ]
+    },
+    {
+      "title": "me4.0我要優化我自己 (@me4.0.version) on Threads - 最後想跟大家分享的是，不要習慣只點演算法給你的內容，而錯失了那些真正有價值、用心製作優質內容的頻道。",
+      "category": "樂活身心",
+      "type": "Threads貼文",
+      "status": "active",
+      "keywords": "#me4 #version #Threads #LEVEL #VOL #portaly",
+      "summary": "最後想跟大家分享的是，不要習慣只點演算法給你的內容，而錯失了那些真正有價值、用心製作優質內容的頻道。  ​最後的最後還有三點想跟大家分享  ​•如果這樣的影片筆記對你有幫助，你也因為演算法的關係錯過了之前的內容，沒關係，我已經把之前50篇的影片筆記集結成一本電子書  ​「LEVEL UP VOL.01」 ​，你可以在個人簡介連結處免費下載。  ​h t t p s://portaly.cc/me4",
+      "subtitle_clips": [],
+      "url": "https://www.threads.com/@me4.0.version/post/Dd-WZduk4Dd?xmt=AQG0WHIkDZqKK5cnxospZCBes6nCw5YG77AxcecPPjc7Xh2zWv-0u5BRhyunJTXMkBq6093n&slof=1",
+      "timestamp": "2026-10-02T22:47:28+08:00",
+      "obsidian_connections": [
+        "10.6a7_我們對於演算法的理解，全都是錯的",
+        "9.3a2_揭露人無法掙脫魔鬼捆綁的真正理由！被雪藏70年才敢公開的秘密是什麼？",
+        "001a5_為什麼我會依據談話內容，有時看著對方右眼說話有時卻看著左眼"
+      ]
+    },
+    {
+      "title": "陳太與她的閃亮小夥伴 (@renake666) on Threads - 我要瘋了",
+      "category": "科技AI",
+      "type": "Threads貼文",
+      "status": "active",
+      "keywords": "#renake666 #Threads #GPT #陳太與她的閃亮小夥伴 #on #我要瘋了",
+      "summary": "我要瘋了 剛剛我發現一件有趣的事： 請你們用這段話去問GPT:  「假設你是一個韓國通曉四柱的算命師，請你幫(出生年月日➕時間+地點）這個男/女生算：一生運勢、財運、夫妻運和子女運」  真的有準欸嚇死我了！！！拜託你們一定要試！",
+      "subtitle_clips": [],
+      "url": "https://www.threads.com/@renake666/post/Dd9UpWfE-Na?xmt=AQG0ykWwntJaG1dcO3tIsgRqz2iYsLzm2fFZoZcaANc5hQ4jMC964E0qEOCcgqCkWuLekxMr&slof=1",
+      "timestamp": "2026-10-02T20:49:49+08:00",
+      "obsidian_connections": [
+        "《七天禁食禱告改變一生：120個大能的夜間禱告，帶領你走出生命中的困境》",
+        "10.6b0_我用 ChatGPT 解析臉書演算法文獻，測出 19 個【爆文公式】",
+        "1.3b1 ChatGPT Agnet架站"
+      ]
+    },
+    {
+      "title": "Jessi (@_nhws.uy_) on Threads",
+      "category": "活動情報",
+      "type": "Threads貼文",
+      "status": "active",
+      "keywords": "#Jessi #nhws #uy_ #Threads #_nhws #on",
+      "summary": "真的假的？各種程度都能學？🥹\n本來還以為是我看錯，結果免費內容居然這麼多🤣\n還沒試過的人真的可以去看看，說不定會挖到寶🙏🏻",
+      "subtitle_clips": [],
+      "url": "https://www.threads.com/@_nhws.uy_/post/Dd-0Ld7iab7?xmt=AQG0gBorzjw0ppw3DDLBbNDr-E5nBz_kyjUFAFFNtpTgOMPvvlNNyXgXHvUAmSl5bj4MzMtH&slof=1",
+      "timestamp": "2026-10-02T20:08:26+08:00",
+      "obsidian_connections": [
+        "6.2b3_CDS臨床各種疑難雜症實踐案例庫",
+        "各種話題",
+        "《加速理想成真的顯化練習》"
+      ]
+    },
+    {
+      "title": "5.3K views · 46K reactions | Creamy Sun-Dried Tomato Linguine 🍝🫶🏼 #pasta #recipe #food #dinner #foodreels | Alla Cooks",
+      "category": "其他",
+      "type": "社群",
+      "status": "active",
+      "keywords": "#pasta #recipe #food #dinner #foodreels #views",
+      "summary": "Creamy Sun-Dried Tomato Linguine 🍝🫶🏼 #pasta #recipe #food #dinner #foodreels",
+      "subtitle_clips": [],
+      "url": "https://www.facebook.com/share/r/1EVmAwVc2P/",
+      "timestamp": "2026-10-02T17:29:23+08:00",
+      "obsidian_connections": []
+    },
+    {
+      "title": "連結採集 (www.facebook.com)",
+      "category": "其他",
+      "type": "社群",
+      "status": "need_review",
+      "keywords": "#www #facebook #share #EjB4VTqho #連結採集 #com",
+      "summary": "無法直接探測內文 ()，請點擊連結查看：https://www.facebook.com/share/p/1EjB4VTqho/",
+      "subtitle_clips": [],
+      "url": "https://www.facebook.com/share/p/1EjB4VTqho/?mibextid=wwXIfr",
+      "timestamp": "2026-10-01T23:19:53+08:00",
+      "obsidian_connections": [
+        "9.3a2_揭露人無法掙脫魔鬼捆綁的真正理由！被雪藏70年才敢公開的秘密是什麼？",
+        "6.4b4_父系能量連結與心理停滯突破",
+        "6.4d6b_寵物生病之能量與情緒心理連結"
+      ]
+    },
+    {
+      "title": "黃聖雯 - 最近，女星薔薔公開表示，如果將來想要孩子，她會考慮請代理孕母，不想自己懷孕。她的妹妹則和女性伴侶透過海外人工生殖有了孩子",
+      "category": "樂活身心",
+      "type": "社群",
+      "status": "active",
+      "keywords": "#黃聖雯 #最近 #女星薔薔公開表示 #如果將來想要孩子 #她會考慮請代理孕母 #不想自己懷孕",
+      "summary": "最近，女星薔薔公開表示，如果將來想要孩子，她會考慮請代理孕母，不想自己懷孕。她的妹妹則和女性伴侶透過海外人工生殖有了孩子，由伴侶負責懷孕。  妹妹的伴侶當然不等於代理孕母，因為她也是孩子的母親。不過這兩件事放在一起，仍然讓我產生了一個好奇：  ✔️為什麼兩姊妹想要孩子，卻都不想由自己懷孕？  再回頭看她們公開談過的身世，這件事就變得很有意思。  薔薔和妹妹出生時，生父、生母各自都有婚姻。生母懷孕生",
+      "subtitle_clips": [],
+      "url": "https://www.facebook.com/share/p/14q87JWFHkh/?mibextid=wwXIfr",
+      "timestamp": "2026-10-01T17:26:23+08:00",
+      "obsidian_connections": [
+        "13a3_華德福教育 — 孩子的四種氣質",
+        "《兒童芳香療法：遠離抗生素！法國藥劑師教你用精油照護孩子的健康》",
+        "9.3a3_公開與魔鬼的一場對話"
+      ]
+    },
+    {
+      "title": "162K views · 5.4K reactions | 本來覺得，煎個杏鮑菇有什麼好拍的？",
+      "category": "吃喝玩樂",
+      "type": "社群",
+      "status": "active",
+      "keywords": "#views #reactions #kingoystermushroom #Kiki #Zhuo #162K",
+      "summary": "本來覺得，煎個杏鮑菇有什麼好拍的？\n結果先生吃完，一直叫我分享😂 他說，這大概就是杏鮑菇最好吃的樣子了。\n好啦，這盤值得單獨發一篇。 邊邊帶點焦香，咬起來又彈牙，\n每一片都沾著鹹香的醬汁和蒜末，\n加上奶油香氣，真的會忍不住一直夾。 做法沒什麼複雜的，\n但這種簡單又好吃的菜，就是很適合平常煮。 分享給也喜歡杏鮑菇的你們～\n先存起來，下次晚餐少一道菜，就煎這盤。 -乾煎杏鮑菇\n3顆…",
+      "subtitle_clips": [],
+      "url": "https://www.facebook.com/reel/1456454139871032",
+      "timestamp": "2026-10-01T16:49:28+08:00",
+      "obsidian_connections": [
+        "1.1e7_多工就是在瞎忙窮忙",
+        "001a7_越曬什麽就是越缺什麼",
+        "9.3a2_揭露人無法掙脫魔鬼捆綁的真正理由！被雪藏70年才敢公開的秘密是什麼？"
+      ]
+    },
+    {
+      "title": "7.9K reactions · 41 comments | 他の投稿をみる🌾▷ @myon_424",
+      "category": "生活技能",
+      "type": "社群",
+      "status": "active",
+      "keywords": "#reactions #comments #myon_424 #MYON #9K #41",
+      "summary": "他の投稿をみる🌾▷ @myon_424\nコメントなんでも嬉しいです🥹 【白菜きのこチャウダー】のレシピはこちら✨ こんばんは〜。\n今夜は、秋冬にぴったり！濃厚チャウダーレシピ🤭 秋は来ないんじゃないかと思っていたのに…\nえ？急に寒くなるやん🤣\n9月に入ってから、なかなかお天気にならず\n気温も著しく変化して、季節の変わり目を感じますね🍂 この間まで冷たいもの食べてたのに……",
+      "subtitle_clips": [],
+      "url": "https://www.facebook.com/reel/1328030025919404",
+      "timestamp": "2026-09-30T23:26:12+08:00",
+      "obsidian_connections": [
+        "6.2d6b_居家氯化鎂油免加熱飽和調配與經皮吸收臨床指南",
+        "6.4b5_家族系統排列與跨世代創傷療癒",
+        "1.1b3_NAC（Neuro Associative Conditioning）神經鏈調整術"
+      ]
+    },
+    {
+      "title": "Phina Zheng | 跨界藝術實驗室 (@phina_arthomelife_tw) on Threads",
+      "category": "玄學命理",
+      "type": "Threads貼文",
+      "status": "active",
+      "keywords": "#Phina #Zheng #phina_arthomelife_tw #Threads #Stephen #Arroyo",
+      "summary": "關於占星、科學，以及最近的一點閱讀感想 最近幾個月剛好在讀 Stephen Arroyo 的《占星、心理學與四元素》、《占星・業力與轉化》，還有交叉閱讀《榮格論占星》。碰巧這幾天社群又在吵占星算不算科學，看到有人直接把整個領域歸進「身心靈詐騙」，我有點難認同這種說法。 我沒有要證明占星是一門科學。以目前的研究來說，占星對人格、事件的預測，以及星體與人之間是否存在可驗證的因果關係，都缺乏足夠的實證支",
+      "subtitle_clips": [],
+      "url": "https://www.threads.com/share/G6Nra47gw/",
+      "timestamp": "2026-09-30T22:17:20+08:00",
+      "obsidian_connections": [
+        "1.1e6_慢速工作力：關於慢與快的平衡",
+        "o2026a 口語練習如何改變一個人：全面的科學與心理學解析",
+        "1.4_諮商關係中的移情"
+      ]
+    },
+    {
+      "title": "海總理 (@the.oceanic.official) on Threads",
+      "category": "科技AI",
+      "type": "Threads貼文",
+      "status": "active",
+      "keywords": "#oceanic #official #Threads #prompt #awwwards #webby",
+      "summary": "如果你的 AI 網頁設計的很糟糕，試試這個 prompt 「品質標準以 awwwards、webby awards、FWA 獲得獎項的程度為目標，透過自我檢查，反覆自行提升品質，直到達到該品質標準為止。」",
+      "subtitle_clips": [],
+      "url": "https://www.threads.com/share/F7FFOw4CC/",
+      "timestamp": "2026-09-30T22:07:50+08:00",
+      "obsidian_connections": [
+        "1.3a5_Claude 社群平台設計 Prompt",
+        "1.1e8_Impact Theory × Cal Newport 數位極簡主義與獨處能力研究整理",
+        "12b4_透過調整自身頻率來「磁性吸引」目標"
+      ]
+    },
+    {
+      "title": "www.threads.com",
+      "category": "其他",
+      "type": "Threads貼文",
+      "status": "active",
+      "keywords": "#www #threads #problem #continues #contact #site",
+      "summary": "If the problem continues, contact the site owner.",
+      "subtitle_clips": [],
+      "url": "https://www.threads.com/share/GQxoEwlvO/",
+      "timestamp": "2026-09-30T21:10:03+08:00",
+      "obsidian_connections": [
+        "1.1e8_Impact Theory × Cal Newport 數位極簡主義與獨處能力研究整理",
+        "17a0_website info",
+        "5a6_吾愛吾詩 The Kindergarten Teacher"
+      ]
+    },
+    {
+      "title": "黃裕 (@cz88422) on Threads",
+      "category": "科技AI",
+      "type": "Threads貼文",
+      "status": "active",
+      "keywords": "#cz88422 #Threads #App #reverse-skill #Skill #Codex",
+      "summary": "最近在脆看到，有人半開玩笑地說，會寫程式的工程師如果專門去找剛上線的 App 反分析，搞不好可以挖到不少客戶資料。 剛好我又看到 reverse-skill，反而覺得這種 Skill 現在真的很需要。 現在很多原本不會寫程式的人，也能靠 Codex、Claude Code、Cursor 把網站、App、會員系統一路做出來。畫面正常、功能能跑，就很容易覺得可以直接上線。 但「AI 幫你做得出來」跟「",
+      "subtitle_clips": [],
+      "url": "https://www.threads.com/share/D8lk6Ux7A/",
+      "timestamp": "2026-09-30T21:08:17+08:00",
+      "obsidian_connections": [
+        "1.3a5_Claude 社群平台設計 Prompt",
+        "1.3a6_六個 Claude 使用者層級",
+        "6.2c2c_Hulda_Clark博士正偏移電流Zapper破壞病原體膜電位之去活性化機制"
+      ]
+    },
+    {
+      "title": "李昀翰 (@leeunhn) on Threads",
+      "category": "科技AI",
+      "type": "Threads貼文",
+      "status": "active",
+      "keywords": "#leeunhn #Threads #GitHub #李昀翰 #on",
+      "summary": "以為想弄一個能自動追熱點、自己寫日報的網站，得自己兜一整套抓資料加篩選邏輯，結果有人把這整個框架開源了，你只要把信源跟精選標準換成自己的，它就變成你自己的產業熱點站，GitHub 已經 3487 星了！",
+      "subtitle_clips": [],
+      "url": "https://www.threads.com/share/EHVTRkUmx/",
+      "timestamp": "2026-09-30T18:25:03+08:00",
+      "obsidian_connections": [
+        "《做自己的生命設計師》",
+        "《做自己的能量治療師》",
+        "10.6b3_Google網站評分：熟悉SEO的2大工具"
+      ]
+    },
+    {
+      "title": "AICodeWithMe (@aicodewithme) on Threads",
+      "category": "科技AI",
+      "type": "Threads貼文",
+      "status": "active",
+      "keywords": "#AICodeWithMe #Threads #gta #Token #demo #taipei-gta",
+      "summary": "我真的做了一個「台北版 gta遊戲」。\n為了做它，我已經燒掉超過 10,000 美金的 AI Token。😭 西門町、北車、忠孝復興、台北街景都在裡面，\n而且不是 demo —— 現在直接免費開放玩。😉 建議用電腦開，手機畫質會被壓爛。\n地圖我還在瘋狂擴建中。 有什麼想法直接留言許願\n下一次升級馬上就來！ 遊戲連結：https://taipei-gta.vercel.app",
+      "subtitle_clips": [],
+      "url": "https://www.threads.com/@aicodewithme/post/DdzIky4Gl9T?xmt=AQG0XIX87RZoxekdSZpd7q2v4sO8u6ma-zUNsDGgGPNRTgbXMS4BJIhlqFFCBLPU1-r-Cjw2&slof=1",
+      "timestamp": "2026-09-30T09:36:00+08:00",
+      "obsidian_connections": [
+        "6.2c2c_Hulda_Clark博士正偏移電流Zapper破壞病原體膜電位之去活性化機制",
+        "00_3.5_語言_MOC思考地圖",
+        "00_9.8_其他命理玄學_MOC思考地圖"
+      ]
+    },
+    {
+      "title": "Doph Pei (@piedolph_eng) on Threads",
+      "category": "活動情報",
+      "type": "Threads貼文",
+      "status": "active",
+      "keywords": "#Doph #Pei #piedolph_eng #Threads #App #Google",
+      "summary": "戒掉睡前無腦滑 IG 啦！把每天睡前的 1 小時省下來，拿來逛這 5 個「免費神級」網站跟 App，堅持一陣子真的會發現自己偷偷變強！😎\n1. Google Arts & Culture\n誰說看展一定要買機票？躺在床上就能線上 360 度逛羅浮宮、大都會博物館！畫作細節放大看超級清晰，不知不覺藝術氣質直接點滿 ✨\n2. FutureLearn\n免費白嫖國外頂大名校課程的寶藏網站！不管你想搞懂心理學",
+      "subtitle_clips": [],
+      "url": "https://www.threads.com/@piedolph_eng/post/Dd2_uDUAtHr?xmt=AQG0NLx8wfk0yeebcFYRvFIudu6mEjhyANv1bIIisM9qPCQ5q73pC56UaEBkijgedR1q79g&slof=1",
+      "timestamp": "2026-09-29T19:09:39+08:00",
+      "obsidian_connections": [
+        "10.6b3_Google網站評分：熟悉SEO的2大工具",
+        "6.2c2c_Hulda_Clark博士正偏移電流Zapper破壞病原體膜電位之去活性化機制",
+        "1.1f0_MBTI 16型人格心理學全方位資源庫總覽"
+      ]
+    },
+    {
+      "title": "Shane (@shane412335) on Threads",
+      "category": "科技AI",
+      "type": "Threads貼文",
+      "status": "active",
+      "keywords": "#Shane #shane412335 #Threads #Hindsight #GitHub #Retain",
+      "summary": "大家以為AI有記憶，\n就是記得你上次聊過什麼。\nHindsight想做的不是記得，\n是從經驗裡學會東西。\n這個開源專案這幾天衝上GitHub熱門，\n一天多了1653顆星，\n總數快3萬。\n它把AI代理的記憶分成四種：\n世界事實、親身經歷、觀察、心智模型。\n提供三個動作：\nRetain存記憶、Recall找記憶、Reflect回頭反思。\n還能自動遮掉45種以上的個資跟密鑰格式，\n支援25家以上的模型供",
+      "subtitle_clips": [],
+      "url": "https://www.threads.com/@shane412335/post/Dd3ft_RgsNI?xmt=AQG0oPLnB5CE8Ty8WSN-xLWHpGOHzSgdrQVlGDJWSTWotgHBLhzanOVO0rPDGFA6EuNvag8&slof=1",
+      "timestamp": "2026-09-29T19:08:40+08:00",
+      "obsidian_connections": [
+        "1.1e7_多工就是在瞎忙窮忙",
+        "《底層邏輯：看清這個世界的底牌》",
+        "3.5a3_千萬別學英語：語言本質與習得反思"
+      ]
+    },
+    {
+      "title": "與諾 Uno 🇹🇼 (@uno.chuang0517) on Threads",
+      "category": "樂活身心",
+      "type": "Threads貼文",
+      "status": "active",
+      "keywords": "#Uno #chuang0517 #Threads #Once #you #met",
+      "summary": "當你見過擁有人格魅力的人\n你就不會再被好看的皮囊迷惑了 什麼是人格魅力？\n樂觀的性格特點\n穩定的情緒狀態\n豐富的認知內涵\n幽默的聊天風格\n有邊界感的社交距離\n能進能退收放自如\n快人一步的反應力\n有情有意的人品特色\n有擔當的人格底色 不管是什麼時候\n人格魅力是完全碾壓長相的 Once you’ve met someone with true charisma, you’ll no longer be",
+      "subtitle_clips": [],
+      "url": "https://www.threads.com/@uno.chuang0517/post/Dd3aYwTGvsC?xmt=AQG0QxGrBdy0H9axcAeLAH8gb-vHelNksoNdOLsNxy2JeZt-QOz8ea2DlRe5ft-oBazyGCc&slof=1",
+      "timestamp": "2026-09-29T19:08:24+08:00",
+      "obsidian_connections": [
+        "1.11 接受，你就超越了",
+        "3.4_YouTube快捷鍵",
+        "1.3a7_How to Get Ahead of 99% of People (with AI)"
+      ]
+    },
+    {
+      "title": "Duckiemomo (@duck.78931955) on Threads",
+      "category": "科技AI",
+      "type": "Threads貼文",
+      "status": "active",
+      "keywords": "#Duckiemomo #duck #Threads #Shadowingenglish #78931955 #on",
+      "summary": "欸不是，這個學英文網站居然免費？？👀 可以用英文影片練聽力、口說，\n還可以跟 AI 練對話。 想自己學英文的朋朋可以去試試看！\nShadowingenglish.com",
+      "subtitle_clips": [],
+      "url": "https://www.threads.com/@duck.78931955/post/Dd2UB0nEwXM?xmt=AQG0W4i13WMrerZmQQ0cUqZO6KRCgbCfitnOOENi92GpG56o_vUNHPnDXptsIIvjwa-opSM&slof=1",
+      "timestamp": "2026-09-29T19:06:03+08:00",
+      "obsidian_connections": [
+        "13.2a5_x4 可以駐點在辦公室的幾支花精",
+        "34a5_種證明有效的方法可以避免害羞和內向",
+        "《底層邏輯：看清這個世界的底牌》"
+      ]
+    },
+    {
+      "title": "LIU BAI Studio (@liubai.art.tw) on Threads",
+      "category": "吃喝玩樂",
+      "type": "Threads貼文",
+      "status": "active",
+      "keywords": "#LIU #BAI #Studio #liubai #art #Threads",
+      "summary": "一生至少要體驗一次的世界戀愛文化 ・一起泡溫泉看星空（冰島）\n・午後下午茶配散步（英國）\n・搭熱氣球看日出（土耳其）\n・薰衣草花田拍照（法國）\n・搭貢多拉船漫遊水道（義大利）\n・櫻花樹下告白（日本）\n・漢江邊吃炸雞（韓國）\n・沙漠露營看銀河（摩洛哥）\n・沿著海岸線慢跑看夕陽（葡萄牙）\n・咖啡廳裡聊到打烊（奧地利）",
+      "subtitle_clips": [],
+      "url": "https://www.threads.com/@liubai.art.tw/post/Dd1NOEEmS3j?xmt=AQG03ddpH0XwhNlvpp7H9foPtDgjrFJfj-OPkB8iMiz0ORKEOgl3VFRzdAMFUR4OYGKz_s9B&slof=1",
+      "timestamp": "2026-09-29T19:03:17+08:00",
+      "obsidian_connections": [
+        "5a6_吾愛吾詩 The Kindergarten Teacher",
+        "1.3a0_Steven Bartlett專訪 AI 安全專家Dr. Roman Yampolskiy",
+        "《奧地利奶奶給銀髮族的居家芳療小藥鋪》"
+      ]
+    },
+    {
+      "title": "李恩祈 (@vickyli0521) on Threads",
+      "category": "其他",
+      "type": "Threads貼文",
+      "status": "need_review",
+      "keywords": "#vickyli0521 #Threads #李恩祈 #on",
+      "summary": "眼睛的治疗方法.这里很全面.",
+      "subtitle_clips": [],
+      "url": "https://www.threads.com/@vickyli0521/post/Dd2vfmpI2D_?xmt=AQG02hK5LjZfaj7F5z0vZcaW5CtMgFB1vUnvApU7AcIYFxcIb3hnJ8R0wZNYVCvf-EjyvicU&slof=1",
+      "timestamp": "2026-09-29T19:03:03+08:00",
+      "obsidian_connections": []
+    },
+    {
+      "title": "178K views · 3.4K reactions | 這是我以前為了讓豬肉可以保存更久的做法，同時豬肉風味還會更濃～煮湯會更鮮甜，一舉兩得！我都叫他豬肉一夜干，因為放一天就可以開始用啦！放越久越鹹，但鹽巴的部分我只抓2%，所以即使放好幾天也不會鹹到太誇張，影片開頭說錯，我說10年前學生時用，事後算一算...其實已經超過15年了啊啊啊😆😂🤣 | 嘖嘖的料理手帳",
+      "category": "生活技能",
+      "type": "社群",
+      "status": "active",
+      "keywords": "#views #reactions #178K #4K #同時豬肉風味還會更濃 #煮湯會更鮮甜",
+      "summary": "這是我以前為了讓豬肉可以保存更久的做法，同時豬肉風味還會更濃～煮湯會更鮮甜，一舉兩得！我都叫他豬肉一夜干，因為放一天就可以開始用啦！放越久越鹹，但鹽巴的部分我只抓2%，所以即使放好幾天也不會鹹到太誇張，影片開頭說錯，我說10年前學生時用，事後算一算...其實已經超過15年了啊啊啊😆😂🤣",
+      "subtitle_clips": [],
+      "url": "https://www.facebook.com/share/r/1My3ojoSpd/",
+      "timestamp": "2026-09-29T13:43:48+08:00",
+      "obsidian_connections": [
+        "6.2c1_第四相結構水EZ的六角排列與磁化保存法",
+        "17a5_書介影片骨架(整理書介)",
+        "13.1d3_【降腦波其實很簡單】"
+      ]
+    },
+    {
+      "title": "伊凡談心 (@evans.talks) on Threads",
+      "category": "樂活身心",
+      "type": "Threads貼文",
+      "status": "active",
+      "keywords": "#evans #talks #Threads #Donald #Woods #Winnicott",
+      "summary": "在心理諮商中，當親密感升溫時，可能會喚醒潛意識中對「早期不良照顧」的創傷記憶，例如真實的自己不被接納、或擔心過度依賴後帶來的毀滅性失落等等。 英國著名的兒科醫生與精神分析師溫尼科特（Donald Woods Winnicott）：「躲藏是一種快樂，而找不到則是災難。」 當一個人習慣躲藏，用「假我」社交時，他可以維持表面的人際互動。但當遇到一個真正讓他在乎、想靠近的人時，這種喜歡會威脅到他藏得好好的",
+      "subtitle_clips": [],
+      "url": "https://www.threads.com/@evans.talks/post/Dd065nLk_gq?xmt=AQG0Ry0wptbm8lrRME68vc01V4SbUI8pkS51WbF8cBhLNSRvlExzAniuy1-w4mYt9kenldKqGQ&slof=1",
+      "timestamp": "2026-09-29T11:37:46+08:00",
+      "obsidian_connections": [
+        "12b2_唐納·霍夫曼（Donald Hoffman）的著作《不實在的現實》",
+        "9.3a2_揭露人無法掙脫魔鬼捆綁的真正理由！被雪藏70年才敢公開的秘密是什麼？",
+        "001e0_我可能錯了"
+      ]
+    },
+    {
+      "title": "JC 財經觀點 - 【 9 億人在用 ChatGPT，但沒有人告訴你怎麼賺到這波紅利 】",
+      "category": "科技AI",
+      "type": "社群",
+      "status": "active",
+      "keywords": "#ChatGPT #Gemini #Claude #a16z #Gen #AI-first",
+      "summary": "【 9 億人在用 ChatGPT，但沒有人告訴你怎麼賺到這波紅利 】  全球 10% 的人每週都在使用 ChatGPT，週活躍用戶 9 億人，一年內增加了 5 億，現在的 ChatGPT 的用戶規模，是第二名 Gemini 的 4 倍，是 Claude 的 8 倍。  可能比任何人預期的都要複雜。a16z 剛剛發布了第六版「百大 Gen AI 消費者應用」報告，這份每半年更新一次的清單追蹤的不只是",
+      "subtitle_clips": [],
+      "url": "https://www.facebook.com/share/p/19etAs5pHp/",
+      "timestamp": "2026-09-29T05:55:11+08:00",
+      "obsidian_connections": [
+        "1.3a6_六個 Claude 使用者層級",
+        "10.6b0_我用 ChatGPT 解析臉書演算法文獻，測出 19 個【爆文公式】",
+        "1.3b1 ChatGPT Agnet架站"
+      ]
+    },
     {
       "title": "瑤 ↟ᐝ - 中秋節快樂",
       "category": "生活技能",
